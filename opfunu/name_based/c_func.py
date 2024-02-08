@@ -5,6 +5,7 @@
 # --------------------------------------------------%
 
 import autograd.numpy as np
+
 from opfunu.benchmark import Benchmark
 
 
@@ -304,15 +305,15 @@ class Cola(Benchmark):
         self.f_global = 11.7464
         self.x_global = np.array([0.651906, 1.30194, 0.099242, -0.883791, -0.8796, 0.204651, -3.28414, 0.851188,
                                   -3.46245, 2.53245, -0.895246, 1.40992, -3.07367, 1.96257, -2.97872, -0.807849, -1.68978])
-        self.d = np.asarray([[0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                             [1.27, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                             [1.69, 1.43, 0, 0, 0, 0, 0, 0, 0, 0],
-                             [2.04, 2.35, 2.43, 0, 0, 0, 0, 0, 0, 0],
-                             [3.09, 3.18, 3.26, 2.85, 0, 0, 0, 0, 0, 0],
-                             [3.20, 3.22, 3.27, 2.88, 1.55, 0, 0, 0, 0, 0],
-                             [2.86, 2.56, 2.58, 2.59, 3.12, 3.06, 0, 0, 0, 0],
-                             [3.17, 3.18, 3.18, 3.12, 1.31, 1.64, 3.00, 0, 0, 0],
-                             [3.21, 3.18, 3.18, 3.17, 1.70, 1.36, 2.95, 1.32, 0, 0],
+        self.d = np.asarray([[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
+                             [1.27, 0., 0., 0., 0., 0., 0., 0., 0., 0.],
+                             [1.69, 1.43, 0., 0., 0., 0., 0., 0., 0., 0.],
+                             [2.04, 2.35, 2.43, 0., 0., 0., 0., 0., 0., 0.],
+                             [3.09, 3.18, 3.26, 2.85, 0., 0., 0., 0., 0., 0.],
+                             [3.20, 3.22, 3.27, 2.88, 1.55, 0., 0., 0., 0., 0.],
+                             [2.86, 2.56, 2.58, 2.59, 3.12, 3.06, 0., 0., 0., 0.],
+                             [3.17, 3.18, 3.18, 3.12, 1.31, 1.64, 3.00, 0., 0., 0.],
+                             [3.21, 3.18, 3.18, 3.17, 1.70, 1.36, 2.95, 1.32, 0., 0.],
                              [2.38, 2.31, 2.42, 1.94, 2.85, 2.81, 2.56, 2.91, 2.97, 0.]])
 
     def evaluate(self, x, *args):
@@ -329,6 +330,38 @@ class Cola(Benchmark):
         inner = (np.sqrt(((xi - xj) ** 2 + (yi - yj) ** 2)) - self.d) ** 2
         inner = np.tril(inner, -1)
         return np.sum(np.sum(inner, axis=1))
+
+    # def evaluate(self, x, *args):
+    #     self.check_solution(x)
+    #     self.n_fe += 1
+
+    #     xi_first = np.concatenate((np.atleast_2d(np.array([0.0])), np.atleast_2d(x[0])
+    #                                ), axis=1)
+    #     xi = np.concatenate((xi_first, np.atleast_2d(x[1::2])), axis=1)
+
+    #     # xi = np.atleast_2d(np.asarray([0.0, x[0]] + list(x[1::2])))
+    #     xj = np.repeat(xi, np.size(xi, 1), axis=0)
+    #     xi = xi.T
+
+    #     yi_first = np.concatenate((np.atleast_2d(np.array([0.0])),
+    #                                np.atleast_2d(np.array([0.0]))),
+    #                               axis=1)
+    #     yi = np.concatenate((yi_first, np.atleast_2d(x[2::2])), axis=1)
+
+    #     # yi = np.atleast_2d(np.asarray([0.0, 0.0] + list(x[2::2])))
+    #     yj = np.repeat(yi, np.size(yi, 1), axis=0)
+    #     yi = yi.T
+
+    #     print(f"xi: {xi}")
+    #     print(f"xj: {xj}")
+    #     print(f"yi: {yi}")
+    #     print(f"yj: {yj}")
+
+    #     inner = (np.sqrt(((xi - xj) ** 2 + (yi - yj) ** 2)) - self.d) ** 2
+
+    #     inner = np.tril(inner, -1)
+    #     print(f"inner: {inner}")
+    #     return np.sum(np.sum(inner, axis=1))
 
 
 class Colville(Benchmark):

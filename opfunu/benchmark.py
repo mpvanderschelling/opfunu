@@ -93,12 +93,12 @@ class Benchmark:
                 else:
                     self._ndim = self.dim_default
                     self._bounds = default_bounds
-                    print(f"{self.__class__.__name__} is fixed problem with {self.dim_default} variables!")
+                    # print(f"{self.__class__.__name__} is fixed problem with {self.dim_default} variables!")
             else:
                 if self.dim_changeable:
                     self._bounds = np.array(bounds).T
                     self._ndim = self._bounds.shape[0]
-                    print(f"{self.__class__.__name__} problem is set with {self._ndim} variables!")
+                    # print(f"{self.__class__.__name__} problem is set with {self._ndim} variables!")
                 else:
                     self._bounds = np.array(bounds).T
                     if self._bounds.shape[0] != self.dim_default:

@@ -5,6 +5,7 @@
 # --------------------------------------------------%
 
 import autograd.numpy as np
+
 from opfunu.benchmark import Benchmark
 
 
@@ -106,11 +107,11 @@ class LennardJones(Benchmark):
     modality = True  # Number of ambiguous peaks, unknown # peaks
 
     def __init__(self, ndim=None, bounds=None):
-        if ndim not in range(6, 61):
-            raise ValueError("LennardJones dimensions must be in (6, 60)")
+        # if ndim not in range(6, 61):
+        #     raise ValueError("LennardJones dimensions must be in (6, 60)")
         super().__init__()
         self.dim_changeable = True
-        self.dim_default = 2
+        self.dim_default = 6
         self.check_ndim_and_bounds(ndim, bounds, np.array([[-4., 1.] for _ in range(self.dim_default)]))
         self.minima = [-1.0, -3.0, -6.0, -9.103852, -12.712062,
                        -16.505384, -19.821489, -24.113360, -28.422532,

@@ -5,6 +5,7 @@
 # --------------------------------------------------%
 
 import autograd.numpy as np
+
 from opfunu.benchmark import Benchmark
 
 
@@ -675,7 +676,8 @@ class Mishra10(Benchmark):
     def evaluate(self, x, *args):
         self.check_solution(x)
         self.n_fe += 1
-        x_int = x.astype(int)
+        # x_int = x.astype(int)
+        x_int = np.floor(x)
         return ((x_int[0] + x_int[1]) - (x_int[0] * x_int[1])) ** 2.0
 
 

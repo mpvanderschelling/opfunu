@@ -5,6 +5,7 @@
 # --------------------------------------------------%
 
 import autograd.numpy as np
+
 from opfunu.benchmark import Benchmark
 
 
@@ -196,25 +197,53 @@ class Deceptive(Benchmark):
         self.f_global = -1.0
         self.x_global = np.arange(1.0, self.ndim + 1.0) / (self.ndim + 1.0)
 
+    # def evaluate(self, x, *args):
+    #     self.check_solution(x)
+    #     self.n_fe += 1
+    #     alpha = np.arange(1.0, self.ndim + 1.0) / (self.ndim + 1.0)
+    #     beta = 2.0
+    #     g = np.zeros((self.ndim,))
+    #     for i in range(self.ndim):
+    #         if x[i] <= 0.0:
+    #             g[i] = x[i]
+    #         elif x[i] < 0.8 * alpha[i]:
+    #             g[i] = -x[i] / alpha[i] + 0.8
+    #         elif x[i] < alpha[i]:
+    #             g[i] = 5.0 * x[i] / alpha[i] - 4.0
+    #         elif x[i] < (1.0 + 4 * alpha[i]) / 5.0:
+    #             g[i] = 5.0 * (x[i] - alpha[i]) / (alpha[i] - 1.0) + 1.0
+    #         elif x[i] <= 1.0:
+    #             g[i] = (x[i] - 1.0) / (1.0 - alpha[i]) + 4.0 / 5.0
+    #         else:
+    #             g[i] = x[i] - 1.0
+    #     return -((1.0 / self.ndim) * np.sum(g)) ** beta
+
     def evaluate(self, x, *args):
         self.check_solution(x)
         self.n_fe += 1
         alpha = np.arange(1.0, self.ndim + 1.0) / (self.ndim + 1.0)
         beta = 2.0
         g = np.zeros((self.ndim,))
+
         for i in range(self.ndim):
-            if x[i] <= 0.0:
-                g[i] = x[i]
-            elif x[i] < 0.8 * alpha[i]:
-                g[i] = -x[i] / alpha[i] + 0.8
-            elif x[i] < alpha[i]:
-                g[i] = 5.0 * x[i] / alpha[i] - 4.0
-            elif x[i] < (1.0 + 4 * alpha[i]) / 5.0:
-                g[i] = 5.0 * (x[i] - alpha[i]) / (alpha[i] - 1.0) + 1.0
-            elif x[i] <= 1.0:
-                g[i] = (x[i] - 1.0) / (1.0 - alpha[i]) + 4.0 / 5.0
-            else:
-                g[i] = x[i] - 1.0
+            g_val = np.where(
+                x[i] <= 0.0, x[i],
+                np.where(
+                    x[i] < 0.8 * alpha[i], -x[i] / alpha[i] + 0.8,
+                    np.where(
+                        x[i] < alpha[i], 5.0 * x[i] / alpha[i] - 4.0,
+                        np.where(
+                            x[i] < (1.0 + 4 * alpha[i]) / 5.0, 5.0 * (x[i] - alpha[i]) / (alpha[i] - 1.0) + 1.0,
+                            np.where(
+                                x[i] <= 1.0, (x[i] - 1.0) / (1.0 - alpha[i]) + 4.0 / 5.0,
+                                x[i] - 1.0
+                            )
+                        )
+                    )
+                )
+            )
+            g = np.concatenate((g[:i], [g_val], g[i + 1:]))  # Replace g[i] with g_val
+
         return -((1.0 / self.ndim) * np.sum(g)) ** beta
 
 

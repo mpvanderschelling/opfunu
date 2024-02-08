@@ -5,6 +5,7 @@
 # --------------------------------------------------%
 
 import autograd.numpy as np
+
 from opfunu.cec_based.cec import CecBenchmark
 from opfunu.utils import operator
 
@@ -893,6 +894,27 @@ class F162005(CecBenchmark):
         else:
             return operator.sphere_func(x)
 
+    # def evaluate(self, x, *args):
+    # # Original!
+    #     self.n_fe += 1
+    #     self.check_solution(x, self.dim_max, self.dim_supported)
+    #     ndim = len(x)
+    #     weights = np.ones(self.n_funcs)
+    #     fits = np.ones(self.n_funcs)
+    #     for idx in range(0, self.n_funcs):
+    #         w_i = np.exp(-np.sum((x - self.f_shift[idx]) ** 2) / (2 * ndim * self.xichmas[idx] ** 2))
+    #         z = np.dot((x - self.f_shift[idx]) / self.lamdas[idx], self.M[idx * ndim:(idx + 1) * ndim, :])
+    #         fit_i = self.fi__(z, idx)
+    #         f_max_i = self.fi__(np.dot((self.y / self.lamdas[idx]), self.M[idx * ndim:(idx + 1) * ndim, :]), idx)
+    #         fit_i = self.C * fit_i / f_max_i
+    #         weights[idx] = w_i
+    #         fits[idx] = fit_i
+
+    #     maxw = np.max(weights)
+    #     weights = np.where(weights != maxw, weights * (1 - maxw**10), weights)
+    #     weights = weights / np.sum(weights)
+    #     return np.sum(np.dot(weights, (fits + self.bias))) + self.f_bias
+
     def evaluate(self, x, *args):
         self.n_fe += 1
         self.check_solution(x, self.dim_max, self.dim_supported)
@@ -905,8 +927,8 @@ class F162005(CecBenchmark):
             fit_i = self.fi__(z, idx)
             f_max_i = self.fi__(np.dot((self.y / self.lamdas[idx]), self.M[idx * ndim:(idx + 1) * ndim, :]), idx)
             fit_i = self.C * fit_i / f_max_i
-            weights[idx] = w_i
-            fits[idx] = fit_i
+            weights = np.concatenate((weights[:idx], np.array([w_i]), weights[idx + 1:]))
+            fits = np.concatenate((fits[:idx], np.array([fit_i]), fits[idx + 1:]))
 
         maxw = np.max(weights)
         weights = np.where(weights != maxw, weights * (1 - maxw**10), weights)

@@ -822,8 +822,10 @@ class F152005(CecBenchmark):
             fit_i = self.fi__(z, idx)
             f_max_i = self.fi__(np.dot((self.y / self.lamdas[idx]), self.M), idx)
             fit_i = self.C * fit_i / f_max_i
-            weights[idx] = w_i
-            fits[idx] = fit_i
+            # weights[idx] = w_i
+            # fits[idx] = fit_i
+            weights = np.concatenate((weights[:idx], np.array([w_i]), weights[idx + 1:]))
+            fits = np.concatenate((fits[:idx], np.array([fit_i]), fits[idx + 1:]))
 
         maxw = np.max(weights)
         weights = np.where(weights != maxw, weights * (1 - maxw**10), weights)
@@ -965,8 +967,10 @@ class F172005(F162005):
             fit_i = self.fi__(z, idx)
             f_max_i = self.fi__(np.dot((self.y / self.lamdas[idx]), self.M[idx * ndim:(idx + 1) * ndim, :]), idx)
             fit_i = self.C * fit_i / f_max_i
-            weights[idx] = w_i
-            fits[idx] = fit_i
+            # weights[idx] = w_i
+            # fits[idx] = fit_i
+            weights = np.concatenate((weights[:idx], np.array([w_i]), weights[idx + 1:]))
+            fits = np.concatenate((fits[:idx], np.array([fit_i]), fits[idx + 1:]))
 
         maxw = np.max(weights)
         weights = np.where(weights != maxw, weights * (1 - maxw**10), weights)
@@ -1049,8 +1053,10 @@ class F182005(CecBenchmark):
             fit_i = self.fi__(z, idx)
             f_max_i = self.fi__(np.dot((self.y / self.lamdas[idx]), self.M[idx * ndim:(idx + 1) * ndim, :]), idx)
             fit_i = self.C * fit_i / f_max_i
-            weights[idx] = w_i
-            fits[idx] = fit_i
+            # weights[idx] = w_i
+            # fits[idx] = fit_i
+            weights = np.concatenate((weights[:idx], np.array([w_i]), weights[idx + 1:]))
+            fits = np.concatenate((fits[:idx], np.array([fit_i]), fits[idx + 1:]))
 
         maxw = np.max(weights)
         weights = np.where(weights != maxw, weights * (1 - maxw**10), weights)
@@ -1175,8 +1181,10 @@ class F212005(CecBenchmark):
             fit_i = self.fi__(z, idx)
             f_max_i = self.fi__(np.dot((self.y / self.lamdas[idx]), self.M[idx * ndim:(idx + 1) * ndim, :]), idx)
             fit_i = self.C * fit_i / f_max_i
-            weights[idx] = w_i
-            fits[idx] = fit_i
+            # weights[idx] = w_i
+            # fits[idx] = fit_i
+            weights = np.concatenate((weights[:idx], np.array([w_i]), weights[idx + 1:]))
+            fits = np.concatenate((fits[:idx], np.array([fit_i]), fits[idx + 1:]))
 
         maxw = np.max(weights)
         weights = np.where(weights != maxw, weights * (1 - maxw**10), weights)
@@ -1232,8 +1240,10 @@ class F232005(F212005):
             fit_i = self.fi__(z, idx)
             f_max_i = self.fi__(np.dot((self.y / self.lamdas[idx]), self.M[idx * ndim:(idx + 1) * ndim, :]), idx)
             fit_i = self.C * fit_i / f_max_i
-            weights[idx] = w_i
-            fits[idx] = fit_i
+            # weights[idx] = w_i
+            # fits[idx] = fit_i
+            weights = np.concatenate((weights[:idx], np.array([w_i]), weights[idx + 1:]))
+            fits = np.concatenate((fits[:idx], np.array([fit_i]), fits[idx + 1:]))
 
         maxw = np.max(weights)
         weights = np.where(weights != maxw, weights * (1 - maxw**10), weights)
@@ -1326,8 +1336,10 @@ class F242005(CecBenchmark):
             fit_i = self.fi__(z, idx)
             f_max_i = self.fi__(np.dot((self.y / self.lamdas[idx]), self.M[idx * ndim:(idx + 1) * ndim, :]), idx)
             fit_i = self.C * fit_i / f_max_i
-            weights[idx] = w_i
-            fits[idx] = fit_i
+            # weights[idx] = w_i
+            # fits[idx] = fit_i
+            weights = np.concatenate((weights[:idx], np.array([w_i]), weights[idx + 1:]))
+            fits = np.concatenate((fits[:idx], np.array([fit_i]), fits[idx + 1:]))
 
         maxw = np.max(weights)
         weights = np.where(weights != maxw, weights * (1 - maxw**10), weights)

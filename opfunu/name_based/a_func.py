@@ -1,10 +1,10 @@
 #!/usr/bin/env python
-# Created by "Thieu" at 18:47, 29/06/2022 ----------%                                                                               
-#       Email: nguyenthieu2102@gmail.com            %                                                    
-#       Github: https://github.com/thieu1995        %                         
+# Created by "Thieu" at 18:47, 29/06/2022 ----------%
+#       Email: nguyenthieu2102@gmail.com            %
+#       Github: https://github.com/thieu1995        %
 # --------------------------------------------------%
 
-import numpy as np
+import autograd.numpy as np
 from opfunu.benchmark import Benchmark
 
 
@@ -224,7 +224,7 @@ class Alpine02(Benchmark):
         self.dim_default = 2
         self.check_ndim_and_bounds(ndim, bounds, np.array([[0., 10.] for _ in range(self.dim_default)]))
         self.f_global = -6.12950
-        self.x_global = np.array([7.91705268, 4.81584232] + list(np.random.uniform(0, 10, self.ndim-2)))
+        self.x_global = np.array([7.91705268, 4.81584232] + list(np.random.uniform(0, 10, self.ndim - 2)))
 
     def evaluate(self, x, *args):
         self.check_solution(x)
@@ -269,7 +269,3 @@ class AMGM(Benchmark):
         f1 = np.sum(x) / self.ndim
         f2 = np.prod(x) ** (1.0 / self.ndim)
         return (f1 - f2) ** 2
-
-
-
-

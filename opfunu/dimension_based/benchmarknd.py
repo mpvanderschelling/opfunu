@@ -5,9 +5,10 @@
 #       Email:      nguyenthieu2102@gmail.com                                                           #
 #       Homepage:   https://www.researchgate.net/profile/Thieu_Nguyen6                                  #
 #       Github:     https://github.com/thieu1995                                                  #
-#-------------------------------------------------------------------------------------------------------#
+# -------------------------------------------------------------------------------------------------------#
 
-import numpy as np
+import autograd.numpy as np
+
 
 class Functions:
     """
@@ -27,7 +28,6 @@ class Functions:
         lin = 1 / len(solution)
         return -a * np.exp(-b * np.sqrt(lin * result1)) - np.exp(lin * result2) + a + np.exp(1)
 
-
     def _ackley_n4__(self, solution=None):
         """
         Class: multimodal, non-convex, differentiable, non-separable, n-dimensional space.
@@ -38,10 +38,9 @@ class Functions:
         """
         d = len(solution)
         score = 0.0
-        for i in range(0, d-1):
-            score += ( np.exp(-0.2*np.sqrt(solution[i]**2 + solution[i+1]**2)) + 3*(np.cos(2*solution[i]) + np.sin(2*solution[i+1])) )
+        for i in range(0, d - 1):
+            score += (np.exp(-0.2 * np.sqrt(solution[i]**2 + solution[i + 1]**2)) + 3 * (np.cos(2 * solution[i]) + np.sin(2 * solution[i + 1])))
         return score
-
 
     def _alpine_n1__(self, solution=None):
         """
@@ -51,8 +50,7 @@ class Functions:
         @param solution: A numpy array like: [1, 2, 10, 4, ...]
         @return: fx
         """
-        return np.sum(np.abs(solution*np.sin(solution) + 0.1 * solution))
-
+        return np.sum(np.abs(solution * np.sin(solution) + 0.1 * solution))
 
     def _alpine_n2__(self, solution=None):
         """
@@ -63,8 +61,7 @@ class Functions:
         @param solution: A numpy array like: [1, 2, 10, 4, ...]
         @return: fx
         """
-        return np.prod(np.sqrt(solution)*np.sin(solution))
-
+        return np.prod(np.sqrt(solution) * np.sin(solution))
 
     def _brown__(self, solution=None):
         """
@@ -77,10 +74,9 @@ class Functions:
         """
         d = len(solution)
         result = 0
-        for i in range(0, d-1):
-            result += (solution[i]**2)**(solution[i+1]**2+1) + (solution[i+1]**2)**(solution[i]**2+1)
+        for i in range(0, d - 1):
+            result += (solution[i]**2)**(solution[i + 1]**2 + 1) + (solution[i + 1]**2)**(solution[i]**2 + 1)
         return result
-
 
     def _exponential__(self, solution=None):
         """
@@ -91,8 +87,7 @@ class Functions:
         @param solution: A numpy array with x_i in [-1, 1]
         @return: fx
         """
-        return -np.exp(0-.5*np.sum(solution**2))
-
+        return -np.exp(0 - .5 * np.sum(solution**2))
 
     def _griewank__(self, solution=None):
         """
@@ -107,11 +102,10 @@ class Functions:
         result = 1 + np.sum(solution**2) / 4000
         prod = 1.0
         for i in range(0, d):
-            prod *= np.cos(solution[i]/np.sqrt(i+1))
+            prod *= np.cos(solution[i] / np.sqrt(i + 1))
         return result - prod
 
-
-    def _happy_cat__(self, solution=None, alpha=1.0/8):
+    def _happy_cat__(self, solution=None, alpha=1.0 / 8):
         """
         Class: multimodal, non-convex, differentiable, non-separable, parametric
         Global: one global minimum fx = 0, at [-1, ..., -1]
@@ -121,8 +115,7 @@ class Functions:
         @return: fx
         """
 
-        return ((np.sum(solution**2) - len(solution))**2)**alpha + (0.5*np.sum(solution**2)+np.sum(solution))/len(solution) + 0.5
-
+        return ((np.sum(solution**2) - len(solution))**2)**alpha + (0.5 * np.sum(solution**2) + np.sum(solution)) / len(solution) + 0.5
 
     def _periodic__(self, solution=None):
         """
@@ -133,8 +126,7 @@ class Functions:
         @param solution: A numpy array with x_i in [-10, 10]
         @return: fx
         """
-        return 1 + np.sum(np.sin(solution)**2) - 0.1*np.exp(np.sum(solution**2))
-
+        return 1 + np.sum(np.sin(solution)**2) - 0.1 * np.exp(np.sum(solution**2))
 
     def _powell_sum__(self, solution=None):
         """
@@ -148,9 +140,8 @@ class Functions:
         d = len(solution)
         result = 0
         for i in range(0, d):
-            result += np.abs(solution[i])**(i+2)
+            result += np.abs(solution[i])**(i + 2)
         return result
-
 
     def _qing__(self, solution=None):
         """
@@ -167,7 +158,6 @@ class Functions:
             result += (solution[i]**2 - i - 1)**2
         return result
 
-
     def _quartic__(self, solution=None):
         """
         Class: multimodal, non-convex, differentiable, separable, continuous, random
@@ -180,9 +170,8 @@ class Functions:
         d = len(solution)
         result = 0
         for i in range(0, d):
-            result+= (i+1)*solution[i]**4
-        return result+np.random.uniform(0, 1)
-
+            result += (i + 1) * solution[i]**4
+        return result + np.random.uniform(0, 1)
 
     def _rastrigin__(self, solution=None):
         """
@@ -193,8 +182,7 @@ class Functions:
         @param solution: A numpy array with x_in in [-5.12, 5.12]
         @return: fx
         """
-        return 10*len(solution) + np.sum(solution**2-10*np.cos(2*solution*np.pi))
-
+        return 10 * len(solution) + np.sum(solution**2 - 10 * np.cos(2 * solution * np.pi))
 
     def _ridge__(self, solution=None, d=2, alpha=0.5):
         """
@@ -206,8 +194,7 @@ class Functions:
         @return: fx
         """
         t1 = solution[1:]
-        return solution[0] + d*np.sum(t1**2)**alpha
-
+        return solution[0] + d * np.sum(t1**2)**alpha
 
     def _rosenbrock__(self, solution=None, a=1, b=100):
         """
@@ -220,10 +207,9 @@ class Functions:
         """
         d = len(solution)
         result = 0
-        for i in range(0, d-1):
-            result += b*(solution[i+1] - solution[i]**2)**2 + (a-solution[i])**2
+        for i in range(0, d - 1):
+            result += b * (solution[i + 1] - solution[i]**2)**2 + (a - solution[i])**2
         return result
-
 
     def _salomon__(self, solution=None):
         """
@@ -234,8 +220,7 @@ class Functions:
         @param solution: A numpy array with x_i in [-100, 100]
         @return: fx
         """
-        return 1 - np.cos(2*np.pi*np.sqrt(np.sum(solution**2))) + 0.1*np.sqrt(np.sum(solution**2))
-
+        return 1 - np.cos(2 * np.pi * np.sqrt(np.sum(solution**2))) + 0.1 * np.sqrt(np.sum(solution**2))
 
     def _schwefel_2_20__(self, solution=None):
         """
@@ -248,7 +233,6 @@ class Functions:
         """
         return np.sum(np.abs(solution))
 
-
     def _schwefel_2_21__(self, solution=None):
         """
         Class: uni-modal, convex, non-differentiable, separable, continuous
@@ -259,7 +243,6 @@ class Functions:
         @return: fx
         """
         return np.max(np.abs(solution))
-
 
     def _schwefel_2_22__(self, solution=None):
         """
@@ -272,7 +255,6 @@ class Functions:
         """
         return np.sum(np.abs(solution)) + np.prod(np.abs(solution))
 
-
     def _schwefel_2_23__(self, solution=None):
         """
         Class: uni-modal, convex, differentiable, separable, continuous
@@ -284,7 +266,6 @@ class Functions:
         """
         return np.sum(solution**10)
 
-
     def _schwefel__(self, solution=None):
         """
         Class: multi-modal, non-convex, non-differentiable, non-separable, continuous
@@ -294,8 +275,7 @@ class Functions:
         @param solution: A numpy array with x_i in [-500, 500]
         @return: fx
         """
-        return 418.9829*len(solution) - np.sum(solution*np.sin(np.sqrt(np.abs(solution))))
-
+        return 418.9829 * len(solution) - np.sum(solution * np.sin(np.sqrt(np.abs(solution))))
 
     def _shubert_3__(self, solution=None):
         """
@@ -310,7 +290,7 @@ class Functions:
         result = 0
         for i in range(0, d):
             for j in range(1, 6):
-                result+= j*np.sin((j+1)*solution[i] + j)
+                result += j * np.sin((j + 1) * solution[i] + j)
         return result
 
     def _shubert_4__(self, solution=None):
@@ -328,7 +308,6 @@ class Functions:
             for j in range(1, 6):
                 result += j * np.cos((j + 1) * solution[i] + j)
         return result
-
 
     def _shubert__(self, solution=None):
         """
@@ -348,7 +327,6 @@ class Functions:
             prod *= result
         return prod
 
-
     def _sphere__(self, solution=None):
         """
         Class: uni-modal, convex, differentiable, separable, continuous
@@ -360,7 +338,6 @@ class Functions:
         """
         return np.sum(solution**2)
 
-
     def _styblinski__(self, solution=None):
         """
         Class: multi-modal, non-convex, continuous
@@ -370,8 +347,7 @@ class Functions:
         @param solution: A numpy array with x_i in [-5, 5]
         @return: fx
         """
-        return 0.5*np.sum(solution**4 - 16*solution**2 + 5*solution)
-
+        return 0.5 * np.sum(solution**4 - 16 * solution**2 + 5 * solution)
 
     def _sum_squres__(self, solution=None):
         """
@@ -385,9 +361,8 @@ class Functions:
         d = len(solution)
         result = 0.0
         for i in range(0, d):
-            result = (i+1)*solution[i]**2
+            result = (i + 1) * solution[i]**2
         return result
-
 
     def _xin_she_yang__(self, solution=None):
         """
@@ -401,9 +376,8 @@ class Functions:
         d = len(solution)
         result = 0
         for i in range(0, d):
-            result += np.random.uniform(0, 1) * np.abs(solution[i])**(i+1)
+            result += np.random.uniform(0, 1) * np.abs(solution[i])**(i + 1)
         return result
-
 
     def _xin_she_yang_n2__(self, solution=None):
         """
@@ -414,8 +388,7 @@ class Functions:
         @param solution: A numpy array with x_i in [-2pi, 2pi]
         @return: fx
         """
-        return np.sum(np.abs(solution))*np.exp(-np.sum(np.sin(solution**2)))
-
+        return np.sum(np.abs(solution)) * np.exp(-np.sum(np.sin(solution**2)))
 
     def _xin_she_yang_n3__(self, solution=None, m=5, beta=15):
         """
@@ -426,11 +399,10 @@ class Functions:
         @param solution: A numpy array with x_i in [-2pi, 2pi]
         @return: fx
         """
-        t1 = np.exp(-np.sum( np.power(solution/beta, 2*m)))
-        t2 = -2*np.exp(-np.sum(solution**2))
+        t1 = np.exp(-np.sum(np.power(solution / beta, 2 * m)))
+        t2 = -2 * np.exp(-np.sum(solution**2))
         t3 = np.prod(np.cos(solution)**2)
-        return t1 + t2*t3
-
+        return t1 + t2 * t3
 
     def _xin_she_yang_n4__(self, solution=None):
         """
@@ -446,7 +418,6 @@ class Functions:
         t3 = -np.exp(np.sum(np.sin(np.sqrt(np.abs(solution)))**2))
         return (t1 + t2) * t3
 
-
     def _zakharov__(self, solution=None):
         """
         Class: uni-modal, convex, continuous
@@ -460,11 +431,5 @@ class Functions:
         t2 = 0
         d = len(solution)
         for i in range(0, d):
-            t2 += 0.5*(i+1)*solution[i]
+            t2 += 0.5 * (i + 1) * solution[i]
         return t1 + t2**2 + t2**4
-
-
-
-
-
-

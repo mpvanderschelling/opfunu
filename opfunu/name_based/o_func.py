@@ -1,10 +1,10 @@
 #!/usr/bin/env python
-# Created by "Thieu" at 17:31, 30/07/2022 ----------%                                                                               
-#       Email: nguyenthieu2102@gmail.com            %                                                    
-#       Github: https://github.com/thieu1995        %                         
+# Created by "Thieu" at 17:31, 30/07/2022 ----------%
+#       Email: nguyenthieu2102@gmail.com            %
+#       Github: https://github.com/thieu1995        %
 # --------------------------------------------------%
 
-import numpy as np
+import autograd.numpy as np
 from opfunu.benchmark import Benchmark
 
 
@@ -53,7 +53,7 @@ class OddSquare(Benchmark):
         super().__init__()
         self.dim_changeable = True
         self.dim_default = 2
-        self.check_ndim_and_bounds(ndim, bounds, np.array([[-5*np.p, 5.*np.pi] for _ in range(self.dim_default)]))
+        self.check_ndim_and_bounds(ndim, bounds, np.array([[-5 * np.p, 5. * np.pi] for _ in range(self.dim_default)]))
         self.b = np.array([1, 1.3, 0.8, -0.4, -1.3, 1.6, -0.2, -0.6, 0.5, 1.4, 1, 1.3, 0.8, -0.4, -1.3, 1.6, -0.2, -0.6, 0.5, 1.4])
         self.f_global = -1.00846728102
         self.x_global = self.b[:self.ndim]

@@ -1,10 +1,10 @@
 #!/usr/bin/env python
-# Created by "Thieu" at 06:36, 30/06/2022 ----------%                                                                               
-#       Email: nguyenthieu2102@gmail.com            %                                                    
-#       Github: https://github.com/thieu1995        %                         
+# Created by "Thieu" at 06:36, 30/06/2022 ----------%
+#       Email: nguyenthieu2102@gmail.com            %
+#       Github: https://github.com/thieu1995        %
 # --------------------------------------------------%
 
-import numpy as np
+import autograd.numpy as np
 from opfunu.cec_based.cec import CecBenchmark
 from opfunu.utils import operator
 
@@ -415,7 +415,7 @@ class F82005(CecBenchmark):
         self.paras = {"f_shift": self.f_shift, "f_matrix": self.f_matrix, "f_bias": self.f_bias}
         a = np.arange(0, self.ndim)
         self.f_shift[a % 2 == 0] = -32
-        self.f_shift[a % 2 == 1] = np.random.uniform(-32., 32., int(self.ndim/2))
+        self.f_shift[a % 2 == 1] = np.random.uniform(-32., 32., int(self.ndim / 2))
 
     def evaluate(self, x, *args):
         self.n_fe += 1
@@ -825,7 +825,7 @@ class F152005(CecBenchmark):
             fits[idx] = fit_i
 
         maxw = np.max(weights)
-        weights = np.where(weights != maxw, weights*(1 - maxw**10), weights)
+        weights = np.where(weights != maxw, weights * (1 - maxw**10), weights)
         weights = weights / np.sum(weights)
         return np.sum(np.dot(weights, (fits + self.bias))) + self.f_bias
 
@@ -901,15 +901,15 @@ class F162005(CecBenchmark):
         fits = np.ones(self.n_funcs)
         for idx in range(0, self.n_funcs):
             w_i = np.exp(-np.sum((x - self.f_shift[idx]) ** 2) / (2 * ndim * self.xichmas[idx] ** 2))
-            z = np.dot((x - self.f_shift[idx]) / self.lamdas[idx], self.M[idx*ndim:(idx+1)*ndim, :])
+            z = np.dot((x - self.f_shift[idx]) / self.lamdas[idx], self.M[idx * ndim:(idx + 1) * ndim, :])
             fit_i = self.fi__(z, idx)
-            f_max_i = self.fi__(np.dot((self.y / self.lamdas[idx]), self.M[idx*ndim:(idx+1)*ndim, :]), idx)
+            f_max_i = self.fi__(np.dot((self.y / self.lamdas[idx]), self.M[idx * ndim:(idx + 1) * ndim, :]), idx)
             fit_i = self.C * fit_i / f_max_i
             weights[idx] = w_i
             fits[idx] = fit_i
 
         maxw = np.max(weights)
-        weights = np.where(weights != maxw, weights*(1 - maxw**10), weights)
+        weights = np.where(weights != maxw, weights * (1 - maxw**10), weights)
         weights = weights / np.sum(weights)
         return np.sum(np.dot(weights, (fits + self.bias))) + self.f_bias
 
@@ -939,17 +939,17 @@ class F172005(F162005):
         fits = np.ones(self.n_funcs)
         for idx in range(0, self.n_funcs):
             w_i = np.exp(-np.sum((x - self.f_shift[idx]) ** 2) / (2 * ndim * self.xichmas[idx] ** 2))
-            z = np.dot((x - self.f_shift[idx]) / self.lamdas[idx], self.M[idx*ndim:(idx+1)*ndim, :])
+            z = np.dot((x - self.f_shift[idx]) / self.lamdas[idx], self.M[idx * ndim:(idx + 1) * ndim, :])
             fit_i = self.fi__(z, idx)
-            f_max_i = self.fi__(np.dot((self.y / self.lamdas[idx]), self.M[idx*ndim:(idx+1)*ndim, :]), idx)
+            f_max_i = self.fi__(np.dot((self.y / self.lamdas[idx]), self.M[idx * ndim:(idx + 1) * ndim, :]), idx)
             fit_i = self.C * fit_i / f_max_i
             weights[idx] = w_i
             fits[idx] = fit_i
 
         maxw = np.max(weights)
-        weights = np.where(weights != maxw, weights*(1 - maxw**10), weights)
+        weights = np.where(weights != maxw, weights * (1 - maxw**10), weights)
         weights = weights / np.sum(weights)
-        return np.sum(np.dot(weights, (fits + self.bias)))*(1 + 0.2*np.abs(np.random.normal(0, 1))) + self.f_bias
+        return np.sum(np.dot(weights, (fits + self.bias))) * (1 + 0.2 * np.abs(np.random.normal(0, 1))) + self.f_bias
 
 
 class F182005(CecBenchmark):
@@ -991,7 +991,7 @@ class F182005(CecBenchmark):
         self.make_support_data_path("data_2005")
         self.f_shift = self.load_matrix_data(f_shift)[:, :self.ndim]        # This shift as matrix for M functions
         self.M = self.check_matrix_data(f_matrix)
-        self.lamdas = np.array([2*5.0/32, 5.0/32, 2*1, 1, 2*5.0/100, 5.0/100, 2*10, 10, 2*5.0/60, 5.0/60])
+        self.lamdas = np.array([2 * 5.0 / 32, 5.0 / 32, 2 * 1, 1, 2 * 5.0 / 100, 5.0 / 100, 2 * 10, 10, 2 * 5.0 / 60, 5.0 / 60])
         self.bias = np.array([0, 100, 200, 300, 400, 500, 600, 700, 800, 900])      # ==> f_shift[0] is the global optimum
         self.n_funcs = 10
         self.xichmas = np.array([1, 2, 1.5, 1.5, 1, 1, 1.5, 1.5, 2, 2])
@@ -1023,15 +1023,15 @@ class F182005(CecBenchmark):
         fits = np.ones(self.n_funcs)
         for idx in range(0, self.n_funcs):
             w_i = np.exp(-np.sum((x - self.f_shift[idx]) ** 2) / (2 * ndim * self.xichmas[idx] ** 2))
-            z = np.dot((x - self.f_shift[idx]) / self.lamdas[idx], self.M[idx*ndim:(idx+1)*ndim, :])
+            z = np.dot((x - self.f_shift[idx]) / self.lamdas[idx], self.M[idx * ndim:(idx + 1) * ndim, :])
             fit_i = self.fi__(z, idx)
-            f_max_i = self.fi__(np.dot((self.y / self.lamdas[idx]), self.M[idx*ndim:(idx+1)*ndim, :]), idx)
+            f_max_i = self.fi__(np.dot((self.y / self.lamdas[idx]), self.M[idx * ndim:(idx + 1) * ndim, :]), idx)
             fit_i = self.C * fit_i / f_max_i
             weights[idx] = w_i
             fits[idx] = fit_i
 
         maxw = np.max(weights)
-        weights = np.where(weights != maxw, weights*(1 - maxw**10), weights)
+        weights = np.where(weights != maxw, weights * (1 - maxw**10), weights)
         weights = weights / np.sum(weights)
         return np.sum(np.dot(weights, (fits + self.bias))) + self.f_bias
 
@@ -1149,15 +1149,15 @@ class F212005(CecBenchmark):
         fits = np.ones(self.n_funcs)
         for idx in range(0, self.n_funcs):
             w_i = np.exp(-np.sum((x - self.f_shift[idx]) ** 2) / (2 * ndim * self.xichmas[idx] ** 2))
-            z = np.dot((x - self.f_shift[idx]) / self.lamdas[idx], self.M[idx*ndim:(idx+1)*ndim, :])
+            z = np.dot((x - self.f_shift[idx]) / self.lamdas[idx], self.M[idx * ndim:(idx + 1) * ndim, :])
             fit_i = self.fi__(z, idx)
-            f_max_i = self.fi__(np.dot((self.y / self.lamdas[idx]), self.M[idx*ndim:(idx+1)*ndim, :]), idx)
+            f_max_i = self.fi__(np.dot((self.y / self.lamdas[idx]), self.M[idx * ndim:(idx + 1) * ndim, :]), idx)
             fit_i = self.C * fit_i / f_max_i
             weights[idx] = w_i
             fits[idx] = fit_i
 
         maxw = np.max(weights)
-        weights = np.where(weights != maxw, weights*(1 - maxw**10), weights)
+        weights = np.where(weights != maxw, weights * (1 - maxw**10), weights)
         weights = weights / np.sum(weights)
         return np.sum(np.dot(weights, (fits + self.bias))) + self.f_bias
 
@@ -1206,15 +1206,15 @@ class F232005(F212005):
         fits = np.ones(self.n_funcs)
         for idx in range(0, self.n_funcs):
             w_i = np.exp(-np.sum((x - self.f_shift[idx]) ** 2) / (2 * ndim * self.xichmas[idx] ** 2))
-            z = np.dot((x - self.f_shift[idx]) / self.lamdas[idx], self.M[idx*ndim:(idx+1)*ndim, :])
+            z = np.dot((x - self.f_shift[idx]) / self.lamdas[idx], self.M[idx * ndim:(idx + 1) * ndim, :])
             fit_i = self.fi__(z, idx)
-            f_max_i = self.fi__(np.dot((self.y / self.lamdas[idx]), self.M[idx*ndim:(idx+1)*ndim, :]), idx)
+            f_max_i = self.fi__(np.dot((self.y / self.lamdas[idx]), self.M[idx * ndim:(idx + 1) * ndim, :]), idx)
             fit_i = self.C * fit_i / f_max_i
             weights[idx] = w_i
             fits[idx] = fit_i
 
         maxw = np.max(weights)
-        weights = np.where(weights != maxw, weights*(1 - maxw**10), weights)
+        weights = np.where(weights != maxw, weights * (1 - maxw**10), weights)
         weights = weights / np.sum(weights)
         return np.sum(np.dot(weights, (fits + self.bias))) + self.f_bias
 
@@ -1300,15 +1300,15 @@ class F242005(CecBenchmark):
         fits = np.ones(self.n_funcs)
         for idx in range(0, self.n_funcs):
             w_i = np.exp(-np.sum((x - self.f_shift[idx]) ** 2) / (2 * ndim * self.xichmas[idx] ** 2))
-            z = np.dot((x - self.f_shift[idx]) / self.lamdas[idx], self.M[idx*ndim:(idx+1)*ndim, :])
+            z = np.dot((x - self.f_shift[idx]) / self.lamdas[idx], self.M[idx * ndim:(idx + 1) * ndim, :])
             fit_i = self.fi__(z, idx)
-            f_max_i = self.fi__(np.dot((self.y / self.lamdas[idx]), self.M[idx*ndim:(idx+1)*ndim, :]), idx)
+            f_max_i = self.fi__(np.dot((self.y / self.lamdas[idx]), self.M[idx * ndim:(idx + 1) * ndim, :]), idx)
             fit_i = self.C * fit_i / f_max_i
             weights[idx] = w_i
             fits[idx] = fit_i
 
         maxw = np.max(weights)
-        weights = np.where(weights != maxw, weights*(1 - maxw**10), weights)
+        weights = np.where(weights != maxw, weights * (1 - maxw**10), weights)
         weights = weights / np.sum(weights)
         return np.sum(np.dot(weights, (fits + self.bias))) + self.f_bias
 

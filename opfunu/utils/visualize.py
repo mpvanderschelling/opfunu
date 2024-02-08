@@ -1,12 +1,12 @@
 #!/usr/bin/env python
-# Created by "Thieu" at 20:46, 29/06/2022 ----------%                                                                               
-#       Email: nguyenthieu2102@gmail.com            %                                                    
-#       Github: https://github.com/thieu1995        %                         
+# Created by "Thieu" at 20:46, 29/06/2022 ----------%
+#       Email: nguyenthieu2102@gmail.com            %
+#       Github: https://github.com/thieu1995        %
 # --------------------------------------------------%
 
 from io import BytesIO
 import matplotlib.pyplot as plt
-import numpy as np
+import autograd.numpy as np
 import requests
 from PIL import Image
 from matplotlib import cm

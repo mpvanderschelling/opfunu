@@ -1,10 +1,10 @@
 #!/usr/bin/env python
-# Created by "Thieu" at 10:49, 01/07/2022 ----------%                                                                               
-#       Email: nguyenthieu2102@gmail.com            %                                                    
-#       Github: https://github.com/thieu1995        %                         
+# Created by "Thieu" at 10:49, 01/07/2022 ----------%
+#       Email: nguyenthieu2102@gmail.com            %
+#       Github: https://github.com/thieu1995        %
 # --------------------------------------------------%
 
-import numpy as np
+import autograd.numpy as np
 
 
 def rounder(x, condition):
@@ -29,6 +29,7 @@ def rosenbrock_func(x, shift=0.0):
     term1 = 100 * (x[:-1] ** 2 - x[1:]) ** 2
     term2 = (x[:-1] - 1) ** 2
     return np.sum(term1 + term2)
+
 
 def scaffer_func(x):
     x = np.array(x).ravel()
@@ -75,8 +76,8 @@ def rotated_expanded_schaffer_func(x):
     x_pairs = np.column_stack((x, np.roll(x, -1)))
     sum_sq = x_pairs[:, 0] ** 2 + x_pairs[:, 1] ** 2
     # Calculate the Schaffer function for all pairs simultaneously
-    schaffer_values = (0.5 + (np.sin(np.sqrt(sum_sq)) ** 2 - 0.5) /
-                       (1 + 0.001 * sum_sq) ** 2)
+    schaffer_values = (0.5 + (np.sin(np.sqrt(sum_sq)) ** 2 - 0.5)
+                       / (1 + 0.001 * sum_sq) ** 2)
     return np.sum(schaffer_values)
 
 
@@ -132,7 +133,6 @@ def elliptic_func(x):
     return np.sum(10 ** (6.0 * idx / (ndim - 1)) * x ** 2)
 
 
-
 def sphere_noise_func(x):
     x = np.array(x).ravel()
     return np.sum(x ** 2) * (1 + 0.1 * np.abs(np.random.normal(0, 1)))
@@ -171,22 +171,34 @@ def schwefel_12_func(x):
     return np.sum([np.sum(x[:idx]) ** 2 for idx in range(0, ndim)])
 
 
+# def tosz_func(x):
+#     # Original!
+#     def transform(xi):
+#         if xi > 0:
+#             c1, c2, x_sign = 10., 7.9, 1.0
+#             x_star = np.log(np.abs(xi))
+#         elif xi == 0:
+#             c1, c2, x_sign, x_star = 5.5, 3.1, 0., 0.
+#         else:
+#             c1, c2, x_sign = 5.5, 3.1, -1.
+#             x_star = np.log(np.abs(xi))
+#         return x_sign * np.exp(x_star + 0.049 * (np.sin(c1 * x_star) + np.sin(c2 * x_star)))
+
+#     x = np.array(x).ravel()
+#     x[0] = transform(x[0])
+#     x[-1] = transform(x[-1])
+#     return x
+
 def tosz_func(x):
     def transform(xi):
-        if xi > 0:
-            c1, c2, x_sign = 10., 7.9, 1.0
-            x_star = np.log(np.abs(xi))
-        elif xi == 0:
-            c1, c2, x_sign, x_star = 5.5, 3.1, 0., 0.
-        else:
-            c1, c2, x_sign = 5.5, 3.1, -1.
-            x_star = np.log(np.abs(xi))
+        c1, c2 = 10., 7.9
+        x_sign = np.where(xi > 0, 1.0, np.where(xi < 0, -1.0, 0.0))
+        x_star = np.log(np.abs(xi))
         return x_sign * np.exp(x_star + 0.049 * (np.sin(c1 * x_star) + np.sin(c2 * x_star)))
 
     x = np.array(x).ravel()
-    x[0] = transform(x[0])
-    x[-1] = transform(x[-1])
-    return x
+    transformed_x = np.where((x == x[0]) | (x == x[-1]), transform(x), x)
+    return transformed_x
 
 
 def tasy_func(x, beta=0.5):
@@ -281,9 +293,9 @@ def modified_schwefel_func(x):
     mask3 = ~mask1 & ~mask2
     fx = np.zeros(nx)
     fx[mask1] -= (500.0 + np.fmod(np.abs(z[mask1]), 500)) * np.sin(np.sqrt(500.0 - np.fmod(np.abs(z[mask1]), 500))) - (
-                (z[mask1] - 500.0) / 100.) ** 2 / nx
+        (z[mask1] - 500.0) / 100.) ** 2 / nx
     fx[mask2] -= (-500.0 + np.fmod(np.abs(z[mask2]), 500)) * np.sin(np.sqrt(500.0 - np.fmod(np.abs(z[mask2]), 500))) - (
-                (z[mask2] + 500.0) / 100.) ** 2 / nx
+        (z[mask2] + 500.0) / 100.) ** 2 / nx
     fx[mask3] -= z[mask3] * np.sin(np.sqrt(np.abs(z[mask3])))
 
     return np.sum(fx) + 4.189828872724338e+002 * nx
@@ -360,7 +372,7 @@ def chebyshev_func(x):
     dx_arr = np.zeros(ndim)
     dx_arr[:2] = [1.0, 1.2]
     for i in range(2, ndim):
-        dx_arr[i] = 2.4 * dx_arr[i-1] - dx_arr[i-2]
+        dx_arr[i] = 2.4 * dx_arr[i - 1] - dx_arr[i - 2]
     dx = dx_arr[-1]
 
     dy = 2.0 / sample
@@ -422,7 +434,7 @@ def lennard_jones_func(x):
     sum_val = 0
 
     x_matrix = x.reshape((k, 3))
-    for i in range(k-1):
+    for i in range(k - 1):
         for j in range(i + 1, k):
             # Use slicing to get the differences between points i and j
             diff = x_matrix[i] - x_matrix[j]

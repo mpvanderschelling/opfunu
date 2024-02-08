@@ -1,10 +1,10 @@
 #!/usr/bin/env python
-# Created by "Thieu" at 15:45, 04/07/2022 ----------%                                                                               
-#       Email: nguyenthieu2102@gmail.com            %                                                    
-#       Github: https://github.com/thieu1995        %                         
+# Created by "Thieu" at 15:45, 04/07/2022 ----------%
+#       Email: nguyenthieu2102@gmail.com            %
+#       Github: https://github.com/thieu1995        %
 # --------------------------------------------------%
 
-import numpy as np
+import autograd.numpy as np
 from opfunu.cec_based.cec import CecBenchmark
 from opfunu.utils import operator
 
@@ -132,7 +132,7 @@ class F42014(F12014):
     def evaluate(self, x, *args):
         self.n_fe += 1
         self.check_solution(x, self.dim_max, self.dim_supported)
-        z = np.dot(self.f_matrix, 2.048*(x - self.f_shift)/100)
+        z = np.dot(self.f_matrix, 2.048 * (x - self.f_shift) / 100)
         return operator.rosenbrock_func(z, shift=1.0) + self.f_bias
 
 
@@ -186,7 +186,7 @@ class F62014(F12014):
     def evaluate(self, x, *args):
         self.n_fe += 1
         self.check_solution(x, self.dim_max, self.dim_supported)
-        z = np.dot(self.f_matrix, 0.5*(x - self.f_shift)/100)
+        z = np.dot(self.f_matrix, 0.5 * (x - self.f_shift) / 100)
         return operator.weierstrass_norm_func(z) + self.f_bias
 
 
@@ -212,7 +212,7 @@ class F72014(F12014):
     def evaluate(self, x, *args):
         self.n_fe += 1
         self.check_solution(x, self.dim_max, self.dim_supported)
-        z = np.dot(self.f_matrix, 600.*(x - self.f_shift)/100)
+        z = np.dot(self.f_matrix, 600. * (x - self.f_shift) / 100)
         return operator.griewank_func(z) + self.f_bias
 
 
@@ -294,7 +294,7 @@ class F92014(F12014):
     def evaluate(self, x, *args):
         self.n_fe += 1
         self.check_solution(x, self.dim_max, self.dim_supported)
-        z = np.dot(self.f_matrix, 5.12*(x - self.f_shift)/100)
+        z = np.dot(self.f_matrix, 5.12 * (x - self.f_shift) / 100)
         return operator.rastrigin_func(z) + self.f_bias
 
 
@@ -318,7 +318,7 @@ class F102014(F82014):
     def evaluate(self, x, *args):
         self.n_fe += 1
         self.check_solution(x, self.dim_max, self.dim_supported)
-        return operator.modified_schwefel_func(1000*(x - self.f_shift)/100) + self.f_bias
+        return operator.modified_schwefel_func(1000 * (x - self.f_shift) / 100) + self.f_bias
 
 
 class F112014(F12014):
@@ -347,7 +347,7 @@ class F112014(F12014):
     def evaluate(self, x, *args):
         self.n_fe += 1
         self.check_solution(x, self.dim_max, self.dim_supported)
-        z = np.dot(self.f_matrix, 1000*(x - self.f_shift)/100)
+        z = np.dot(self.f_matrix, 1000 * (x - self.f_shift) / 100)
         return operator.modified_schwefel_func(z) + self.f_bias
 
 
@@ -379,7 +379,7 @@ class F122014(F12014):
     def evaluate(self, x, *args):
         self.n_fe += 1
         self.check_solution(x, self.dim_max, self.dim_supported)
-        z = np.dot(self.f_matrix, 5*(x - self.f_shift)/100)
+        z = np.dot(self.f_matrix, 5 * (x - self.f_shift) / 100)
         return operator.katsuura_func(z) + self.f_bias
 
 
@@ -409,7 +409,7 @@ class F132014(F12014):
     def evaluate(self, x, *args):
         self.n_fe += 1
         self.check_solution(x, self.dim_max, self.dim_supported)
-        z = np.dot(self.f_matrix, 5*(x - self.f_shift)/100)
+        z = np.dot(self.f_matrix, 5 * (x - self.f_shift) / 100)
         return operator.happy_cat_func(z, shift=-1.0) + self.f_bias
 
 
@@ -440,7 +440,7 @@ class F142014(F12014):
     def evaluate(self, x, *args):
         self.n_fe += 1
         self.check_solution(x, self.dim_max, self.dim_supported)
-        z = np.dot(self.f_matrix, 5*(x - self.f_shift)/100)
+        z = np.dot(self.f_matrix, 5 * (x - self.f_shift) / 100)
         return operator.hgbat_func(z, shift=-1.0) + self.f_bias
 
 
@@ -469,7 +469,7 @@ class F152014(F12014):
     def evaluate(self, x, *args):
         self.n_fe += 1
         self.check_solution(x, self.dim_max, self.dim_supported)
-        z = np.dot(self.f_matrix, 5*(x - self.f_shift)/100)
+        z = np.dot(self.f_matrix, 5 * (x - self.f_shift) / 100)
         return operator.expanded_griewank_rosenbrock_func(z) + self.f_bias
 
 
@@ -608,9 +608,9 @@ class F182014(F172014):
         z = x - self.f_shift
         z1 = np.concatenate((z[self.idx1], z[self.idx2], z[self.idx3]))
         mz = np.dot(self.f_matrix, z1)
-        return (operator.bent_cigar_func(mz[:self.n1]) +
-                operator.hgbat_func(mz[self.n1:self.n2], shift=-1.0) +
-                operator.rastrigin_func(mz[self.n2:]) + self.f_bias)
+        return (operator.bent_cigar_func(mz[:self.n1])
+                + operator.hgbat_func(mz[self.n1:self.n2], shift=-1.0)
+                + operator.rastrigin_func(mz[self.n2:]) + self.f_bias)
 
 
 class F192014(F172014):
@@ -660,10 +660,10 @@ class F192014(F172014):
         z = x - self.f_shift
         z1 = np.concatenate((z[self.idx1], z[self.idx2], z[self.idx3], z[self.idx4]))
         mz = np.dot(self.f_matrix, z1)
-        return (operator.griewank_func(mz[:self.n1]) +
-                operator.weierstrass_func(mz[self.n1:self.n2]) +
-                operator.rosenbrock_func(mz[self.n2:self.n3], shift=1.0) +
-                operator.expanded_scaffer_f6_func(mz[self.n3:]) + self.f_bias)
+        return (operator.griewank_func(mz[:self.n1])
+                + operator.weierstrass_func(mz[self.n1:self.n2])
+                + operator.rosenbrock_func(mz[self.n2:self.n3], shift=1.0)
+                + operator.expanded_scaffer_f6_func(mz[self.n3:]) + self.f_bias)
 
 
 class F202014(F192014):
@@ -706,10 +706,11 @@ class F202014(F192014):
         z = x - self.f_shift
         z1 = np.concatenate((z[self.idx1], z[self.idx2], z[self.idx3], z[self.idx4]))
         mz = np.dot(self.f_matrix, z1)
-        return (operator.hgbat_func(mz[:self.n1], shift=-1.0) +
-                operator.discus_func(mz[self.n1:self.n2]) +
-                operator.expanded_griewank_rosenbrock_func(mz[self.n2:self.n3]) +
-                operator.rastrigin_func(mz[self.n3:]) + self.f_bias)
+        return (operator.hgbat_func(mz[:self.n1], shift=-1.0)
+                + operator.discus_func(mz[self.n1:self.n2])
+                + operator.expanded_griewank_rosenbrock_func(mz[self.n2:self.n3])
+                + operator.rastrigin_func(mz[self.n3:]) + self.f_bias)
+
 
 class F212014(F172014):
     """
@@ -753,18 +754,17 @@ class F212014(F172014):
         self.idx1, self.idx2, self.idx3 = self.f_shuffle[:self.n1], self.f_shuffle[self.n1:self.n2], self.f_shuffle[self.n2:self.n3]
         self.idx4, self.idx5 = self.f_shuffle[self.n3:self.n4], self.f_shuffle[self.n4:self.ndim]
 
-
     def evaluate(self, x, *args):
         self.n_fe += 1
         self.check_solution(x, self.dim_max, self.dim_supported)
         z = x - self.f_shift
         z1 = np.concatenate((z[self.idx1], z[self.idx2], z[self.idx3], z[self.idx4], z[self.idx5]))
         mz = np.dot(self.f_matrix, z1)
-        return (operator.expanded_scaffer_f6_func(mz[:self.n1]) +
-                operator.hgbat_func(mz[self.n1:self.n2], shift=-1.0) +
-                operator.rosenbrock_func(mz[self.n2:self.n3], shift=1.0) +
-                operator.modified_schwefel_func(mz[self.n3:self.n4]) +
-                operator.elliptic_func(mz[self.n4:]) + self.f_bias)
+        return (operator.expanded_scaffer_f6_func(mz[:self.n1])
+                + operator.hgbat_func(mz[self.n1:self.n2], shift=-1.0)
+                + operator.rosenbrock_func(mz[self.n2:self.n3], shift=1.0)
+                + operator.modified_schwefel_func(mz[self.n3:self.n4])
+                + operator.elliptic_func(mz[self.n4:]) + self.f_bias)
 
 
 class F222014(F212014):
@@ -807,11 +807,12 @@ class F222014(F212014):
         z = x - self.f_shift
         z1 = np.concatenate((z[self.idx1], z[self.idx2], z[self.idx3], z[self.idx4], z[self.idx5]))
         mz = np.dot(self.f_matrix, z1)
-        return (operator.katsuura_func(mz[:self.n1]) +
-                operator.happy_cat_func(mz[self.n1:self.n2], shift=-1.0) +
-                operator.expanded_griewank_rosenbrock_func(mz[self.n2:self.n3]) +
-                operator.modified_schwefel_func(mz[self.n3:self.n4]) +
-                operator.ackley_func(mz[self.n4:]) + self.f_bias)
+        return (operator.katsuura_func(mz[:self.n1])
+                + operator.happy_cat_func(mz[self.n1:self.n2], shift=-1.0)
+                + operator.expanded_griewank_rosenbrock_func(mz[self.n2:self.n3])
+                + operator.modified_schwefel_func(mz[self.n3:self.n4])
+                + operator.ackley_func(mz[self.n4:]) + self.f_bias)
+
 
 class F232014(CecBenchmark):
     """
@@ -860,11 +861,11 @@ class F232014(CecBenchmark):
         self.xichmas = [10, 20, 30, 40, 50]
         self.lamdas = [1., 1e-6, 1e-26, 1e-6, 1e-6]
         self.bias = [0, 100, 200, 300, 400]
-        self.g0 = F42014(self.ndim, None, self.f_shift[0], self.f_matrix[:self.ndim,:], f_bias=0)
-        self.g1 = F12014(self.ndim, None, self.f_shift[1], self.f_matrix[self.ndim:2*self.ndim,:], f_bias=0)
-        self.g2 = F22014(self.ndim, None, self.f_shift[2], self.f_matrix[2*self.ndim:3*self.ndim,:], f_bias=0)
-        self.g3 = F32014(self.ndim, None, self.f_shift[3], self.f_matrix[3*self.ndim:4*self.ndim,:], f_bias=0)
-        self.g4 = F12014(self.ndim, None, self.f_shift[4], self.f_matrix[4*self.ndim:5*self.ndim, :],f_bias=0)
+        self.g0 = F42014(self.ndim, None, self.f_shift[0], self.f_matrix[:self.ndim, :], f_bias=0)
+        self.g1 = F12014(self.ndim, None, self.f_shift[1], self.f_matrix[self.ndim:2 * self.ndim, :], f_bias=0)
+        self.g2 = F22014(self.ndim, None, self.f_shift[2], self.f_matrix[2 * self.ndim:3 * self.ndim, :], f_bias=0)
+        self.g3 = F32014(self.ndim, None, self.f_shift[3], self.f_matrix[3 * self.ndim:4 * self.ndim, :], f_bias=0)
+        self.g4 = F12014(self.ndim, None, self.f_shift[4], self.f_matrix[4 * self.ndim:5 * self.ndim, :], f_bias=0)
         self.paras = {"f_shift": self.f_shift, "f_bias": self.f_bias, "f_matrix": self.f_matrix}
 
     def evaluate(self, x, *args):
@@ -1133,11 +1134,11 @@ class F282014(F232014):
         self.xichmas = [10, 20, 30, 40, 50]
         self.lamdas = [2.5, 10, 2.5, 5e-4, 1e-6]
         self.bias = [0, 100, 200, 300, 400]
-        self.g0 = F152014(self.ndim, None, self.f_shift[0], self.f_matrix[:self.ndim,:], f_bias=0)
-        self.g1 = F132014(self.ndim, None, self.f_shift[1], self.f_matrix[self.ndim:2*self.ndim,:], f_bias=0)
-        self.g2 = F112014(self.ndim, None, self.f_shift[2], self.f_matrix[2*self.ndim:3*self.ndim,:], f_bias=0)
-        self.g3 = F162014(self.ndim, None, self.f_shift[3], self.f_matrix[3*self.ndim:4*self.ndim,:], f_bias=0)
-        self.g4 = F12014(self.ndim, None, self.f_shift[4], self.f_matrix[4*self.ndim:5*self.ndim,:], f_bias=0)
+        self.g0 = F152014(self.ndim, None, self.f_shift[0], self.f_matrix[:self.ndim, :], f_bias=0)
+        self.g1 = F132014(self.ndim, None, self.f_shift[1], self.f_matrix[self.ndim:2 * self.ndim, :], f_bias=0)
+        self.g2 = F112014(self.ndim, None, self.f_shift[2], self.f_matrix[2 * self.ndim:3 * self.ndim, :], f_bias=0)
+        self.g3 = F162014(self.ndim, None, self.f_shift[3], self.f_matrix[3 * self.ndim:4 * self.ndim, :], f_bias=0)
+        self.g4 = F12014(self.ndim, None, self.f_shift[4], self.f_matrix[4 * self.ndim:5 * self.ndim, :], f_bias=0)
         self.paras = {"f_shift": self.f_shift, "f_bias": self.f_bias, "f_matrix": self.f_matrix}
 
     def evaluate(self, x, *args):
@@ -1193,7 +1194,7 @@ class F292014(F232014):
         self.bias = [0, 100, 200]
         self.x_global = self.f_shift[0]
         self.g0 = F172014(self.ndim, None, self.f_shift[0], f_shuffle=f_shuffle, f_bias=0)
-        self.g1 = F182014(self.ndim, None, self.f_shift[1], f_shuffle=f_shuffle,f_bias=0)
+        self.g1 = F182014(self.ndim, None, self.f_shift[1], f_shuffle=f_shuffle, f_bias=0)
         self.g2 = F192014(self.ndim, None, self.f_shift[2], f_shuffle=f_shuffle, f_bias=0)
         self.paras = {"f_shift": self.f_shift, "f_bias": self.f_bias, "f_matrix": self.f_matrix}
 
@@ -1243,8 +1244,8 @@ class F302014(F232014):
         self.bias = [0, 100, 200]
         self.x_global = self.f_shift[0]
         self.g0 = F202014(self.ndim, None, self.f_shift[0], self.f_matrix[:self.ndim, :], f_shuffle=f_shuffle, f_bias=0)
-        self.g1 = F212014(self.ndim, None, self.f_shift[1], self.f_matrix[self.ndim:2*self.ndim, :], f_shuffle=f_shuffle,f_bias=0)
-        self.g2 = F222014(self.ndim, None, self.f_shift[2], self.f_matrix[2*self.ndim:3*self.ndim, :], f_shuffle=f_shuffle, f_bias=0)
+        self.g1 = F212014(self.ndim, None, self.f_shift[1], self.f_matrix[self.ndim:2 * self.ndim, :], f_shuffle=f_shuffle, f_bias=0)
+        self.g2 = F222014(self.ndim, None, self.f_shift[2], self.f_matrix[2 * self.ndim:3 * self.ndim, :], f_shuffle=f_shuffle, f_bias=0)
         self.paras = {"f_shift": self.f_shift, "f_bias": self.f_bias, "f_matrix": self.f_matrix}
 
     def evaluate(self, x, *args):

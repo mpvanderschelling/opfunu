@@ -1,10 +1,10 @@
 #!/usr/bin/env python
-# Created by "Thieu" at 21:17, 12/07/2022 ----------%                                                                               
-#       Email: nguyenthieu2102@gmail.com            %                                                    
-#       Github: https://github.com/thieu1995        %                         
+# Created by "Thieu" at 21:17, 12/07/2022 ----------%
+#       Email: nguyenthieu2102@gmail.com            %
+#       Github: https://github.com/thieu1995        %
 # --------------------------------------------------%
 
-import numpy as np
+import autograd.numpy as np
 from opfunu.cec_based.cec import CecBenchmark
 from opfunu.utils import operator
 
@@ -109,7 +109,7 @@ class F22020(CecBenchmark):
     def evaluate(self, x, *args):
         self.n_fe += 1
         self.check_solution(x, self.dim_max, self.dim_supported)
-        z = np.dot(self.f_matrix, 1000.*(x - self.f_shift)/100)
+        z = np.dot(self.f_matrix, 1000. * (x - self.f_shift) / 100)
         return operator.modified_schwefel_func(z) + self.f_bias
 
 
@@ -161,7 +161,7 @@ class F32020(CecBenchmark):
     def evaluate(self, x, *args):
         self.n_fe += 1
         self.check_solution(x, self.dim_max, self.dim_supported)
-        z = np.dot(self.f_matrix, 600.*(x - self.f_shift)/100)
+        z = np.dot(self.f_matrix, 600. * (x - self.f_shift) / 100)
         return operator.lunacek_bi_rastrigin_func(z, shift=2.5) + self.f_bias
 
 
@@ -339,10 +339,10 @@ class F62020(CecBenchmark):
         self.n_fe += 1
         self.check_solution(x, self.dim_max, self.dim_supported)
         mz = np.dot(self.f_matrix, x - self.f_shift)
-        return (operator.expanded_schaffer_f6_func(mz[self.idx1]) +
-                operator.hgbat_func(mz[self.idx2], shift=-1.0) +
-                operator.rosenbrock_func(mz[self.idx3], shift=1.0) +
-                operator.modified_schwefel_func(mz[self.idx4]) + self.f_bias)
+        return (operator.expanded_schaffer_f6_func(mz[self.idx1])
+                + operator.hgbat_func(mz[self.idx2], shift=-1.0)
+                + operator.rosenbrock_func(mz[self.idx3], shift=1.0)
+                + operator.modified_schwefel_func(mz[self.idx4]) + self.f_bias)
 
 
 class F72020(CecBenchmark):
@@ -406,11 +406,11 @@ class F72020(CecBenchmark):
         z = x - self.f_shift
         z1 = np.concatenate((z[self.idx1], z[self.idx2], z[self.idx3], z[self.idx4], z[self.idx5]))
         mz = np.dot(self.f_matrix, z1)
-        return (operator.expanded_scaffer_f6_func(mz[:self.n1]) +
-                operator.hgbat_func(mz[self.n1:self.n2], shift=-1.0) +
-                operator.rosenbrock_func(mz[self.n2:self.n3], shift=1.0) +
-                operator.modified_schwefel_func(mz[self.n3:self.n4]) +
-                operator.elliptic_func(mz[self.n4:]) + self.f_bias)
+        return (operator.expanded_scaffer_f6_func(mz[:self.n1])
+                + operator.hgbat_func(mz[self.n1:self.n2], shift=-1.0)
+                + operator.rosenbrock_func(mz[self.n2:self.n3], shift=1.0)
+                + operator.modified_schwefel_func(mz[self.n3:self.n4])
+                + operator.elliptic_func(mz[self.n4:]) + self.f_bias)
 
 
 class F82020(CecBenchmark):
@@ -472,13 +472,13 @@ class F82020(CecBenchmark):
         w0 = operator.calculate_weight(x - self.f_shift[0], self.xichmas[0])
 
         # 2. Griewank’s Function F15’
-        z1 = np.dot(self.f_matrix[self.ndim:2*self.ndim, :], x - self.f_shift[1])
+        z1 = np.dot(self.f_matrix[self.ndim:2 * self.ndim, :], x - self.f_shift[1])
         g1 = self.lamdas[1] * self.g1(z1) + self.bias[1]
         w1 = operator.calculate_weight(x - self.f_shift[1], self.xichmas[1])
 
         # 3. Modifed Schwefel's Function F10’
         # z2 = np.dot(self.f_matrix[2*self.ndim:3*self.ndim, :], x - self.f_shift[2])
-        z2 = 1000*(x - self.f_shift[2])/100
+        z2 = 1000 * (x - self.f_shift[2]) / 100
         g2 = self.lamdas[2] * self.g2(z2) + self.bias[2]
         w2 = operator.calculate_weight(x - self.f_shift[2], self.xichmas[2])
 
@@ -550,12 +550,12 @@ class F92020(CecBenchmark):
         w0 = operator.calculate_weight(x - self.f_shift[0], self.xichmas[0])
 
         # 2. High Conditioned Elliptic Function F11’
-        z1 = np.dot(self.f_matrix[self.ndim:2*self.ndim, :], x - self.f_shift[1])
+        z1 = np.dot(self.f_matrix[self.ndim:2 * self.ndim, :], x - self.f_shift[1])
         g1 = self.lamdas[1] * self.g1(z1) + self.bias[1]
         w1 = operator.calculate_weight(x - self.f_shift[1], self.xichmas[1])
 
         # 3. Girewank Function F15’
-        z2 = np.dot(self.f_matrix[2*self.ndim:3*self.ndim, :], x - self.f_shift[2])
+        z2 = np.dot(self.f_matrix[2 * self.ndim:3 * self.ndim, :], x - self.f_shift[2])
         g2 = self.lamdas[2] * self.g2(z2) + self.bias[2]
         w2 = operator.calculate_weight(x - self.f_shift[2], self.xichmas[2])
 
@@ -633,12 +633,12 @@ class F102020(CecBenchmark):
         w0 = operator.calculate_weight(x - self.f_shift[0], self.xichmas[0])
 
         # 2. Happycat Function F17’
-        z1 = np.dot(self.f_matrix[self.ndim:2*self.ndim, :], x - self.f_shift[0])
+        z1 = np.dot(self.f_matrix[self.ndim:2 * self.ndim, :], x - self.f_shift[0])
         g1 = self.lamdas[1] * self.g1(z1) + self.bias[1]
         w1 = operator.calculate_weight(x - self.f_shift[1], self.xichmas[1])
 
         # 3. Ackley Function F13’
-        z2 = np.dot(self.f_matrix[2*self.ndim:3*self.ndim, :], x - self.f_shift[0])
+        z2 = np.dot(self.f_matrix[2 * self.ndim:3 * self.ndim, :], x - self.f_shift[0])
         g2 = self.lamdas[2] * self.g2(z2) + self.bias[2]
         w2 = operator.calculate_weight(x - self.f_shift[2], self.xichmas[2])
 
@@ -648,7 +648,7 @@ class F102020(CecBenchmark):
         w3 = operator.calculate_weight(x - self.f_shift[3], self.xichmas[3])
 
         # 5. Rosenbrock’s Function F4’
-        z4 = np.dot(self.f_matrix[4 * self.ndim:5 * self.ndim, :], 2.048*(x - self.f_shift[0])/100) + 1
+        z4 = np.dot(self.f_matrix[4 * self.ndim:5 * self.ndim, :], 2.048 * (x - self.f_shift[0]) / 100) + 1
         g4 = self.lamdas[4] * self.g4(z4) + self.bias[4]
         w4 = operator.calculate_weight(x - self.f_shift[4], self.xichmas[4])
 

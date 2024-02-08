@@ -1,10 +1,10 @@
 #!/usr/bin/env python
-# Created by "Thieu" at 18:47, 29/06/2022 ----------%                                                                               
-#       Email: nguyenthieu2102@gmail.com            %                                                    
-#       Github: https://github.com/thieu1995        %                         
+# Created by "Thieu" at 18:47, 29/06/2022 ----------%
+#       Email: nguyenthieu2102@gmail.com            %
+#       Github: https://github.com/thieu1995        %
 # --------------------------------------------------%
 
-import numpy as np
+import autograd.numpy as np
 from opfunu.benchmark import Benchmark
 
 
@@ -42,7 +42,7 @@ class BartelsConn(Benchmark):
     def evaluate(self, x, *args):
         self.check_solution(x)
         self.n_fe += 1
-        return np.abs(x[0]**2 + x[1]**2 + x[0]*x[1]) + np.abs(np.sin(x[0]))+ np.abs(np.cos(x[1]))
+        return np.abs(x[0]**2 + x[1]**2 + x[0] * x[1]) + np.abs(np.sin(x[0])) + np.abs(np.cos(x[1]))
 
 
 class Beale(Benchmark):
@@ -250,7 +250,7 @@ class Bird(Benchmark):
     """
     name = "Bird Function"
     latex_formula = r'f_{\text{Bird}}(x) = \left(x_1 - x_2\right)^{2} + e^{\left[1 -' + \
-         r'\sin\left(x_1\right) \right]^{2}} \cos\left(x_2\right) + e^{\left[1 - \cos\left(x_2\right)\right]^{2}} \sin\left(x_1\right)'
+        r'\sin\left(x_1\right) \right]^{2}} \cos\left(x_2\right) + e^{\left[1 - \cos\left(x_2\right)\right]^{2}} \sin\left(x_1\right)'
     latex_formula_dimension = r'd = 2'
     latex_formula_bounds = r'x_i \in [-2\pi, 2\pi], \forall i \in \llbracket 1, d\rrbracket'
     latex_formula_global_optimum = r'f(4.701055751981055, 3.152946019601391) = f(-1.582142172055011, -3.130246799635430) = -106.7645367198034'
@@ -271,7 +271,7 @@ class Bird(Benchmark):
         super().__init__()
         self.dim_changeable = False
         self.dim_default = 2
-        self.check_ndim_and_bounds(ndim, bounds, np.array([[-2*np.pi, 2*np.pi] for _ in range(self.dim_default)]))
+        self.check_ndim_and_bounds(ndim, bounds, np.array([[-2 * np.pi, 2 * np.pi] for _ in range(self.dim_default)]))
         self.f_global = -106.7645367198034
         self.x_global = np.array([4.701055751981055, 3.152946019601391])
         self.x_globals = np.array([[4.701055751981055, 3.152946019601391], [-1.582142172055011, -3.130246799635430]])
@@ -427,7 +427,7 @@ class Booth(Benchmark):
     def evaluate(self, x, *args):
         self.check_solution(x)
         self.n_fe += 1
-        return (x[0] + 2*x[1] - 7)**2 + (2*x[0] + x[1] - 5)**2
+        return (x[0] + 2 * x[1] - 7)**2 + (2 * x[0] + x[1] - 5)**2
 
 
 class BoxBetts(Benchmark):
@@ -732,14 +732,3 @@ class Bukin06(Benchmark):
         self.check_solution(x)
         self.n_fe += 1
         return 100 * np.sqrt(np.abs(x[1] - 0.01 * x[0] ** 2)) + 0.01 * np.abs(x[0] + 10)
-
-
-
-
-
-
-
-
-
-
-

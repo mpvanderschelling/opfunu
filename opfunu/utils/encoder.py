@@ -1,10 +1,10 @@
 #!/usr/bin/env python
-# Created by "Thieu" at 13:58, 09/05/2023 ----------%                                                                               
-#       Email: nguyenthieu2102@gmail.com            %                                                    
-#       Github: https://github.com/thieu1995        %                         
+# Created by "Thieu" at 13:58, 09/05/2023 ----------%
+#       Email: nguyenthieu2102@gmail.com            %
+#       Github: https://github.com/thieu1995        %
 # --------------------------------------------------%
 
-import numpy as np
+import autograd.numpy as np
 
 
 class LabelEncoder:

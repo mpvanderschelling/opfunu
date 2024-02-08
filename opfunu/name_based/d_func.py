@@ -1,10 +1,10 @@
 #!/usr/bin/env python
-# Created by "Thieu" at 09:33, 21/07/2022 ----------%                                                                               
-#       Email: nguyenthieu2102@gmail.com            %                                                    
-#       Github: https://github.com/thieu1995        %                         
+# Created by "Thieu" at 09:33, 21/07/2022 ----------%
+#       Email: nguyenthieu2102@gmail.com            %
+#       Github: https://github.com/thieu1995        %
 # --------------------------------------------------%
 
-import numpy as np
+import autograd.numpy as np
 from opfunu.benchmark import Benchmark
 
 
@@ -130,8 +130,8 @@ class Decanomial(Benchmark):
     """
     name = "Decanomial Function"
     latex_formula = r'f(x) = 0.001 \left(\lvert{x_{2}^{4} + 12 x_{2}^{3}' + \
-       r'+ 54 x_{2}^{2} + 108 x_{2} + 81.0}\rvert + \lvert{x_{1}^{10} - 20 x_{1}^{9} + 180 x_{1}^{8} - 960 x_{1}^{7} + 3360 x_{1}^{6}' + \
-       r'- 8064 x_{1}^{5} + 13340 x_{1}^{4} - 15360 x_{1}^{3} + 11520 x_{1}^{2} - 5120 x_{1} + 2624.0}\rvert\right)^{2}'
+        r'+ 54 x_{2}^{2} + 108 x_{2} + 81.0}\rvert + \lvert{x_{1}^{10} - 20 x_{1}^{9} + 180 x_{1}^{8} - 960 x_{1}^{7} + 3360 x_{1}^{6}' + \
+        r'- 8064 x_{1}^{5} + 13340 x_{1}^{4} - 15360 x_{1}^{3} + 11520 x_{1}^{2} - 5120 x_{1} + 2624.0}\rvert\right)^{2}'
     latex_formula_dimension = r'd = 2'
     latex_formula_bounds = r'x_i \in [-10, 10], \forall i \in \llbracket 1, d\rrbracket'
     latex_formula_global_optimum = r'f(2, -3) = 0'
@@ -283,7 +283,7 @@ class DeflectedCorrugatedSpring(Benchmark):
         self.dim_changeable = True
         self.dim_default = 2
         self.alpha = alpha
-        self.check_ndim_and_bounds(ndim, bounds, np.array([[0., 2.*self.alpha] for _ in range(self.dim_default)]))
+        self.check_ndim_and_bounds(ndim, bounds, np.array([[0., 2. * self.alpha] for _ in range(self.dim_default)]))
         self.f_global = -1.0
         self.x_global = self.alpha * np.ones(self.ndim)
 
@@ -340,7 +340,7 @@ class DeVilliersGlasser02(Benchmark):
     """
     name = "DeVilliers-Glasser 2 Function"
     latex_formula = r'f(x) = \sum_{i=1}^{24} \left[ x_1x_2^{t_i}' +\
-       r'\tanh \left [x_3t_i + \sin(x_4t_i) \right] \cos(t_ie^{x_5}) - y_i \right ]^2'
+        r'\tanh \left [x_3t_i + \sin(x_4t_i) \right] \cos(t_ie^{x_5}) - y_i \right ]^2'
     latex_formula_dimension = r'd = 5'
     latex_formula_bounds = r'x_i \in [-500, 500], \forall i \in \llbracket 1, d\rrbracket'
     latex_formula_global_optimum = r'f(53.81, 1.27, 3.012, 2.13, 0.507) = 0'

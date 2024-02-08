@@ -1,10 +1,10 @@
 #!/usr/bin/env python
-# Created by "Thieu" at 17:26, 22/07/2022 ----------%                                                                               
-#       Email: nguyenthieu2102@gmail.com            %                                                    
-#       Github: https://github.com/thieu1995        %                         
+# Created by "Thieu" at 17:26, 22/07/2022 ----------%
+#       Email: nguyenthieu2102@gmail.com            %
+#       Github: https://github.com/thieu1995        %
 # --------------------------------------------------%
 
-import numpy as np
+import autograd.numpy as np
 from opfunu.benchmark import Benchmark
 
 
@@ -176,7 +176,7 @@ class Gear(Benchmark):
     """
     name = "Gear Problem"
     latex_formula = r'f(x) = \left \{ \frac{1.0}{6.931}' + \
-       r'- \frac{\lfloor x_1\rfloor \lfloor x_2 \rfloor } {\lfloor x_3 \rfloor \lfloor x_4 \rfloor } \right\}^2'
+        r'- \frac{\lfloor x_1\rfloor \lfloor x_2 \rfloor } {\lfloor x_3 \rfloor \lfloor x_4 \rfloor } \right\}^2'
     latex_formula_dimension = r'd = 4'
     latex_formula_bounds = r'x_i \in [12, 60], \forall i \in \llbracket 1, d\rrbracket'
     latex_formula_global_optimum = r'f(16, 19, 43, 49) = 2.7 \cdot 10^{-12}'

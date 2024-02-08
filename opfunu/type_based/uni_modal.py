@@ -5,9 +5,10 @@
 #       Email:      nguyenthieu2102@gmail.com                                                           #
 #       Homepage:   https://www.researchgate.net/profile/Thieu_Nguyen6                                  #
 #       Github:     https://github.com/thieu1995                                                  #
-#-------------------------------------------------------------------------------------------------------#
+# -------------------------------------------------------------------------------------------------------#
 
-import numpy as np
+import autograd.numpy as np
+
 
 class Functions:
     """
@@ -29,7 +30,6 @@ class Functions:
             result += (solution[i] ** 2) ** (solution[i + 1] ** 2 + 1) + (solution[i + 1] ** 2) ** (solution[i] ** 2 + 1)
         return result
 
-
     def _chung_reynolds__(self, solution=None):
         """
         Class: continuous, differentiable, partially-separable, scalable
@@ -40,7 +40,6 @@ class Functions:
         @return: fx
         """
         return np.sum(solution**2)**2
-
 
     def _dixon_price__(self, solution=None):
         """
@@ -53,10 +52,9 @@ class Functions:
         """
         d = len(solution)
         result = (solution[0] - 1)**2
-        for i in range(1, d-1):
-            result += (i+1)*(2*solution[i]**2 - solution[i-1])**2
+        for i in range(1, d - 1):
+            result += (i + 1) * (2 * solution[i]**2 - solution[i - 1])**2
         return result
-
 
     def _powell_sum__(self, solution=None):
         """
@@ -73,7 +71,6 @@ class Functions:
             result += np.abs(solution[i]) ** (i + 2)
         return result
 
-
     def _powell_singular_2__(self, solution=None):
         """
         Class: continuous, differentiable, non-separable, scalable
@@ -85,11 +82,10 @@ class Functions:
         """
         d = len(solution)
         result = 0
-        for i in range(1, d-2):
-            result += (solution[i-1]+10*solution[i])**2 + 5*(solution[i+1]-solution[i+2])**2 + \
-                   (solution[i]-2*solution[i+1])**4 + 10 * (solution[i-1]-solution[i+2])**4
+        for i in range(1, d - 2):
+            result += (solution[i - 1] + 10 * solution[i])**2 + 5 * (solution[i + 1] - solution[i + 2])**2 + \
+                (solution[i] - 2 * solution[i + 1])**4 + 10 * (solution[i - 1] - solution[i + 2])**4
         return result
-
 
     def _rosenbrock__(self, solution=None):
         """
@@ -102,10 +98,9 @@ class Functions:
         """
         d = len(solution)
         result = 0
-        for i in range(0, d-1):
-            result += 100*(solution[i+1] - solution[i]**2)**2 + (solution[i]-1)**2
+        for i in range(0, d - 1):
+            result += 100 * (solution[i + 1] - solution[i]**2)**2 + (solution[i] - 1)**2
         return result
-
 
     def _schwefel_2_20__(self, solution=None):
         """
@@ -118,7 +113,6 @@ class Functions:
         """
         return np.sum(np.abs(solution))
 
-
     def _schwefel_2_21__(self, solution=None):
         """
         Class: Continuous, Differentiable, Non-Separable, Scalable
@@ -129,7 +123,6 @@ class Functions:
         @return: fx
         """
         return np.max(np.abs(solution))
-
 
     def _schwefel_2_22__(self, solution=None):
         """
@@ -142,7 +135,6 @@ class Functions:
         """
         return np.sum(np.abs(solution)) + np.prod(np.abs(solution))
 
-
     def _schwefel_2_23__(self, solution=None):
         """
         Class: differentiable, non-separable, continuous, scalable
@@ -153,7 +145,6 @@ class Functions:
         @return: fx
         """
         return np.sum(solution**10)
-
 
     def _step__(self, solution=None):
         """
@@ -166,7 +157,6 @@ class Functions:
         """
         return np.sum(np.floor(np.abs(solution)))
 
-
     def _step_2__(self, solution=None):
         """
         Class: Discontinuous, Non-Differentiable, Separable, Scalable
@@ -176,8 +166,7 @@ class Functions:
         @param solution: A numpy array with x_i in [-100, 100]
         @return: fx
         """
-        return np.sum(np.floor(solution+0.5)**2)
-
+        return np.sum(np.floor(solution + 0.5)**2)
 
     def _step_3__(self, solution=None):
         """
@@ -190,7 +179,6 @@ class Functions:
         """
         return np.sum(np.floor(solution**2))
 
-
     def _streched_v_sin_wave__(self, solution=None):
         """
         Class: Continuous, Differentiable, Non-Separable, Scalable
@@ -202,10 +190,9 @@ class Functions:
         """
         d = len(solution)
         result = 0
-        for i in range(0, d-1):
-            result += (solution[i+1]**2 + solution[i]**2)**0.25 * (np.sin(50*(solution[i+1]**2+solution[i]**2)**0.1)**2+0.1)
+        for i in range(0, d - 1):
+            result += (solution[i + 1]**2 + solution[i]**2)**0.25 * (np.sin(50 * (solution[i + 1]**2 + solution[i]**2)**0.1)**2 + 0.1)
         return result
-
 
     def _sum_squres__(self, solution=None):
         """
@@ -219,9 +206,8 @@ class Functions:
         d = len(solution)
         result = 0.0
         for i in range(0, d):
-            result = (i+1)*solution[i]**2
+            result = (i + 1) * solution[i]**2
         return result
-
 
     def _zakharov__(self, solution=None):
         """

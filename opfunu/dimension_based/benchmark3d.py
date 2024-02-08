@@ -5,10 +5,11 @@
 #       Email:      nguyenthieu2102@gmail.com                                                           #
 #       Homepage:   https://www.researchgate.net/profile/Thieu_Nguyen6                                  #
 #       Github:     https://github.com/thieu1995                                                  #
-#-------------------------------------------------------------------------------------------------------#
+# -------------------------------------------------------------------------------------------------------#
 
 
-import numpy as np
+import autograd.numpy as np
+
 
 class Functions:
     """
@@ -25,4 +26,4 @@ class Functions:
         """
         n = len(solution)
         assert (n == 3, 'Wolfe function is only defined on a 3D space.')
-        return 4/3 * (solution[0]**2 + solution[1]**2 - solution[0]*solution[1])**0.75 + solution[2]
+        return 4 / 3 * (solution[0]**2 + solution[1]**2 - solution[0] * solution[1])**0.75 + solution[2]

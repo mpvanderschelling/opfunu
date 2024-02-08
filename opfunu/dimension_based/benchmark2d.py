@@ -5,9 +5,10 @@
 #       Email:      nguyenthieu2102@gmail.com                                                           #
 #       Homepage:   https://www.researchgate.net/profile/Thieu_Nguyen6                                  #
 #       Github:     https://github.com/thieu1995                                                  #
-#-------------------------------------------------------------------------------------------------------#
+# -------------------------------------------------------------------------------------------------------#
 
-import numpy as np
+import autograd.numpy as np
+
 
 class Functions:
     """
@@ -23,8 +24,7 @@ class Functions:
         """
         n = len(solution)
         assert (n == 2, 'Ackley N. 2 function is only defined on a 2D space.')
-        return -200*np.exp(-0.2*np.sqrt(np.sum(solution**2)))
-
+        return -200 * np.exp(-0.2 * np.sqrt(np.sum(solution**2)))
 
     def _ackley_n3__(self, solution=None):
         """
@@ -36,8 +36,7 @@ class Functions:
         """
         d = len(solution)
         assert (d == 2, 'Ackley N. 3 function is only defined on a 2D space.')
-        return -200*np.exp(-0.2*np.sqrt(np.sum(solution**2))) + 5*np.exp(np.cos(3*solution[0]) + np.sin(3*solution[1]))
-
+        return -200 * np.exp(-0.2 * np.sqrt(np.sum(solution**2))) + 5 * np.exp(np.cos(3 * solution[0]) + np.sin(3 * solution[1]))
 
     def _adjiman__(self, solution=None):
         """
@@ -63,7 +62,7 @@ class Functions:
         d = len(solution)
         assert (d == 2, 'Bartels conn function is only defined on a 2D space.')
         return np.abs(solution[0]**2 + solution[1]**2 + solution[0] * solution[1]) + np.abs(np.sin(solution[0])) + \
-               np.abs(np.cos(solution[1]))
+            np.abs(np.cos(solution[1]))
 
     def _beale__(self, solution=None):
         """
@@ -76,8 +75,8 @@ class Functions:
         """
         d = len(solution)
         assert (d == 2, 'Beale function is only defined on a 2D space.')
-        return (1.5-solution[0]+solution[0]*solution[1])**2 + (2.25-solution[0]+solution[0]*solution[1]**2)**2 +\
-               (2.625-solution[0]+solution[0]*solution[1]**3)**2
+        return (1.5 - solution[0] + solution[0] * solution[1])**2 + (2.25 - solution[0] + solution[0] * solution[1]**2)**2 +\
+               (2.625 - solution[0] + solution[0] * solution[1]**3)**2
 
     def _bird__(self, solution=None):
         """
@@ -90,8 +89,8 @@ class Functions:
         """
         d = len(solution)
         assert (d == 2, 'Bird function is only defined on a 2D space.')
-        return np.sin(solution[0])*np.exp((1 - np.cos(solution[1]))**2) + \
-            np.cos(solution[1]) * np.exp( (1-np.sin(solution[0]))**2 ) + (solution[0] - solution[1])**2
+        return np.sin(solution[0]) * np.exp((1 - np.cos(solution[1]))**2) + \
+            np.cos(solution[1]) * np.exp((1 - np.sin(solution[0]))**2) + (solution[0] - solution[1])**2
 
     def _bohachevskyn_n1__(self, solution=None):
         """
@@ -104,8 +103,7 @@ class Functions:
         """
         d = len(solution)
         assert (d == 2, 'Bohachevskyn N.1 function is only defined on a 2D space.')
-        return solution[0]**2 + 2*solution[1]**2 - 0.3*np.cos(3*solution[0]*np.pi) - 0.4*np.cos(4*solution[1]*np.pi) + 0.7
-
+        return solution[0]**2 + 2 * solution[1]**2 - 0.3 * np.cos(3 * solution[0] * np.pi) - 0.4 * np.cos(4 * solution[1] * np.pi) + 0.7
 
     def _bohachevskyn_n2__(self, solution=None):
         """
@@ -120,7 +118,6 @@ class Functions:
         assert (d == 2, 'Bohachevskyn N.2 function is only defined on a 2D space.')
         return solution[0] ** 2 + 2 * solution[1] ** 2 - 0.3 * np.cos(3 * solution[0] * np.pi) * np.cos(4 * solution[1] * np.pi) + 0.3
 
-
     def _booth__(self, solution=None):
         """
         Class: unimodal, convex, non-separable, differentiable, continuous
@@ -132,8 +129,7 @@ class Functions:
         """
         d = len(solution)
         assert (d == 2, 'Brooth function is only defined on a 2D space.')
-        return  (solution[0]+2*solution[1]-7)**2 + (2*solution[0]+solution[1]-5)**2
-
+        return (solution[0] + 2 * solution[1] - 7)**2 + (2 * solution[0] + solution[1] - 5)**2
 
     def _brent__(self, solution=None):
         """
@@ -146,8 +142,7 @@ class Functions:
         """
         d = len(solution)
         assert (d == 2, 'Brent function is only defined on a 2D space.')
-        return (solution[0]+10)**2 + (solution[1]+10)**2 + np.exp(-solution[0]**2-solution[1]**2)
-
+        return (solution[0] + 10)**2 + (solution[1] + 10)**2 + np.exp(-solution[0]**2 - solution[1]**2)
 
     def _bukin_n6__(self, solution=None):
         """
@@ -160,8 +155,7 @@ class Functions:
         """
         d = len(solution)
         assert (d == 2, 'Bukin N.6 function is only defined on a 2D space.')
-        return 100*np.sqrt(np.abs(solution[1] - 0.01*solution[0]**2)) + 0.01*np.abs(solution[0]+10)
-
+        return 100 * np.sqrt(np.abs(solution[1] - 0.01 * solution[0]**2)) + 0.01 * np.abs(solution[0] + 10)
 
     def _cross_in_tray__(self, solution=None):
         """
@@ -174,10 +168,9 @@ class Functions:
         """
         d = len(solution)
         assert (d == 2, 'Bukin N.6 function is only defined on a 2D space.')
-        t1 = np.exp( np.abs(100 - np.sqrt(np.sum(solution**2))/np.pi ) )
+        t1 = np.exp(np.abs(100 - np.sqrt(np.sum(solution**2)) / np.pi))
         t2 = np.sin(solution[0]) * np.cos(solution[1])
-        return -0.0001*(np.abs(t1*t2) + 1)**0.1
-
+        return -0.0001 * (np.abs(t1 * t2) + 1)**0.1
 
     def _deckkers_aarts__(self, solution=None):
         """
@@ -192,8 +185,7 @@ class Functions:
         assert (d == 2, 'Deckkers Aarts function is only defined on a 2D space.')
         t1 = solution[0]**2
         t2 = solution[1]**2
-        return 10**5*t1 + t2 - (t1 + t2)**2 + 10**(-5) * (t1 + t2)**4
-
+        return 10**5 * t1 + t2 - (t1 + t2)**2 + 10**(-5) * (t1 + t2)**4
 
     def _drop_wave__(self, solution=None):
         """
@@ -206,8 +198,7 @@ class Functions:
         """
         d = len(solution)
         assert (d == 2, 'Drop wave function is only defined on a 2D space.')
-        return -(1+np.cos(12*np.sqrt(np.sum(solution*2)))) / (0.5 * np.sum(solution**2) + 2)
-
+        return -(1 + np.cos(12 * np.sqrt(np.sum(solution * 2)))) / (0.5 * np.sum(solution**2) + 2)
 
     def _easom__(self, solution=None):
         """
@@ -220,8 +211,7 @@ class Functions:
         """
         d = len(solution)
         assert (d == 2, 'Easom function is only defined on a 2D space.')
-        return -np.cos(solution[0])*np.cos(solution[1])*np.exp(-(solution[0] - np.pi)**2 - (solution[1] - np.pi)**2)
-
+        return -np.cos(solution[0]) * np.cos(solution[1]) * np.exp(-(solution[0] - np.pi)**2 - (solution[1] - np.pi)**2)
 
     def _egg_crate__(self, solution=None):
         """
@@ -236,7 +226,6 @@ class Functions:
         assert (d == 2, 'Egg Crate function is only defined on a 2D space.')
         return np.sum(solution**2) + 25 * (np.sin(solution[0])**2 + np.sin(solution[1])**2)
 
-
     def _goldstein_price__(self, solution=None):
         """
         Class: multi-modal, non-convex, continuous, differentiable, non-separable
@@ -248,11 +237,10 @@ class Functions:
         """
         d = len(solution)
         assert (d == 2, 'Goldstein price function is only defined on a 2D space.')
-        t1 = 18 - 32*solution[0] + 12*solution[0]**2 + 4*solution[1] - 36*solution[0]*solution[1] + 27*solution[1]**2
-        t2 = 19 - 14*solution[0]+3*solution[0]**2 - 14*solution[1] + 6*solution[0]*solution[1] + 3*solution[1]**2
+        t1 = 18 - 32 * solution[0] + 12 * solution[0]**2 + 4 * solution[1] - 36 * solution[0] * solution[1] + 27 * solution[1]**2
+        t2 = 19 - 14 * solution[0] + 3 * solution[0]**2 - 14 * solution[1] + 6 * solution[0] * solution[1] + 3 * solution[1]**2
         t3 = (np.sum(solution) + 1)**2
-        return (1+t3*t2) * (30 + (2*solution[0]-3*solution[1])**2 * t1)
-
+        return (1 + t3 * t2) * (30 + (2 * solution[0] - 3 * solution[1])**2 * t1)
 
     def _himmelblau__(self, solution=None):
         """
@@ -266,8 +254,7 @@ class Functions:
         """
         d = len(solution)
         assert (d == 2, 'Himmelblau function is only defined on a 2D space.')
-        return (solution[0]**2+solution[1]-11)**2 + (solution[0] + solution[1]**2 - 7)**2
-
+        return (solution[0]**2 + solution[1] - 11)**2 + (solution[0] + solution[1]**2 - 7)**2
 
     def _holder_table__(self, solution=None):
         """
@@ -281,8 +268,7 @@ class Functions:
         """
         d = len(solution)
         assert (d == 2, 'Holder Table function is only defined on a 2D space.')
-        return -np.abs(np.sin(solution[0])*np.cos(solution[1])*np.abs(1 - np.sqrt(np.sum(solution**2))/np.pi))
-
+        return -np.abs(np.sin(solution[0]) * np.cos(solution[1]) * np.abs(1 - np.sqrt(np.sum(solution**2)) / np.pi))
 
     def _keane__(self, solution=None):
         """
@@ -296,8 +282,7 @@ class Functions:
         """
         d = len(solution)
         assert (d == 2, 'Keane function is only defined on a 2D space.')
-        return -np.sin(solution[0]-solution[1])**2 * np.sin(solution[0] + solution[1])**2 / np.sqrt(np.sum(solution**2))
-
+        return -np.sin(solution[0] - solution[1])**2 * np.sin(solution[0] + solution[1])**2 / np.sqrt(np.sum(solution**2))
 
     def _leon__(self, solution=None):
         """
@@ -311,8 +296,7 @@ class Functions:
         """
         d = len(solution)
         assert (d == 2, 'Leon function is only defined on a 2D space.')
-        return 100*(solution[1]-solution[0]**3)**2 + (1-solution[0])**2
-
+        return 100 * (solution[1] - solution[0]**3)**2 + (1 - solution[0])**2
 
     def _levi_n13__(self, solution=None):
         """
@@ -326,9 +310,8 @@ class Functions:
         """
         d = len(solution)
         assert (d == 2, 'Levi N.13 function is only defined on a 2D space.')
-        return np.sin(3*solution[0]*np.pi)**2 + (solution[0]-1)**2*(1+np.sin(3*solution[1]**np.pi)**2) +\
-               (solution[1]-1)**2*(1 + np.sin(2*solution[1]*np.pi)**2)
-
+        return np.sin(3 * solution[0] * np.pi)**2 + (solution[0] - 1)**2 * (1 + np.sin(3 * solution[1]**np.pi)**2) +\
+            (solution[1] - 1)**2 * (1 + np.sin(2 * solution[1] * np.pi)**2)
 
     def _matyas__(self, solution=None):
         """
@@ -341,8 +324,7 @@ class Functions:
         """
         d = len(solution)
         assert (d == 2, 'Matyas function is only defined on a 2D space.')
-        return 0.26*np.sum(solution**2) - 0.48*solution[0]*solution[1]
-
+        return 0.26 * np.sum(solution**2) - 0.48 * solution[0] * solution[1]
 
     def _mc_cormick__(self, solution=None):
         """
@@ -355,8 +337,7 @@ class Functions:
         """
         d = len(solution)
         assert (d == 2, 'Mc Cormick function is only defined on a 2D space.')
-        return np.sin(solution[0]+solution[1]) + (solution[0] - solution[1])**2 - 1.5*solution[0] + 2.5*solution[1] + 1
-
+        return np.sin(solution[0] + solution[1]) + (solution[0] - solution[1])**2 - 1.5 * solution[0] + 2.5 * solution[1] + 1
 
     def _schaffer_n1__(self, solution=None):
         """
@@ -369,8 +350,7 @@ class Functions:
         """
         d = len(solution)
         assert (d == 2, 'Scheffer N.1 function is only defined on a 2D space.')
-        return 0.5 + (np.sin(np.sum(solution**2)**2)**2 - 0.5) / (1 + 0.001*np.sum(solution**2))**2
-
+        return 0.5 + (np.sin(np.sum(solution**2)**2)**2 - 0.5) / (1 + 0.001 * np.sum(solution**2))**2
 
     def _schaffer_n2__(self, solution=None):
         """
@@ -383,8 +363,7 @@ class Functions:
         """
         d = len(solution)
         assert (d == 2, 'Scheffer N.2 function is only defined on a 2D space.')
-        return 0.5 + (np.sin(solution[0]**2 - solution[1]**2)**2 - 0.5) / (1 + 0.001*np.sum(solution**2))**2
-
+        return 0.5 + (np.sin(solution[0]**2 - solution[1]**2)**2 - 0.5) / (1 + 0.001 * np.sum(solution**2))**2
 
     def _schaffer_n3__(self, solution=None):
         """
@@ -397,8 +376,7 @@ class Functions:
         """
         d = len(solution)
         assert (d == 2, 'Scheffer N.3 function is only defined on a 2D space.')
-        return 0.5 + (np.sin(np.cos(np.abs( solution[0]**2 - solution[1]**2 ))) - 0.5) / (1 + 0.001*np.sum(solution**2))**2
-
+        return 0.5 + (np.sin(np.cos(np.abs(solution[0]**2 - solution[1]**2))) - 0.5) / (1 + 0.001 * np.sum(solution**2))**2
 
     def _schaffer_n4__(self, solution=None):
         """
@@ -411,8 +389,7 @@ class Functions:
         """
         d = len(solution)
         assert (d == 2, 'Scheffer N.4 function is only defined on a 2D space.')
-        return 0.5 + (np.cos(np.sin(np.abs( solution[0]**2 - solution[1]**2 ))) - 0.5) / (1 + 0.001*np.sum(solution**2))**2
-
+        return 0.5 + (np.cos(np.sin(np.abs(solution[0]**2 - solution[1]**2))) - 0.5) / (1 + 0.001 * np.sum(solution**2))**2
 
     def _three_hump_camel__(self, solution=None):
         """
@@ -425,7 +402,4 @@ class Functions:
         """
         d = len(solution)
         assert (d == 2, 'Scheffer N.3 function is only defined on a 2D space.')
-        return 2*solution[0]**2 - 1.05*solution[0]**4 + solution[0]**6/6 + solution[0]*solution[1] + solution[1]**2
-
-
-
+        return 2 * solution[0]**2 - 1.05 * solution[0]**4 + solution[0]**6 / 6 + solution[0] * solution[1] + solution[1]**2

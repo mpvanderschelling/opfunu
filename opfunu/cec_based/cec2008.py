@@ -1,10 +1,10 @@
 #!/usr/bin/env python
-# Created by "Thieu" at 22:19, 01/07/2022 ----------%                                                                               
-#       Email: nguyenthieu2102@gmail.com            %                                                    
-#       Github: https://github.com/thieu1995        %                         
+# Created by "Thieu" at 22:19, 01/07/2022 ----------%
+#       Email: nguyenthieu2102@gmail.com            %
+#       Github: https://github.com/thieu1995        %
 # --------------------------------------------------%
 
-import numpy as np
+import autograd.numpy as np
 from opfunu.cec_based.cec import CecBenchmark
 from opfunu.utils import operator
 
@@ -293,6 +293,7 @@ class F62008(CecBenchmark):
         z = x - self.f_shift
         return operator.ackley_func(z) + self.f_bias
 
+
 class F72008(CecBenchmark):
     """
     .. [1] Tang, K., Yáo, X., Suganthan, P. N., MacNish, C., Chen, Y. P., Chen, C. M., & Yang, Z. (2007). Benchmark functions
@@ -339,5 +340,5 @@ class F72008(CecBenchmark):
         self.n_fe += 1
         self.check_solution(x, self.dim_max, self.dim_supported)
         ndim = len(x)
-        results = [operator.fractal_1d_func(x[idx] + operator.twist_func(x[idx+1])) for idx in range(0, ndim-1)]
+        results = [operator.fractal_1d_func(x[idx] + operator.twist_func(x[idx + 1])) for idx in range(0, ndim - 1)]
         return np.sum(results) + operator.fractal_1d_func(x[-1] + operator.twist_func(x[0])) + self.f_bias

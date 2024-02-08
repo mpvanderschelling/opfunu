@@ -1,10 +1,10 @@
 #!/usr/bin/env python
-# Created by "Thieu" at 20:18, 19/07/2022 ----------%                                                                               
-#       Email: nguyenthieu2102@gmail.com            %                                                    
-#       Github: https://github.com/thieu1995        %                         
+# Created by "Thieu" at 20:18, 19/07/2022 ----------%
+#       Email: nguyenthieu2102@gmail.com            %
+#       Github: https://github.com/thieu1995        %
 # --------------------------------------------------%
 
-import numpy as np
+import autograd.numpy as np
 from opfunu.benchmark import Benchmark
 
 
@@ -42,7 +42,7 @@ class CamelThreeHump(Benchmark):
     def evaluate(self, x, *args):
         self.check_solution(x)
         self.n_fe += 1
-        return 2*x[0]**2 - 1.05*x[0]**4 + x[0]**6/6 + x[0]*x[1] + x[1]**2
+        return 2 * x[0]**2 - 1.05 * x[0]**4 + x[0]**6 / 6 + x[0] * x[1] + x[1]**2
 
 
 class CamelSixHump(Benchmark):
@@ -80,7 +80,7 @@ class CamelSixHump(Benchmark):
     def evaluate(self, x, *args):
         self.check_solution(x)
         self.n_fe += 1
-        return (4 - 2.1*x[0]**2 + x[0]**4/3)*x[0]**2 + x[0]*x[1] + (4*x[1]**2 - 4)*x[1]**2
+        return (4 - 2.1 * x[0]**2 + x[0]**4 / 3) * x[0]**2 + x[0] * x[1] + (4 * x[1]**2 - 4) * x[1]**2
 
 
 class ChenBird(Benchmark):
@@ -117,7 +117,7 @@ class ChenBird(Benchmark):
     def evaluate(self, x, *args):
         self.check_solution(x)
         self.n_fe += 1
-        return -0.001/(0.001**2 + (x[0] - 0.4*x[1] - 0.1)**2) - 0.001/(0.001**2 + (2*x[0] + x[1] - 1.5)**2)
+        return -0.001 / (0.001**2 + (x[0] - 0.4 * x[1] - 0.1)**2) - 0.001 / (0.001**2 + (2 * x[0] + x[1] - 1.5)**2)
 
 
 class ChenV(Benchmark):
@@ -158,7 +158,7 @@ class ChenV(Benchmark):
     def evaluate(self, x, *args):
         self.check_solution(x)
         self.n_fe += 1
-        return -0.001/(0.001**2 + (x[0]**2 + x[1]**2 - 1)**2) - 0.001/(0.001**2 + (x[0]**2 + x[1]**2 - 0.5)**2) - 0.001/(0.001**2 + (x[0]**2 - x[1]**2)**2)
+        return -0.001 / (0.001**2 + (x[0]**2 + x[1]**2 - 1)**2) - 0.001 / (0.001**2 + (x[0]**2 + x[1]**2 - 0.5)**2) - 0.001 / (0.001**2 + (x[0]**2 - x[1]**2)**2)
 
 
 class Chichinadze(Benchmark):
@@ -300,20 +300,20 @@ class Cola(Benchmark):
         super().__init__()
         self.dim_changeable = False
         self.dim_default = 17
-        self.check_ndim_and_bounds(ndim, bounds, np.array([[0.0, 4.0]] + [[-4., 4.] for _ in range(self.dim_default-1)]))
+        self.check_ndim_and_bounds(ndim, bounds, np.array([[0.0, 4.0]] + [[-4., 4.] for _ in range(self.dim_default - 1)]))
         self.f_global = 11.7464
         self.x_global = np.array([0.651906, 1.30194, 0.099242, -0.883791, -0.8796, 0.204651, -3.28414, 0.851188,
-                                -3.46245, 2.53245, -0.895246, 1.40992, -3.07367, 1.96257, -2.97872, -0.807849, -1.68978])
+                                  -3.46245, 2.53245, -0.895246, 1.40992, -3.07367, 1.96257, -2.97872, -0.807849, -1.68978])
         self.d = np.asarray([[0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                 [1.27, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                 [1.69, 1.43, 0, 0, 0, 0, 0, 0, 0, 0],
-                 [2.04, 2.35, 2.43, 0, 0, 0, 0, 0, 0, 0],
-                 [3.09, 3.18, 3.26, 2.85, 0, 0, 0, 0, 0, 0],
-                 [3.20, 3.22, 3.27, 2.88, 1.55, 0, 0, 0, 0, 0],
-                 [2.86, 2.56, 2.58, 2.59, 3.12, 3.06, 0, 0, 0, 0],
-                 [3.17, 3.18, 3.18, 3.12, 1.31, 1.64, 3.00, 0, 0, 0],
-                 [3.21, 3.18, 3.18, 3.17, 1.70, 1.36, 2.95, 1.32, 0, 0],
-                 [2.38, 2.31, 2.42, 1.94, 2.85, 2.81, 2.56, 2.91, 2.97, 0.]])
+                             [1.27, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                             [1.69, 1.43, 0, 0, 0, 0, 0, 0, 0, 0],
+                             [2.04, 2.35, 2.43, 0, 0, 0, 0, 0, 0, 0],
+                             [3.09, 3.18, 3.26, 2.85, 0, 0, 0, 0, 0, 0],
+                             [3.20, 3.22, 3.27, 2.88, 1.55, 0, 0, 0, 0, 0],
+                             [2.86, 2.56, 2.58, 2.59, 3.12, 3.06, 0, 0, 0, 0],
+                             [3.17, 3.18, 3.18, 3.12, 1.31, 1.64, 3.00, 0, 0, 0],
+                             [3.21, 3.18, 3.18, 3.17, 1.70, 1.36, 2.95, 1.32, 0, 0],
+                             [2.38, 2.31, 2.42, 1.94, 2.85, 2.81, 2.56, 2.91, 2.97, 0.]])
 
     def evaluate(self, x, *args):
         self.check_solution(x)
@@ -366,8 +366,8 @@ class Colville(Benchmark):
     def evaluate(self, x, *args):
         self.check_solution(x)
         self.n_fe += 1
-        return (100 * (x[0] - x[1] ** 2) ** 2 + (1 - x[0]) ** 2 + (1 - x[2]) ** 2 + 90 * (x[3] - x[2] ** 2) ** 2 +
-                10.1 * ((x[1] - 1) ** 2 + (x[3] - 1) ** 2) + 19.8 * (x[1] - 1) * (x[3] - 1))
+        return (100 * (x[0] - x[1] ** 2) ** 2 + (1 - x[0]) ** 2 + (1 - x[2]) ** 2 + 90 * (x[3] - x[2] ** 2) ** 2
+                + 10.1 * ((x[1] - 1) ** 2 + (x[3] - 1) ** 2) + 19.8 * (x[1] - 1) * (x[3] - 1))
 
 
 class Corana(Benchmark):
@@ -443,7 +443,7 @@ class CosineMixture(Benchmark):
         self.dim_changeable = True
         self.dim_default = 2
         self.check_ndim_and_bounds(ndim, bounds, np.array([[-1.0, 1.0] for _ in range(self.dim_default)]))
-        self.f_global = -0.9*self.ndim
+        self.f_global = -0.9 * self.ndim
         self.x_global = -1 * np.ones(self.ndim)
 
     def evaluate(self, x, *args):
@@ -484,14 +484,14 @@ class CrossInTray(Benchmark):
         self.f_global = -2.062611870822739
         self.x_global = np.array([1.349406608602084, 1.349406608602084])
         self.x_globals = np.array([(1.349406685353340, 1.349406608602084),
-                               (-1.349406685353340, 1.349406608602084),
-                               (1.349406685353340, -1.349406608602084),
-                               (-1.349406685353340, -1.349406608602084)])
+                                   (-1.349406685353340, 1.349406608602084),
+                                   (1.349406685353340, -1.349406608602084),
+                                   (-1.349406685353340, -1.349406608602084)])
 
     def evaluate(self, x, *args):
         self.check_solution(x)
         self.n_fe += 1
-        return (-0.0001 * (np.abs(np.sin(x[0]) * np.sin(x[1]) * np.exp(abs(100 - np.sqrt(x[0] ** 2 + x[1] ** 2) / np.pi)))+ 1) ** (0.1))
+        return (-0.0001 * (np.abs(np.sin(x[0]) * np.sin(x[1]) * np.exp(abs(100 - np.sqrt(x[0] ** 2 + x[1] ** 2) / np.pi))) + 1) ** (0.1))
 
 
 class CrossLegTable(Benchmark):
@@ -608,7 +608,7 @@ class Csendes(Benchmark):
     def evaluate(self, x, *args):
         self.check_solution(x)
         self.n_fe += 1
-        return np.sum((x ** 6.0) * (2.0 + np.sin(1.0/(x+self.epsilon))))
+        return np.sum((x ** 6.0) * (2.0 + np.sin(1.0 / (x + self.epsilon))))
 
 
 class Cube(Benchmark):

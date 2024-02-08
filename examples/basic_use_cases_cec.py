@@ -1,11 +1,11 @@
 #!/usr/bin/env python
-# Created by "Thieu" at 10:46, 30/06/2022 ----------%                                                                               
-#       Email: nguyenthieu2102@gmail.com            %                                                    
-#       Github: https://github.com/thieu1995        %                         
+# Created by "Thieu" at 10:46, 30/06/2022 ----------%
+#       Email: nguyenthieu2102@gmail.com            %
+#       Github: https://github.com/thieu1995        %
 # --------------------------------------------------%
 
 import opfunu
-import numpy as np
+import autograd.numpy as np
 
 
 if __name__ == '__main__':
@@ -63,7 +63,7 @@ if __name__ == '__main__':
     # print(latex)  # --> f(\mathbf{x}) = exp(-\sum_{i=1}^{d}(x_i / \beta)^{2m}) - 2exp(-\prod_{i=1}^{d}x_i^2) \prod_{i=1}^{d}cos^ 2(x_i)
     # opfunu.plot_latex_formula(latex)
 
-    ## Test read file matrix
+    # Test read file matrix
     f32005 = opfunu.cec_based.F32005(ndim=10)
     x = np.ones(10)
     print(f32005.evaluate(x))
@@ -83,7 +83,7 @@ if __name__ == '__main__':
     )
     print(my_list)  # --> 41
 
-    ## Get all noise function
+    # Get all noise function
     my_list = opfunu.get_cecs(
         randomized_term=True
     )

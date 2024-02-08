@@ -1,11 +1,11 @@
 #!/usr/bin/env python
-# Created by "Thieu" at 16:39, 08/07/2022 ----------%                                                                               
-#       Email: nguyenthieu2102@gmail.com            %                                                    
-#       Github: https://github.com/thieu1995        %                         
+# Created by "Thieu" at 16:39, 08/07/2022 ----------%
+#       Email: nguyenthieu2102@gmail.com            %
+#       Github: https://github.com/thieu1995        %
 # --------------------------------------------------%
 
 
-import numpy as np
+import autograd.numpy as np
 from opfunu.cec_based.cec import CecBenchmark
 from opfunu.utils import operator
 
@@ -109,7 +109,7 @@ class F32017(F12017):
     def evaluate(self, x, *args):
         self.n_fe += 1
         self.check_solution(x, self.dim_max, self.dim_supported)
-        z = np.dot(self.f_matrix, 2.048*(x - self.f_shift)/100)
+        z = np.dot(self.f_matrix, 2.048 * (x - self.f_shift) / 100)
         return operator.rosenbrock_func(z, shift=1.0) + self.f_bias
 
 
@@ -165,7 +165,7 @@ class F52017(F12017):
     def evaluate(self, x, *args):
         self.n_fe += 1
         self.check_solution(x, self.dim_max, self.dim_supported)
-        z = np.dot(self.f_matrix, 0.5*(x - self.f_shift)/100)
+        z = np.dot(self.f_matrix, 0.5 * (x - self.f_shift) / 100)
         return operator.schaffer_f7_func(z) + self.f_bias
 
 
@@ -193,7 +193,7 @@ class F62017(F12017):
     def evaluate(self, x, *args):
         self.n_fe += 1
         self.check_solution(x, self.dim_max, self.dim_supported)
-        z = np.dot(self.f_matrix, 600.*(x - self.f_shift)/100)
+        z = np.dot(self.f_matrix, 600. * (x - self.f_shift) / 100)
         return operator.lunacek_bi_rastrigin_func(z, shift=2.5) + self.f_bias
 
 
@@ -221,7 +221,7 @@ class F72017(F12017):
     def evaluate(self, x, *args):
         self.n_fe += 1
         self.check_solution(x, self.dim_max, self.dim_supported)
-        z = np.dot(self.f_matrix, 5.12*(x - self.f_shift)/100)
+        z = np.dot(self.f_matrix, 5.12 * (x - self.f_shift) / 100)
         return operator.non_continuous_rastrigin_func(z) + self.f_bias
 
 
@@ -246,7 +246,7 @@ class F82017(F12017):
     def evaluate(self, x, *args):
         self.n_fe += 1
         self.check_solution(x, self.dim_max, self.dim_supported)
-        z = np.dot(self.f_matrix, 5.12*(x - self.f_shift)/100)
+        z = np.dot(self.f_matrix, 5.12 * (x - self.f_shift) / 100)
         return operator.levy_func(z, shift=1.0) + self.f_bias
 
 
@@ -271,7 +271,7 @@ class F92017(F12017):
     def evaluate(self, x, *args):
         self.n_fe += 1
         self.check_solution(x, self.dim_max, self.dim_supported)
-        z = np.dot(self.f_matrix, 1000.*(x - self.f_shift)/100)
+        z = np.dot(self.f_matrix, 1000. * (x - self.f_shift) / 100)
         return operator.modified_schwefel_func(z) + self.f_bias
 
 
@@ -331,9 +331,9 @@ class F102017(CecBenchmark):
         self.n_fe += 1
         self.check_solution(x, self.dim_max, self.dim_supported)
         mz = np.dot(self.f_matrix, x - self.f_shift)
-        return (operator.zakharov_func(mz[self.idx1]) +
-                operator.rosenbrock_func(mz[self.idx2], shift=1.0) +
-                operator.rastrigin_func(mz[self.idx3]) + self.f_bias)
+        return (operator.zakharov_func(mz[self.idx1])
+                + operator.rosenbrock_func(mz[self.idx2], shift=1.0)
+                + operator.rastrigin_func(mz[self.idx3]) + self.f_bias)
 
 
 class F112017(F102017):
@@ -391,9 +391,9 @@ class F122017(F102017):
         self.check_solution(x, self.dim_max, self.dim_supported)
         mz = np.dot(self.f_matrix, x - self.f_shift)
         miu0 = 2.5
-        return (operator.bent_cigar_func(mz[self.idx1]) +
-                operator.rosenbrock_func(mz[self.idx2], shift=1.0) +
-                operator.lunacek_bi_rastrigin_func(mz[self.idx3], miu0, 1.0, shift=miu0) + self.f_bias)
+        return (operator.bent_cigar_func(mz[self.idx1])
+                + operator.rosenbrock_func(mz[self.idx2], shift=1.0)
+                + operator.lunacek_bi_rastrigin_func(mz[self.idx3], miu0, 1.0, shift=miu0) + self.f_bias)
 
 
 class F132017(F102017):
@@ -455,10 +455,10 @@ class F142017(F102017):
         self.n_fe += 1
         self.check_solution(x, self.dim_max, self.dim_supported)
         mz = np.dot(self.f_matrix, x - self.f_shift)
-        return (operator.bent_cigar_func(mz[self.idx1]) +
-                operator.hgbat_func(mz[self.idx2], shift=-1.0) +
-                operator.rastrigin_func(mz[self.idx3]) +
-                operator.rosenbrock_func(mz[self.idx4], shift=1.0) + self.f_bias)
+        return (operator.bent_cigar_func(mz[self.idx1])
+                + operator.hgbat_func(mz[self.idx2], shift=-1.0)
+                + operator.rastrigin_func(mz[self.idx3])
+                + operator.rosenbrock_func(mz[self.idx4], shift=1.0) + self.f_bias)
 
 
 class F152017(F102017):
@@ -487,10 +487,10 @@ class F152017(F102017):
         self.n_fe += 1
         self.check_solution(x, self.dim_max, self.dim_supported)
         mz = np.dot(self.f_matrix, x - self.f_shift)
-        return (operator.expanded_scaffer_f6_func(mz[self.idx1]) +
-                operator.hgbat_func(mz[self.idx2], shift=-1.0) +
-                operator.rosenbrock_func(mz[self.idx3], shift=1.0) +
-                operator.modified_schwefel_func(mz[self.idx4]) + self.f_bias)
+        return (operator.expanded_scaffer_f6_func(mz[self.idx1])
+                + operator.hgbat_func(mz[self.idx2], shift=-1.0)
+                + operator.rosenbrock_func(mz[self.idx3], shift=1.0)
+                + operator.modified_schwefel_func(mz[self.idx4]) + self.f_bias)
 
 
 class F162017(F102017):
@@ -527,7 +527,7 @@ class F162017(F102017):
         self.check_solution(x, self.dim_max, self.dim_supported)
         mz = np.dot(self.f_matrix, x - self.f_shift)
         return self.g1(mz[self.idx1]) + self.g2(mz[self.idx2]) + self.g3(mz[self.idx3]) + \
-               self.g4(mz[self.idx4]) + self.g5(mz[self.idx5]) + self.f_bias
+            self.g4(mz[self.idx4]) + self.g5(mz[self.idx5]) + self.f_bias
 
 
 class F172017(F102017):
@@ -558,11 +558,11 @@ class F172017(F102017):
         self.n_fe += 1
         self.check_solution(x, self.dim_max, self.dim_supported)
         mz = np.dot(self.f_matrix, x - self.f_shift)
-        return (operator.elliptic_func(mz[self.idx1]) +
-                operator.ackley_func(mz[self.idx2]) +
-                operator.rastrigin_func(mz[self.idx3]) +
-                operator.hgbat_func(mz[self.idx4], shift=-1.0) +
-                operator.discus_func(mz[self.idx5]) + self.f_bias)
+        return (operator.elliptic_func(mz[self.idx1])
+                + operator.ackley_func(mz[self.idx2])
+                + operator.rastrigin_func(mz[self.idx3])
+                + operator.hgbat_func(mz[self.idx4], shift=-1.0)
+                + operator.discus_func(mz[self.idx5]) + self.f_bias)
 
 
 class F182017(F102017):
@@ -599,7 +599,7 @@ class F182017(F102017):
         self.check_solution(x, self.dim_max, self.dim_supported)
         mz = np.dot(self.f_matrix, x - self.f_shift)
         return self.g1(mz[self.idx1]) + self.g2(mz[self.idx2]) + self.g3(mz[self.idx3]) + \
-               self.g4(mz[self.idx4]) + self.g5(mz[self.idx5]) + self.f_bias
+            self.g4(mz[self.idx4]) + self.g5(mz[self.idx5]) + self.f_bias
 
 
 class F192017(F102017):
@@ -632,11 +632,11 @@ class F192017(F102017):
         self.check_solution(x, self.dim_max, self.dim_supported)
         mz = np.dot(self.f_matrix, x - self.f_shift)
         return (operator.happy_cat_func(mz[self.idx1], shift=-1.0) +
-                operator.katsuura_func(mz[self.idx2]) +
-                operator.ackley_func(mz[self.idx3]) +
-                operator.rastrigin_func(mz[self.idx4]) +
-                operator.modified_schwefel_func(mz[self.idx5]) +
-                operator.schaffer_f7_func(mz[self.idx6]) + self.f_bias)
+                operator.katsuura_func(mz[self.idx2])
+                + operator.ackley_func(mz[self.idx3])
+                + operator.rastrigin_func(mz[self.idx4])
+                + operator.modified_schwefel_func(mz[self.idx5])
+                + operator.schaffer_f7_func(mz[self.idx6]) + self.f_bias)
 
 
 class F202017(CecBenchmark):
@@ -695,17 +695,17 @@ class F202017(CecBenchmark):
         self.check_solution(x, self.dim_max, self.dim_supported)
 
         # 1. Rosenbrock’s Function F4’
-        z0 = np.dot(self.f_matrix[:self.ndim, :], 2.048*(x - self.f_shift[0])/100) + 1
+        z0 = np.dot(self.f_matrix[:self.ndim, :], 2.048 * (x - self.f_shift[0]) / 100) + 1
         g0 = self.lamdas[0] * self.g0(z0) + self.bias[0]
         w0 = operator.calculate_weight(x - self.f_shift[0], self.xichmas[0])
 
         # 2. High Conditioned Elliptic Function F11’
-        z1 = np.dot(self.f_matrix[self.ndim:2*self.ndim, :], x - self.f_shift[1])
+        z1 = np.dot(self.f_matrix[self.ndim:2 * self.ndim, :], x - self.f_shift[1])
         g1 = self.lamdas[1] * self.g1(z1) + self.bias[1]
         w1 = operator.calculate_weight(x - self.f_shift[1], self.xichmas[1])
 
         # 3. Rastrigin’s Function F4’
-        z2 = np.dot(self.f_matrix[2*self.ndim:3*self.ndim, :], x - self.f_shift[2])
+        z2 = np.dot(self.f_matrix[2 * self.ndim:3 * self.ndim, :], x - self.f_shift[2])
         g2 = self.lamdas[2] * self.g2(z2) + self.bias[2]
         w2 = operator.calculate_weight(x - self.f_shift[2], self.xichmas[2])
 
@@ -752,13 +752,13 @@ class F212017(F202017):
         w0 = operator.calculate_weight(x - self.f_shift[0], self.xichmas[0])
 
         # 2. Griewank’s Function F15’
-        z1 = np.dot(self.f_matrix[self.ndim:2*self.ndim, :], x - self.f_shift[1])
+        z1 = np.dot(self.f_matrix[self.ndim:2 * self.ndim, :], x - self.f_shift[1])
         g1 = self.lamdas[1] * self.g1(z1) + self.bias[1]
         w1 = operator.calculate_weight(x - self.f_shift[1], self.xichmas[1])
 
         # 3. Modifed Schwefel's Function F10’
         # z2 = np.dot(self.f_matrix[2*self.ndim:3*self.ndim, :], x - self.f_shift[2])
-        z2 = 1000*(x - self.f_shift[2])/100
+        z2 = 1000 * (x - self.f_shift[2]) / 100
         g2 = self.lamdas[2] * self.g2(z2) + self.bias[2]
         w2 = operator.calculate_weight(x - self.f_shift[2], self.xichmas[2])
 
@@ -801,17 +801,17 @@ class F222017(F202017):
         self.check_solution(x, self.dim_max, self.dim_supported)
 
         # 1. Rosenbrock’s Function F4’
-        z0 = np.dot(self.f_matrix[:self.ndim, :], 2.048*(x - self.f_shift[0])/100) + 1
+        z0 = np.dot(self.f_matrix[:self.ndim, :], 2.048 * (x - self.f_shift[0]) / 100) + 1
         g0 = self.lamdas[0] * self.g0(z0) + self.bias[0]
         w0 = operator.calculate_weight(x - self.f_shift[0], self.xichmas[0])
 
         # 2. Ackley’s Function F13’
-        z1 = np.dot(self.f_matrix[self.ndim:2*self.ndim, :], x - self.f_shift[1])
+        z1 = np.dot(self.f_matrix[self.ndim:2 * self.ndim, :], x - self.f_shift[1])
         g1 = self.lamdas[1] * self.g1(z1) + self.bias[1]
         w1 = operator.calculate_weight(x - self.f_shift[1], self.xichmas[1])
 
         # 3. Modified Schwefel's Function F10’
-        z2 = np.dot(self.f_matrix[2*self.ndim:3*self.ndim, :], x - self.f_shift[2])
+        z2 = np.dot(self.f_matrix[2 * self.ndim:3 * self.ndim, :], x - self.f_shift[2])
         g2 = self.lamdas[2] * self.g2(z2) + self.bias[2]
         w2 = operator.calculate_weight(x - self.f_shift[2], self.xichmas[2])
 
@@ -864,12 +864,12 @@ class F232017(F202017):
         w0 = operator.calculate_weight(x - self.f_shift[0], self.xichmas[0])
 
         # 2. High Conditioned Elliptic Function F11’
-        z1 = np.dot(self.f_matrix[self.ndim:2*self.ndim, :], x - self.f_shift[1])
+        z1 = np.dot(self.f_matrix[self.ndim:2 * self.ndim, :], x - self.f_shift[1])
         g1 = self.lamdas[1] * self.g1(z1) + self.bias[1]
         w1 = operator.calculate_weight(x - self.f_shift[1], self.xichmas[1])
 
         # 3. Girewank Function F15’
-        z2 = np.dot(self.f_matrix[2*self.ndim:3*self.ndim, :], x - self.f_shift[2])
+        z2 = np.dot(self.f_matrix[2 * self.ndim:3 * self.ndim, :], x - self.f_shift[2])
         g2 = self.lamdas[2] * self.g2(z2) + self.bias[2]
         w2 = operator.calculate_weight(x - self.f_shift[2], self.xichmas[2])
 
@@ -923,12 +923,12 @@ class F242017(F202017):
         w0 = operator.calculate_weight(x - self.f_shift[0], self.xichmas[0])
 
         # 2. Happycat Function F17’
-        z1 = np.dot(self.f_matrix[self.ndim:2*self.ndim, :], x - self.f_shift[0])
+        z1 = np.dot(self.f_matrix[self.ndim:2 * self.ndim, :], x - self.f_shift[0])
         g1 = self.lamdas[1] * self.g1(z1) + self.bias[1]
         w1 = operator.calculate_weight(x - self.f_shift[1], self.xichmas[1])
 
         # 3. Ackley Function F13’
-        z2 = np.dot(self.f_matrix[2*self.ndim:3*self.ndim, :], x - self.f_shift[0])
+        z2 = np.dot(self.f_matrix[2 * self.ndim:3 * self.ndim, :], x - self.f_shift[0])
         g2 = self.lamdas[2] * self.g2(z2) + self.bias[2]
         w2 = operator.calculate_weight(x - self.f_shift[2], self.xichmas[2])
 
@@ -938,7 +938,7 @@ class F242017(F202017):
         w3 = operator.calculate_weight(x - self.f_shift[3], self.xichmas[3])
 
         # 5. Rosenbrock’s Function F4’
-        z4 = np.dot(self.f_matrix[4 * self.ndim:5 * self.ndim, :], 2.048*(x - self.f_shift[0])/100) + 1
+        z4 = np.dot(self.f_matrix[4 * self.ndim:5 * self.ndim, :], 2.048 * (x - self.f_shift[0]) / 100) + 1
         g4 = self.lamdas[4] * self.g4(z4) + self.bias[4]
         w4 = operator.calculate_weight(x - self.f_shift[4], self.xichmas[4])
 
@@ -988,17 +988,17 @@ class F252017(F202017):
 
         # 2. Modified Schwefel's Function F10’
         # z1 = np.dot(self.f_matrix[self.ndim:2*self.ndim, :], x - self.f_shift[1])
-        z1 = np.dot(self.f_matrix[self.ndim:2*self.ndim, :], 1000*(x - self.f_shift[0]) / 100)
+        z1 = np.dot(self.f_matrix[self.ndim:2 * self.ndim, :], 1000 * (x - self.f_shift[0]) / 100)
         g1 = self.lamdas[1] * self.g1(z1) + self.bias[1]
         w1 = operator.calculate_weight(x - self.f_shift[1], self.xichmas[1])
 
         # 3. Griewank’s Function F15’
-        z2 = np.dot(self.f_matrix[2*self.ndim:3*self.ndim, :], 600*(x - self.f_shift[0])/100)
+        z2 = np.dot(self.f_matrix[2 * self.ndim:3 * self.ndim, :], 600 * (x - self.f_shift[0]) / 100)
         g2 = self.lamdas[2] * self.g2(z2) + self.bias[2]
         w2 = operator.calculate_weight(x - self.f_shift[2], self.xichmas[2])
 
         # 4. Rosenbrock’s Function F4’
-        z3 = np.dot(self.f_matrix[3 * self.ndim:4 * self.ndim, :], 2.048*(x - self.f_shift[0])/100) + 1
+        z3 = np.dot(self.f_matrix[3 * self.ndim:4 * self.ndim, :], 2.048 * (x - self.f_shift[0]) / 100) + 1
         g3 = self.lamdas[3] * self.g3(z3) + self.bias[3]
         w3 = operator.calculate_weight(x - self.f_shift[3], self.xichmas[3])
 
@@ -1042,17 +1042,17 @@ class F262017(F202017):
         self.check_solution(x, self.dim_max, self.dim_supported)
 
         # 1. HGBat Function F18’
-        z0 = np.dot(self.f_matrix[:self.ndim, :], 5*(x - self.f_shift[0])/100)
+        z0 = np.dot(self.f_matrix[:self.ndim, :], 5 * (x - self.f_shift[0]) / 100)
         g0 = self.lamdas[0] * operator.hgbat_func(z0, shift=-1.0) + self.bias[0]
         w0 = operator.calculate_weight(x - self.f_shift[0], self.xichmas[0])
 
         # 2. Rastrigin’s Function F5’
-        z1 = np.dot(self.f_matrix[self.ndim:2*self.ndim, :], 5.12*(x - self.f_shift[0]) / 100)
+        z1 = np.dot(self.f_matrix[self.ndim:2 * self.ndim, :], 5.12 * (x - self.f_shift[0]) / 100)
         g1 = self.lamdas[1] * operator.rastrigin_func(z1) + self.bias[1]
         w1 = operator.calculate_weight(x - self.f_shift[1], self.xichmas[1])
 
         # 3. Modified Schwefel's Function F10’
-        z2 = np.dot(self.f_matrix[2*self.ndim:3*self.ndim, :], 1000*(x - self.f_shift[0])/100)
+        z2 = np.dot(self.f_matrix[2 * self.ndim:3 * self.ndim, :], 1000 * (x - self.f_shift[0]) / 100)
         g2 = self.lamdas[2] * operator.modified_schwefel_func(z2) + self.bias[2]
         w2 = operator.calculate_weight(x - self.f_shift[2], self.xichmas[2])
 
@@ -1114,22 +1114,22 @@ class F272017(F202017):
         w0 = operator.calculate_weight(x - self.f_shift[0], self.xichmas[0])
 
         # 2. Griewank’s Function F15’
-        z1 = np.dot(self.f_matrix[self.ndim:2*self.ndim, :], 600*(x - self.f_shift[0]) / 100)
+        z1 = np.dot(self.f_matrix[self.ndim:2 * self.ndim, :], 600 * (x - self.f_shift[0]) / 100)
         g1 = self.lamdas[1] * self.g1(z1) + self.bias[1]
         w1 = operator.calculate_weight(x - self.f_shift[1], self.xichmas[1])
 
         # 3. Discus Function F12’
-        z2 = np.dot(self.f_matrix[2*self.ndim:3*self.ndim, :], x - self.f_shift[0])
+        z2 = np.dot(self.f_matrix[2 * self.ndim:3 * self.ndim, :], x - self.f_shift[0])
         g2 = self.lamdas[2] * self.g2(z2) + self.bias[2]
         w2 = operator.calculate_weight(x - self.f_shift[2], self.xichmas[2])
 
         # 4. Rosenbrock’s Function F4’
-        z3 = np.dot(self.f_matrix[3 * self.ndim:4 * self.ndim, :], 2.048*(x - self.f_shift[0])/100) + 1
+        z3 = np.dot(self.f_matrix[3 * self.ndim:4 * self.ndim, :], 2.048 * (x - self.f_shift[0]) / 100) + 1
         g3 = self.lamdas[3] * self.g3(z3) + self.bias[3]
         w3 = operator.calculate_weight(x - self.f_shift[3], self.xichmas[3])
 
         # 5. HappyCat Function F17’
-        z4 = np.dot(self.f_matrix[4 * self.ndim:5 * self.ndim, :], 5*(x - self.f_shift[0])/100)
+        z4 = np.dot(self.f_matrix[4 * self.ndim:5 * self.ndim, :], 5 * (x - self.f_shift[0]) / 100)
         g4 = self.lamdas[4] * self.g4(z4) + self.bias[4]
         w4 = operator.calculate_weight(x - self.f_shift[4], self.xichmas[4])
 
@@ -1167,8 +1167,8 @@ class F282017(F202017):
         self.lamdas = [1., 1., 1.]
         self.bias = [0, 100, 200]
         self.g0 = F142017(self.ndim, None, self.f_shift[0], self.f_matrix[:self.ndim, :], self.f_shuffle[0], 0)
-        self.g1 = F152017(self.ndim, None, self.f_shift[0], self.f_matrix[self.ndim:2*self.ndim, :], self.f_shuffle[1], 0)
-        self.g2 = F162017(self.ndim, None, self.f_shift[0], self.f_matrix[2*self.ndim:3*self.ndim, :], self.f_shuffle[2], 0)
+        self.g1 = F152017(self.ndim, None, self.f_shift[0], self.f_matrix[self.ndim:2 * self.ndim, :], self.f_shuffle[1], 0)
+        self.g2 = F162017(self.ndim, None, self.f_shift[0], self.f_matrix[2 * self.ndim:3 * self.ndim, :], self.f_shuffle[2], 0)
         self.paras = {"f_shift": self.f_shift, "f_bias": self.f_bias, "f_matrix": self.f_matrix}
 
     def evaluate(self, x, *args):
@@ -1216,8 +1216,8 @@ class F292017(F202017):
         self.lamdas = [1., 1., 1.]
         self.bias = [0, 100, 200]
         self.g0 = F142017(self.ndim, None, self.f_shift[0], self.f_matrix[:self.ndim, :], self.f_shuffle[0], 0)
-        self.g1 = F172017(self.ndim, None, self.f_shift[0], self.f_matrix[self.ndim:2*self.ndim, :], self.f_shuffle[1], 0)
-        self.g2 = F182017(self.ndim, None, self.f_shift[0], self.f_matrix[2*self.ndim:3*self.ndim, :], self.f_shuffle[2], 0)
+        self.g1 = F172017(self.ndim, None, self.f_shift[0], self.f_matrix[self.ndim:2 * self.ndim, :], self.f_shuffle[1], 0)
+        self.g2 = F182017(self.ndim, None, self.f_shift[0], self.f_matrix[2 * self.ndim:3 * self.ndim, :], self.f_shuffle[2], 0)
         self.paras = {"f_shift": self.f_shift, "f_bias": self.f_bias, "f_matrix": self.f_matrix}
 
     def evaluate(self, x, *args):

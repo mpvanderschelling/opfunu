@@ -1,10 +1,10 @@
 #!/usr/bin/env python
-# Created by "Thieu" at 16:32, 12/07/2022 ----------%                                                                               
-#       Email: nguyenthieu2102@gmail.com            %                                                    
-#       Github: https://github.com/thieu1995        %                         
+# Created by "Thieu" at 16:32, 12/07/2022 ----------%
+#       Email: nguyenthieu2102@gmail.com            %
+#       Github: https://github.com/thieu1995        %
 # --------------------------------------------------%
 
-import numpy as np
+import autograd.numpy as np
 from opfunu.cec_based.cec import CecBenchmark
 from opfunu.utils import operator
 
@@ -312,7 +312,7 @@ class F82019(F42019):
     def evaluate(self, x, *args):
         self.n_fe += 1
         self.check_solution(x, self.dim_max, self.dim_supported)
-        z = np.dot(self.f_matrix, 0.005*(x - self.f_shift))
+        z = np.dot(self.f_matrix, 0.005 * (x - self.f_shift))
         return operator.expanded_scaffer_f6_func(z) + self.f_bias
 
 

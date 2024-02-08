@@ -3,7 +3,7 @@
 #       Github: https://github.com/firestrand       %
 # --------------------------------------------------%
 
-import numpy as np
+import autograd.numpy as np
 from opfunu import get_all_cec_functions
 
 

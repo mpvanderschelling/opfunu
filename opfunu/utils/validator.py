@@ -1,11 +1,11 @@
 #!/usr/bin/env python
-# Created by "Thieu" at 21:39, 29/06/2022 ----------%                                                                               
-#       Email: nguyenthieu2102@gmail.com            %                                                    
-#       Github: https://github.com/thieu1995        %                         
+# Created by "Thieu" at 21:39, 29/06/2022 ----------%
+#       Email: nguyenthieu2102@gmail.com            %
+#       Github: https://github.com/thieu1995        %
 # --------------------------------------------------%
 
 import operator
-import numpy as np
+import autograd.numpy as np
 
 
 def is_in_bound(value, bound):

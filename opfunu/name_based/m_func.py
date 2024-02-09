@@ -525,6 +525,8 @@ class Mishra07(Benchmark):
         super().__init__()
         self.dim_changeable = True
         self.dim_default = 2
+        self.dim_supported = range(2, 6)  # To prevent OverFlowError
+        self.dim_max = 5
         self.check_ndim_and_bounds(ndim, bounds, np.array([[-10., 10.] for _ in range(self.dim_default)]))
         self.f_global = 0
         self.x_global = np.sqrt(self.ndim) * np.ones(self.ndim)

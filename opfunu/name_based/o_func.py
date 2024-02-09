@@ -53,6 +53,7 @@ class OddSquare(Benchmark):
     def __init__(self, ndim=None, bounds=None):
         super().__init__()
         self.dim_changeable = True
+        self.dim_supported = range(2, 21)
         self.dim_default = 2
         self.check_ndim_and_bounds(ndim, bounds, np.array([[-5 * np.pi, 5. * np.pi] for _ in range(self.dim_default)]))
         self.b = np.array([1, 1.3, 0.8, -0.4, -1.3, 1.6, -0.2, -0.6, 0.5, 1.4, 1, 1.3, 0.8, -0.4, -1.3, 1.6, -0.2, -0.6, 0.5, 1.4])

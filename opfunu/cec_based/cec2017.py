@@ -6,6 +6,7 @@
 
 
 import autograd.numpy as np
+
 from opfunu.cec_based.cec import CecBenchmark
 from opfunu.utils import operator
 
@@ -208,6 +209,7 @@ class F72017(F12017):
     latex_formula_bounds = r'x_i \in [-100.0, 100.0], \forall i \in  [1, D]'
     latex_formula_global_optimum = r'\text{Global optimum: } x^* = o, F_1(x^*) = bias = 700.0'
 
+    differentiable = False
     unimodal = False
     modality = True  # Number of ambiguous peaks, unknown # peaks
     # n_basins = 1
@@ -260,6 +262,8 @@ class F92017(F12017):
     latex_formula_dimension = r'2 <= D <= 100'
     latex_formula_bounds = r'x_i \in [-100.0, 100.0], \forall i \in  [1, D]'
     latex_formula_global_optimum = r'\text{Global optimum: } x^* = o, F_1(x^*) = bias = 900.0'
+
+    differentiable = False
 
     unimodal = False
     modality = True  # Number of ambiguous peaks, unknown # peaks
@@ -346,6 +350,8 @@ class F112017(F102017):
     latex_formula_dimension = r'2 <= D <= 100'
     latex_formula_bounds = r'x_i \in [-100.0, 100.0], \forall i \in  [1, D]'
     latex_formula_global_optimum = r'\text{Global optimum: } x^* = o, F_1(x^*) = bias = 1100.0'
+
+    differentiable = False
 
     def __init__(self, ndim=None, bounds=None, f_shift="shift_data_11", f_matrix="M_11_D", f_shuffle="shuffle_data_11_D", f_bias=1100.):
         super().__init__(ndim, bounds, f_shift, f_matrix, f_shuffle, f_bias)
@@ -471,6 +477,7 @@ class F152017(F102017):
     latex_formula_dimension = r'2 <= D <= 100'
     latex_formula_bounds = r'x_i \in [-100.0, 100.0], \forall i \in  [1, D]'
     latex_formula_global_optimum = r'\text{Global optimum: } x^* = o, F_1(x^*) = bias = 1500.0'
+    differentiable = False
 
     def __init__(self, ndim=None, bounds=None, f_shift="shift_data_15", f_matrix="M_15_D", f_shuffle="shuffle_data_15_D", f_bias=1500.):
         super().__init__(ndim, bounds, f_shift, f_matrix, f_shuffle, f_bias)
@@ -503,6 +510,8 @@ class F162017(F102017):
     latex_formula_dimension = r'2 <= D <= 100'
     latex_formula_bounds = r'x_i \in [-100.0, 100.0], \forall i \in  [1, D]'
     latex_formula_global_optimum = r'\text{Global optimum: } x^* = o, F_1(x^*) = bias = 1600.0'
+
+    differentiable = False
 
     def __init__(self, ndim=None, bounds=None, f_shift="shift_data_16", f_matrix="M_16_D", f_shuffle="shuffle_data_16_D", f_bias=1600.):
         super().__init__(ndim, bounds, f_shift, f_matrix, f_shuffle, f_bias)
@@ -612,6 +621,8 @@ class F192017(F102017):
     latex_formula_dimension = r'2 <= D <= 100'
     latex_formula_bounds = r'x_i \in [-100.0, 100.0], \forall i \in  [1, D]'
     latex_formula_global_optimum = r'\text{Global optimum: } x^* = o, F_1(x^*) = bias = 1900.0'
+
+    differentiable = False
 
     def __init__(self, ndim=None, bounds=None, f_shift="shift_data_19", f_matrix="M_19_D", f_shuffle="shuffle_data_19_D", f_bias=1900.):
         super().__init__(ndim, bounds, f_shift, f_matrix, f_shuffle, f_bias)
@@ -726,6 +737,8 @@ class F212017(F202017):
     latex_formula_bounds = r'x_i \in [-100.0, 100.0], \forall i \in  [1, D]'
     latex_formula_global_optimum = r'\text{Global optimum: } x^* = o, F_1(x^*) = bias = 2100.0'
 
+    differentiable = False
+
     modality = True  # Number of ambiguous peaks, unknown # peaks
     # n_basins = 1
     # n_valleys = 1
@@ -779,6 +792,7 @@ class F222017(F202017):
     latex_formula_bounds = r'x_i \in [-100.0, 100.0], \forall i \in  [1, D]'
     latex_formula_global_optimum = r'\text{Global optimum: } x^* = o, F_1(x^*) = bias = 2200.0'
 
+    differentiable = False
     modality = True  # Number of ambiguous peaks, unknown # peaks
     # n_basins = 1
     # n_valleys = 1
@@ -959,6 +973,7 @@ class F252017(F202017):
     latex_formula_bounds = r'x_i \in [-100.0, 100.0], \forall i \in  [1, D]'
     latex_formula_global_optimum = r'\text{Global optimum: } x^* = o, F_1(x^*) = bias = 2500.0'
 
+    differentiable = False
     modality = True  # Number of ambiguous peaks, unknown # peaks
     # n_basins = 1
     # n_valleys = 1
@@ -1024,6 +1039,7 @@ class F262017(F202017):
     latex_formula_bounds = r'x_i \in [-100.0, 100.0], \forall i \in  [1, D]'
     latex_formula_global_optimum = r'\text{Global optimum: } x^* = o, F_1(x^*) = bias = 2600.0'
 
+    differentiable = False
     modality = True  # Number of ambiguous peaks, unknown # peaks
     # n_basins = 1
     # n_valleys = 1
@@ -1154,6 +1170,8 @@ class F282017(F202017):
     latex_formula_dimension = r'2 <= D <= 100'
     latex_formula_bounds = r'x_i \in [-100.0, 100.0], \forall i \in  [1, D]'
     latex_formula_global_optimum = r'\text{Global optimum: } x^* = o, F_1(x^*) = bias = 2800.0'
+
+    differentiable = False
 
     characteristics = ["Asymmetrical", "Different properties around different local optima",
                        "Different properties for different variables subcomponents"]

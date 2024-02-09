@@ -5,6 +5,7 @@
 # --------------------------------------------------%
 
 import autograd.numpy as np
+
 from opfunu.cec_based.cec import CecBenchmark
 from opfunu.utils import operator
 
@@ -76,7 +77,7 @@ class F22013(CecBenchmark):
     unimodal = True
     separable = False
 
-    differentiable = True
+    differentiable = False
     scalable = True
     randomized_term = False
     parametric = True
@@ -444,6 +445,7 @@ class F132013(F32013):
     latex_formula_bounds = r'x_i \in [-100.0, 100.0], \forall i \in  [1, D]'
     latex_formula_global_optimum = r'\text{Global optimum: } x^* = o, F_1(x^*) = bias = -200.0'
 
+    differentiable = False
     continuous = False
     linear = False
     convex = False
@@ -524,6 +526,7 @@ class F152013(F22013):
     convex = False
     unimodal = False
     modality = True  # Number of ambiguous peaks, unknown # peaks
+    differentiable = False
     # n_basins = 1
     # n_valleys = 1
 
@@ -877,7 +880,7 @@ class F232013(CecBenchmark):
     unimodal = False
     separable = False
 
-    differentiable = True
+    differentiable = False
     scalable = True
     randomized_term = False
     parametric = True
@@ -949,7 +952,7 @@ class F242013(CecBenchmark):
     unimodal = False
     separable = False
 
-    differentiable = True
+    differentiable = False
     scalable = True
     randomized_term = False
     parametric = True
@@ -1011,6 +1014,7 @@ class F252013(F242013):
     for the CEC 2013 special session on real-parameter optimization. Computational Intelligence Laboratory, Zhengzhou University,
     Zhengzhou, China and Nanyang Technological University, Singapore, Technical Report, 201212(34), 281-295..
     """
+    differentiable = False
     name = "F25: Composition Function 5"
     latex_formula = r'F_1(x) = \sum_{i=1}^D z_i^2 + bias, z=x-o,\\ x=[x_1, ..., x_D]; o=[o_1, ..., o_D]: \text{the shifted global optimum}'
     latex_formula_dimension = r'2 <= D <= 100'
@@ -1040,7 +1044,7 @@ class F262013(CecBenchmark):
     unimodal = False
     separable = False
 
-    differentiable = True
+    differentiable = False
     scalable = True
     randomized_term = False
     parametric = True
@@ -1124,7 +1128,7 @@ class F272013(CecBenchmark):
     unimodal = False
     separable = False
 
-    differentiable = True
+    differentiable = False
     scalable = True
     randomized_term = False
     parametric = True
@@ -1208,7 +1212,7 @@ class F282013(CecBenchmark):
     unimodal = False
     separable = False
 
-    differentiable = True
+    differentiable = False
     scalable = True
     randomized_term = False
     parametric = True

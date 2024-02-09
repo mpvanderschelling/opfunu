@@ -5,6 +5,7 @@
 # --------------------------------------------------%
 
 import autograd.numpy as np
+
 from opfunu.cec_based.cec import CecBenchmark
 from opfunu.utils import operator
 
@@ -128,6 +129,7 @@ class F42015(F12015):
     convex = False
     unimodal = False
     modality = True
+    differentiable = False
 
     characteristics = ["Local optima’s number is huge", "The second better local optimum is far from the global optimum"]
 
@@ -302,7 +304,7 @@ class F102015(CecBenchmark):
     unimodal = False
     separable = False
 
-    differentiable = True
+    differentiable = False
     scalable = True
     randomized_term = False
     parametric = True
@@ -393,6 +395,8 @@ class F122015(F102015):
     latex_formula_dimension = r'2 <= D <= 100'
     latex_formula_bounds = r'x_i \in [-100.0, 100.0], \forall i \in  [1, D]'
     latex_formula_global_optimum = r'\text{Global optimum: } x^* = o, F_1(x^*) = bias = 1200.0'
+
+    differentiable = False
 
     characteristics = []
 
@@ -513,6 +517,7 @@ class F142015(F132015):
     latex_formula_bounds = r'x_i \in [-100.0, 100.0], \forall i \in  [1, D]'
     latex_formula_global_optimum = r'\text{Global optimum: } x^* = o, F_1(x^*) = bias = 1400.0'
 
+    differentiable = False
     modality = False  # Number of ambiguous peaks, unknown # peaks
 
     def __init__(self, ndim=None, bounds=None, f_shift="shift_data_14_D", f_matrix="M_14_D", f_bias=1400.):
@@ -568,6 +573,7 @@ class F152015(CecBenchmark):
     latex_formula_bounds = r'x_i \in [-100.0, 100.0], \forall i \in  [1, D]'
     latex_formula_global_optimum = r'\text{Global optimum: } x^* = o, F_1(x^*) = bias = 1500.0'
 
+    differentiable = False
     modality = False
 
     def __init__(self, ndim=None, bounds=None, f_shift="shift_data_15_D", f_matrix="M_15_D", f_bias=1500.):

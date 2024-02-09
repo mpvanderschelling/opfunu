@@ -5,6 +5,7 @@
 # --------------------------------------------------%
 
 import autograd.numpy as np
+
 from opfunu.cec_based.cec import CecBenchmark
 from opfunu.utils import operator
 
@@ -26,7 +27,7 @@ class F12022(CecBenchmark):
     unimodal = True
     separable = False
 
-    differentiable = True
+    differentiable = False
     scalable = True
     randomized_term = False
     parametric = True
@@ -96,6 +97,8 @@ class F32022(F12022):
     latex_formula_bounds = r'x_i \in [-100.0, 100.0], \forall i \in  [1, D]'
     latex_formula_global_optimum = r'\text{Global optimum: } x^* = o, F_1(x^*) = bias = 600.0'
 
+    differentiable = False
+
     unimodal = False
     convex = False
     modality = True  # Number of ambiguous peaks, unknown # peaks
@@ -122,6 +125,7 @@ class F42022(F12022):
     latex_formula_bounds = r'x_i \in [-100.0, 100.0], \forall i \in  [1, D]'
     latex_formula_global_optimum = r'\text{Global optimum: } x^* = o, F_1(x^*) = bias = 800.0'
 
+    differentiable = False
     unimodal = False
     convex = False
     modality = True  # Number of ambiguous peaks, unknown # peaks
@@ -243,7 +247,7 @@ class F72022(CecBenchmark):
     unimodal = False
     separable = False
 
-    differentiable = True
+    differentiable = False
     scalable = True
     randomized_term = False
     parametric = True
@@ -313,7 +317,7 @@ class F82022(CecBenchmark):
     unimodal = False
     separable = False
 
-    differentiable = True
+    differentiable = False
     scalable = True
     randomized_term = False
     parametric = True
@@ -469,7 +473,7 @@ class F102022(CecBenchmark):
     unimodal = False
     separable = False
 
-    differentiable = True
+    differentiable = False
     scalable = True
     randomized_term = False
     parametric = True
@@ -542,7 +546,7 @@ class F112022(CecBenchmark):
     unimodal = False
     separable = False
 
-    differentiable = True
+    differentiable = False
     scalable = True
     randomized_term = False
     parametric = True

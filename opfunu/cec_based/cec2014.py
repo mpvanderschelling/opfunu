@@ -5,6 +5,7 @@
 # --------------------------------------------------%
 
 import autograd.numpy as np
+
 from opfunu.cec_based.cec import CecBenchmark
 from opfunu.utils import operator
 
@@ -123,7 +124,6 @@ class F42014(F12014):
     latex_formula_global_optimum = r'\text{Global optimum: } x^* = o, F_1(x^*) = bias = 400.0'
 
     unimodal = False
-
     characteristics = ["Having a very narrow valley from local optimum to global optimum"]
 
     def __init__(self, ndim=None, bounds=None, f_shift="shift_data_4", f_matrix="M_4_D", f_bias=400.):
@@ -299,6 +299,7 @@ class F92014(F12014):
 
 
 class F102014(F82014):
+    differentiable = False
     """
     .. [1] Liang, J. J., Qu, B. Y., & Suganthan, P. N. (2013). Problem definitions and evaluation criteria for the CEC 2014
     special session and competition on single objective real-parameter numerical optimization. Computational Intelligence Laboratory,
@@ -310,6 +311,7 @@ class F102014(F82014):
     latex_formula_bounds = r'x_i \in [-100.0, 100.0], \forall i \in  [1, D]'
     latex_formula_global_optimum = r'\text{Global optimum: } x^* = o, F_1(x^*) = bias = 1000.0'
 
+    differentiable = False
     characteristics = ["Local optima’s number is huge", "The second better local optimum is far from the global optimum"]
 
     def __init__(self, ndim=None, bounds=None, f_shift="shift_data_10", f_bias=1000.):
@@ -336,6 +338,7 @@ class F112014(F12014):
     convex = False
     unimodal = False
     modality = True  # Number of ambiguous peaks, unknown # peaks
+    differentiable = False
     # n_basins = 1
     # n_valleys = 1
 
@@ -521,7 +524,7 @@ class F172014(CecBenchmark):
     unimodal = False
     separable = False
 
-    differentiable = True
+    differentiable = False
     scalable = True
     randomized_term = False
     parametric = True
@@ -730,7 +733,7 @@ class F212014(F172014):
     unimodal = False
     separable = False
 
-    differentiable = True
+    differentiable = False
     scalable = True
     randomized_term = False
     parametric = True
@@ -785,7 +788,7 @@ class F222014(F212014):
     unimodal = False
     separable = False
 
-    differentiable = True
+    differentiable = False
     scalable = True
     randomized_term = False
     parametric = True
@@ -910,6 +913,7 @@ class F242014(F232014):
     latex_formula_bounds = r'x_i \in [-100.0, 100.0], \forall i \in  [1, D]'
     latex_formula_global_optimum = r'\text{Global optimum: } x^* = o, F_1(x^*) = bias = 2400.0'
 
+    differentiable = False
     convex = False
     modality = True  # Number of ambiguous peaks, unknown # peaks
 
@@ -960,6 +964,7 @@ class F252014(F232014):
     latex_formula_bounds = r'x_i \in [-100.0, 100.0], \forall i \in  [1, D]'
     latex_formula_global_optimum = r'\text{Global optimum: } x^* = o, F_1(x^*) = bias = 2500.0'
 
+    differentiable = False
     convex = False
     characteristics = ["Asymmetrical", "Different properties around different local optima"]
 
@@ -1010,6 +1015,7 @@ class F262014(F232014):
 
     convex = False
     modality = True
+    differentiable = False
     characteristics = ["Asymmetrical", "Different properties around different local optima"]
 
     def __init__(self, ndim=None, bounds=None, f_shift="shift_data_26", f_matrix="M_26_D", f_bias=2600.):
@@ -1067,6 +1073,7 @@ class F272014(F232014):
     latex_formula_bounds = r'x_i \in [-100.0, 100.0], \forall i \in  [1, D]'
     latex_formula_global_optimum = r'\text{Global optimum: } x^* = o, F_1(x^*) = bias = 2700.0'
 
+    differentiable = False
     convex = False
     characteristics = ["Asymmetrical", "Different properties around different local optima"]
 
@@ -1125,6 +1132,7 @@ class F282014(F232014):
     latex_formula_bounds = r'x_i \in [-100.0, 100.0], \forall i \in  [1, D]'
     latex_formula_global_optimum = r'\text{Global optimum: } x^* = o, F_1(x^*) = bias = 2800.0'
 
+    differentiable = False
     convex = False
     characteristics = ["Asymmetrical", "Different properties around different local optima"]
 
@@ -1183,6 +1191,7 @@ class F292014(F232014):
     latex_formula_bounds = r'x_i \in [-100.0, 100.0], \forall i \in  [1, D]'
     latex_formula_global_optimum = r'\text{Global optimum: } x^* = o, F_1(x^*) = bias = 2900.0'
 
+    differentiable = False
     convex = False
     characteristics = ["Asymmetrical", "Different properties around different local optima"]
 
@@ -1232,6 +1241,7 @@ class F302014(F232014):
     latex_formula_bounds = r'x_i \in [-100.0, 100.0], \forall i \in  [1, D]'
     latex_formula_global_optimum = r'\text{Global optimum: } x^* = o, F_1(x^*) = bias = 3000.0'
 
+    differentiable = False
     convex = False
     characteristics = ["Asymmetrical", "Different properties around different local optima",
                        "Different properties for different variables subcomponents"]

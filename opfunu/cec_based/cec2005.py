@@ -1124,7 +1124,7 @@ class F212005(CecBenchmark):
     unimodal = False
     separable = False
 
-    differentiable = True
+    differentiable = False
     scalable = True
     randomized_term = False
     parametric = True
@@ -1193,6 +1193,7 @@ class F212005(CecBenchmark):
 
 
 class F222005(F212005):
+    differentiable = False
     """
     .. [1] Suganthan, P.N., Hansen, N., Liang, J.J., Deb, K., Chen, Y.P., Auger, A. and Tiwari, S., 2005.
     Problem definitions and evaluation criteria for the CEC 2005 special session on real-parameter optimization.
@@ -1348,6 +1349,7 @@ class F242005(CecBenchmark):
 
 
 class F252005(F242005):
+    differentiable = False
     """
     .. [1] Suganthan, P.N., Hansen, N., Liang, J.J., Deb, K., Chen, Y.P., Auger, A. and Tiwari, S., 2005.
     Problem definitions and evaluation criteria for the CEC 2005 special session on real-parameter optimization.

@@ -115,7 +115,7 @@ class Deb03(Benchmark):
         super().__init__()
         self.dim_changeable = True
         self.dim_default = 2
-        self.check_ndim_and_bounds(ndim, bounds, np.array([[-1., 1.] for _ in range(self.dim_default)]))
+        self.check_ndim_and_bounds(ndim, bounds, np.array([[0., 1.] for _ in range(self.dim_default)]))
         self.f_global = -1.0
         self.x_global = np.zeros(self.ndim)
 

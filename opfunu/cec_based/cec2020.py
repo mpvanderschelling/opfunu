@@ -131,7 +131,7 @@ class F32020(CecBenchmark):
     unimodal = False
     separable = False
 
-    differentiable = False
+    differentiable = True
     scalable = True
     randomized_term = False
     parametric = True

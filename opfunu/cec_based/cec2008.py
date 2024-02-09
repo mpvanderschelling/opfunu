@@ -5,6 +5,7 @@
 # --------------------------------------------------%
 
 import autograd.numpy as np
+
 from opfunu.cec_based.cec import CecBenchmark
 from opfunu.utils import operator
 
@@ -73,7 +74,7 @@ class F22008(CecBenchmark):
     unimodal = True
     separable = False
 
-    differentiable = False
+    differentiable = True
     scalable = True
     randomized_term = False
     parametric = True
@@ -311,7 +312,7 @@ class F72008(CecBenchmark):
     unimodal = False
     separable = False
 
-    differentiable = False
+    differentiable = True
     scalable = True
     randomized_term = True
     parametric = True

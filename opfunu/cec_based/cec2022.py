@@ -27,7 +27,7 @@ class F12022(CecBenchmark):
     unimodal = True
     separable = False
 
-    differentiable = False
+    differentiable = True
     scalable = True
     randomized_term = False
     parametric = True
@@ -72,6 +72,7 @@ class F22022(F12022):
     latex_formula_bounds = r'x_i \in [-100.0, 100.0], \forall i \in  [1, D]'
     latex_formula_global_optimum = r'\text{Global optimum: } x^* = o, F_1(x^*) = bias = 400.0'
 
+    differentiable = True
     unimodal = False
     modality = True  # Number of ambiguous peaks, unknown # peaks
     characteristics = ["Local optima’s number is huge"]
@@ -152,6 +153,7 @@ class F52022(F12022):
     latex_formula_bounds = r'x_i \in [-100.0, 100.0], \forall i \in  [1, D]'
     latex_formula_global_optimum = r'\text{Global optimum: } x^* = o, F_1(x^*) = bias = 900.0'
 
+    differentiable = True
     unimodal = False
     convex = False
     modality = True  # Number of ambiguous peaks, unknown # peaks
@@ -634,7 +636,7 @@ class F122022(CecBenchmark):
     unimodal = False
     separable = False
 
-    differentiable = True
+    differentiable = False
     scalable = True
     randomized_term = False
     parametric = True

@@ -77,7 +77,7 @@ class F22013(CecBenchmark):
     unimodal = True
     separable = False
 
-    differentiable = False
+    differentiable = True
     scalable = True
     randomized_term = False
     parametric = True
@@ -204,7 +204,7 @@ class F52013(F12013):
     latex_formula_global_optimum = r'\text{Global optimum: } x^* = o, F_1(x^*) = bias = -1000.0'
 
     continuous = False
-    differentiable = False
+    differentiable = True
 
     characteristics = ["Sensitivities of the zi-variables are different"]
 
@@ -352,6 +352,7 @@ class F102013(F22013):
     latex_formula_bounds = r'x_i \in [-100.0, 100.0], \forall i \in  [1, D]'
     latex_formula_global_optimum = r'\text{Global optimum: } x^* = o, F_1(x^*) = bias = -500.0'
 
+    differentiable = True
     unimodal = False
     characteristics = []
 
@@ -557,7 +558,7 @@ class F162013(F32013):
 
     convex = False
     unimodal = False
-    differentiable = False
+    differentiable = True
     modality = True  # Number of ambiguous peaks, unknown # peaks
     # n_basins = 1
     # n_valleys = 1
@@ -593,7 +594,7 @@ class F172013(F12013):
     convex = False
     unimodal = False
     separable = False
-    differentiable = False
+    differentiable = True
     modality = True  # Number of ambiguous peaks, unknown # peaks
     # n_basins = 1
     # n_valleys = 1
@@ -625,7 +626,7 @@ class F182013(F32013):
     continuous = True
     convex = False
     unimodal = False
-    differentiable = False
+    differentiable = True
     modality = False  # Number of ambiguous peaks, unknown # peaks
     # n_basins = 1
     # n_valleys = 1
@@ -656,6 +657,7 @@ class F192013(F22013):
     latex_formula_bounds = r'x_i \in [-100.0, 100.0], \forall i \in  [1, D]'
     latex_formula_global_optimum = r'\text{Global optimum: } x^* = o, F_1(x^*) = bias = 500.0'
 
+    differentiable = True
     unimodal = False
     modality = True  # Number of ambiguous peaks, unknown # peaks
     # n_basins = 1
@@ -809,7 +811,7 @@ class F222013(CecBenchmark):
     unimodal = False
     separable = True
 
-    differentiable = True
+    differentiable = False
     scalable = True
     randomized_term = False
     parametric = True

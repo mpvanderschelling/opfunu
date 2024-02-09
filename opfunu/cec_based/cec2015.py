@@ -157,7 +157,7 @@ class F52015(F12015):
 
     convex = False
     unimodal = False
-    differentiable = False
+    differentiable = True
     modality = True
 
     characteristics = ["Continuous everywhere yet differentiable nowhere"]
@@ -187,7 +187,7 @@ class F62015(F12015):
     convex = False
     unimodal = False
     separable = False
-    differentiable = False
+    differentiable = True
 
     characteristics = ["Continuous everywhere yet differentiable nowhere"]
 
@@ -361,6 +361,7 @@ class F112015(F102015):
     latex_formula_bounds = r'x_i \in [-100.0, 100.0], \forall i \in  [1, D]'
     latex_formula_global_optimum = r'\text{Global optimum: } x^* = o, F_1(x^*) = bias = 1100.0'
 
+    differentiable = True
     characteristics = []
 
     def __init__(self, ndim=None, bounds=None, f_shift="shift_data_11_D", f_matrix="M_11_D", f_shuffle="shuffle_data_11_D", f_bias=1100.):

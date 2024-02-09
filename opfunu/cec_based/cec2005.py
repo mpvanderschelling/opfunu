@@ -232,7 +232,7 @@ class F52005(CecBenchmark):
     unimodal = True
     separable = False
 
-    differentiable = False
+    differentiable = True
     scalable = True
     randomized_term = False
     parametric = True

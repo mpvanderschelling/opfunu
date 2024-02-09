@@ -369,7 +369,7 @@ class F122014(F12014):
     convex = False
     unimodal = False
     separable = False
-    differentiable = False
+    differentiable = True
     modality = True  # Number of ambiguous peaks, unknown # peaks
     # n_basins = 1
     # n_valleys = 1
@@ -402,7 +402,7 @@ class F132014(F12014):
     convex = True
     unimodal = False
     separable = False
-    differentiable = False
+    differentiable = True
 
     characteristics = []
 

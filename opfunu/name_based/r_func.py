@@ -5,6 +5,7 @@
 # --------------------------------------------------%
 
 import autograd.numpy as np
+
 from opfunu.benchmark import Benchmark
 
 
@@ -45,9 +46,9 @@ class Rana(Benchmark):
         super().__init__()
         self.dim_changeable = True
         self.dim_default = 2
-        self.check_ndim_and_bounds(ndim, bounds, np.array([[-500., 500.] for _ in range(self.dim_default)]))
-        self.f_global = -500.8021602966615
-        self.x_global = np.array([-300.3376, 500.])
+        self.check_ndim_and_bounds(ndim, bounds, np.array([[-512., 512.] for _ in range(self.dim_default)]))
+        self.f_global = -511.708
+        self.x_global = -512 * np.ones(self.ndim)
 
     def evaluate(self, x, *args):
         self.check_solution(x)

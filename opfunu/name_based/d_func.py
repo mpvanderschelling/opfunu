@@ -104,7 +104,7 @@ class Deb03(Benchmark):
     unimodal = False
     separable = True
 
-    differentiable = True
+    differentiable = False
     scalable = False
     randomized_term = False
     parametric = False
@@ -339,7 +339,7 @@ class DeVilliersGlasser01(Benchmark):
     unimodal = False
     separable = False
 
-    differentiable = True
+    differentiable = False
     scalable = False
     randomized_term = False
     parametric = False
@@ -379,7 +379,7 @@ class DeVilliersGlasser02(Benchmark):
     unimodal = False
     separable = False
 
-    differentiable = True
+    differentiable = False
     scalable = False
     randomized_term = False
     parametric = False
@@ -503,7 +503,7 @@ class DropWave(Benchmark):
 
     def __init__(self, ndim=None, bounds=None):
         super().__init__()
-        self.dim_changeable = True
+        self.dim_changeable = False
         self.dim_default = 2
         self.check_ndim_and_bounds(ndim, bounds, np.array([[-5.12, 5.12] for _ in range(self.dim_default)]))
         self.f_global = -1.0

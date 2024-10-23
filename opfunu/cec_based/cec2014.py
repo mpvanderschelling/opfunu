@@ -149,6 +149,7 @@ class F52014(F12014):
     latex_formula_bounds = r'x_i \in [-100.0, 100.0], \forall i \in  [1, D]'
     latex_formula_global_optimum = r'\text{Global optimum: } x^* = o, F_1(x^*) = bias = 500.0'
 
+    convex = False
     unimodal = False
 
     characteristics = ["Having a very narrow valley from local optimum to global optimum"]

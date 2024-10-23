@@ -123,6 +123,7 @@ class F42014(F12014):
     latex_formula_bounds = r'x_i \in [-100.0, 100.0], \forall i \in  [1, D]'
     latex_formula_global_optimum = r'\text{Global optimum: } x^* = o, F_1(x^*) = bias = 400.0'
 
+    convex = False
     unimodal = False
     characteristics = ["Having a very narrow valley from local optimum to global optimum"]
 
@@ -202,6 +203,7 @@ class F72014(F12014):
     latex_formula_bounds = r'x_i \in [-100.0, 100.0], \forall i \in  [1, D]'
     latex_formula_global_optimum = r'\text{Global optimum: } x^* = o, F_1(x^*) = bias = 700.0'
 
+    convex = False
     unimodal = False
 
     characteristics = ["Continuous but differentiable only on a set of points"]
@@ -279,6 +281,7 @@ class F92014(F12014):
     latex_formula_bounds = r'x_i \in [-100.0, 100.0], \forall i \in  [1, D]'
     latex_formula_global_optimum = r'\text{Global optimum: } x^* = o, F_1(x^*) = bias = 900.0'
 
+    convex = False
     unimodal = False
     separable = False
     parametric = True

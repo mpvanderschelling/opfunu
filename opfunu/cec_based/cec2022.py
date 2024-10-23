@@ -72,6 +72,7 @@ class F22022(F12022):
     latex_formula_bounds = r'x_i \in [-100.0, 100.0], \forall i \in  [1, D]'
     latex_formula_global_optimum = r'\text{Global optimum: } x^* = o, F_1(x^*) = bias = 400.0'
 
+    convex = False
     differentiable = True
     unimodal = False
     modality = True  # Number of ambiguous peaks, unknown # peaks

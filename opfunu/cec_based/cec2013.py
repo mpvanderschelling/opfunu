@@ -229,6 +229,7 @@ class F62013(F22013):
     latex_formula_bounds = r'x_i \in [-100.0, 100.0], \forall i \in  [1, D]'
     latex_formula_global_optimum = r'\text{Global optimum: } x^* = o, F_1(x^*) = bias = -900.0'
 
+    convex = False
     unimodal = False
     characteristics = ["Having a very narrow valley from local optimum to global optimum"]
 
@@ -254,6 +255,7 @@ class F72013(F32013):
     latex_formula_bounds = r'x_i \in [-100.0, 100.0], \forall i \in  [1, D]'
     latex_formula_global_optimum = r'\text{Global optimum: } x^* = o, F_1(x^*) = bias = -800.0'
 
+    convex = False
     unimodal = False
     modality = True  # Number of ambiguous peaks, unknown # peaks
     characteristics = ["Asymmetrical", "Local optima’s number is huge"]
@@ -288,6 +290,7 @@ class F82013(F32013):
     latex_formula_bounds = r'x_i \in [-100.0, 100.0], \forall i \in  [1, D]'
     latex_formula_global_optimum = r'\text{Global optimum: } x^* = o, F_1(x^*) = bias = -700.0'
 
+    convex = False
     unimodal = False
     characteristics = ["Asymmetrical"]
 
@@ -317,6 +320,7 @@ class F92013(F32013):
     latex_formula_bounds = r'x_i \in [-100.0, 100.0], \forall i \in  [1, D]'
     latex_formula_global_optimum = r'\text{Global optimum: } x^* = o, F_1(x^*) = bias = -600.0'
 
+    convex = False
     unimodal = False
     modality = True  # Number of ambiguous peaks, unknown # peaks
     characteristics = ["Asymmetrical", "Continuous but differentiable only on a set of points"]
@@ -353,6 +357,7 @@ class F102013(F22013):
     latex_formula_global_optimum = r'\text{Global optimum: } x^* = o, F_1(x^*) = bias = -500.0'
 
     differentiable = True
+    convex = False
     unimodal = False
     characteristics = []
 
@@ -657,6 +662,7 @@ class F192013(F22013):
     latex_formula_bounds = r'x_i \in [-100.0, 100.0], \forall i \in  [1, D]'
     latex_formula_global_optimum = r'\text{Global optimum: } x^* = o, F_1(x^*) = bias = 500.0'
 
+    convex = False
     differentiable = True
     unimodal = False
     modality = True  # Number of ambiguous peaks, unknown # peaks

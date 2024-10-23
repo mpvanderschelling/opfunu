@@ -97,6 +97,7 @@ class F32017(F12017):
     latex_formula_bounds = r'x_i \in [-100.0, 100.0], \forall i \in  [1, D]'
     latex_formula_global_optimum = r'\text{Global optimum: } x^* = o, F_1(x^*) = bias = 300.0'
 
+    convex = False
     unimodal = False
     modality = True  # Number of ambiguous peaks, unknown # peaks
     # n_basins = 1
@@ -153,6 +154,7 @@ class F52017(F12017):
     latex_formula_bounds = r'x_i \in [-100.0, 100.0], \forall i \in  [1, D]'
     latex_formula_global_optimum = r'\text{Global optimum: } x^* = o, F_1(x^*) = bias = 500.0'
 
+    convex = False
     unimodal = False
     modality = True  # Number of ambiguous peaks, unknown # peaks
     # n_basins = 1
@@ -181,6 +183,7 @@ class F62017(F12017):
     latex_formula_bounds = r'x_i \in [-100.0, 100.0], \forall i \in  [1, D]'
     latex_formula_global_optimum = r'\text{Global optimum: } x^* = o, F_1(x^*) = bias = 600.0'
 
+    convex = False
     unimodal = False
     modality = True  # Number of ambiguous peaks, unknown # peaks
     # n_basins = 1
@@ -209,6 +212,7 @@ class F72017(F12017):
     latex_formula_bounds = r'x_i \in [-100.0, 100.0], \forall i \in  [1, D]'
     latex_formula_global_optimum = r'\text{Global optimum: } x^* = o, F_1(x^*) = bias = 700.0'
 
+    convex = False
     differentiable = False
     unimodal = False
     modality = True  # Number of ambiguous peaks, unknown # peaks
@@ -238,6 +242,7 @@ class F82017(F12017):
     latex_formula_bounds = r'x_i \in [-100.0, 100.0], \forall i \in  [1, D]'
     latex_formula_global_optimum = r'\text{Global optimum: } x^* = o, F_1(x^*) = bias = 800.0'
 
+    convex = False
     unimodal = False
     modality = True  # Number of ambiguous peaks, unknown # peaks
     characteristics = ["Local optima’s number is huge"]
@@ -265,6 +270,7 @@ class F92017(F12017):
 
     differentiable = False
 
+    convex = False
     unimodal = False
     modality = True  # Number of ambiguous peaks, unknown # peaks
     characteristics = ["Local optima’s number is huge", "The second better local optimum is far from the global optimum"]

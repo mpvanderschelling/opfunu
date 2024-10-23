@@ -5,6 +5,7 @@
 # --------------------------------------------------%
 
 import autograd.numpy as np
+
 from opfunu.benchmark import Benchmark
 
 
@@ -20,7 +21,7 @@ class Hansen(Benchmark):
     latex_formula_global_optimum = r'f(-7.58989583, -7.70831466) = -176.54179'
     continuous = True
     linear = False
-    convex = True
+    convex = False
     unimodal = False
     separable = True
 
@@ -60,7 +61,7 @@ class Hartmann3(Benchmark):
     latex_formula_global_optimum = r'f([0.11461292,  0.55564907,  0.85254697]) = -3.8627821478'
     continuous = True
     linear = False
-    convex = True
+    convex = False
     unimodal = False
     separable = False
 
@@ -108,7 +109,7 @@ class Hartmann6(Benchmark):
     latex_formula_global_optimum = r'f([0.20168952, 0.15001069, 0.47687398, 0.27533243, 0.31165162, 0.65730054]) = -3.32236801141551'
     continuous = True
     linear = False
-    convex = True
+    convex = False
     unimodal = False
     separable = False
 
@@ -156,7 +157,7 @@ class HelicalValley(Benchmark):
     latex_formula_global_optimum = r'f([1.0, 0.0, 0.0]) = 0'
     continuous = True
     linear = False
-    convex = True
+    convex = False
     unimodal = False
     separable = False
 
@@ -195,7 +196,7 @@ class Himmelblau(Benchmark):
     latex_formula_global_optimum = r'f([3, 2]) = 0'
     continuous = True
     linear = False
-    convex = True
+    convex = False
     unimodal = False
     separable = False
 
@@ -232,7 +233,7 @@ class Hosaki(Benchmark):
     latex_formula_global_optimum = r'f(4, 2) = −2.3458'
     continuous = True
     linear = False
-    convex = True
+    convex = False
     unimodal = False
     separable = False
 
@@ -270,7 +271,7 @@ class HolderTable(Benchmark):
     latex_formula_global_optimum = r'f(\pm 9.664590028909654) = -19.20850256788675'
     continuous = True
     linear = False
-    convex = True
+    convex = False
     unimodal = False
     separable = False
 

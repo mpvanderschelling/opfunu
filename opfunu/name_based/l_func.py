@@ -207,7 +207,7 @@ class Levy03(Benchmark):
     latex_formula_global_optimum = r'f(1,... 1) = 0'
     continuous = True
     linear = False
-    convex = True
+    convex = False
     unimodal = False
     separable = False
 
@@ -298,7 +298,7 @@ class Levy13(Benchmark):
     latex_formula_global_optimum = r'f(1., 1.) = 0'
     continuous = True
     linear = False
-    convex = True
+    convex = False
     unimodal = False
     separable = False
 

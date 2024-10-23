@@ -283,7 +283,7 @@ class F62005(CecBenchmark):
     latex_formula_global_optimum = r'\text{Global optimum: } x^* = o, F_6(x^*) = bias = 390.0'
     continuous = True
     linear = False
-    convex = True
+    convex = False
     unimodal = False
     separable = False
 
@@ -332,7 +332,7 @@ class F72005(CecBenchmark):
     latex_formula_global_optimum = r'\text{Global optimum: } x^* = o, F_6(x^*) = bias = 390.0'
     continuous = True
     linear = False
-    convex = True
+    convex = False
     unimodal = False
     separable = False
 

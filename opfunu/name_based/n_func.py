@@ -5,6 +5,7 @@
 # --------------------------------------------------%
 
 import autograd.numpy as np
+
 from opfunu.benchmark import Benchmark
 
 
@@ -34,7 +35,7 @@ class NeedleEye(Benchmark):
     continuous = False
     linear = False
     convex = True
-    unimodal = False
+    unimodal = True
     separable = False
 
     differentiable = False
@@ -87,7 +88,7 @@ class NewFunction01(Benchmark):
     latex_formula_global_optimum = r'f([-8.46669057, -9.99982177]) = -0.18459899925'
     continuous = False
     linear = False
-    convex = True
+    convex = False
     unimodal = False
     separable = False
 
@@ -131,7 +132,7 @@ class NewFunction02(Benchmark):
     latex_formula_global_optimum = r'f([-9.94103375, -9.99771235]) = -0.19933159253'
     continuous = False
     linear = False
-    convex = True
+    convex = False
     unimodal = False
     separable = False
 

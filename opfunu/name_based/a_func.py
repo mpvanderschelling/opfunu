@@ -5,6 +5,7 @@
 # --------------------------------------------------%
 
 import autograd.numpy as np
+
 from opfunu.benchmark import Benchmark
 
 
@@ -20,7 +21,7 @@ class Ackley01(Benchmark):
     latex_formula_global_optimum = r'f(0, ..., 0) = 0'
     continuous = True
     linear = False
-    convex = True
+    convex = False
     unimodal = False
     separable = False
 
@@ -44,7 +45,7 @@ class Ackley01(Benchmark):
         self.n_fe += 1
         u = np.sum(x ** 2)
         v = np.sum(np.cos(2 * np.pi * x))
-        return (-20. * np.exp(-0.2 * np.sqrt(u / self.ndim)) - np.exp(v / self.ndim) + 20. + np.exp(1.))
+        return (-20. * np.exp(-0.02 * np.sqrt(u / self.ndim)) - np.exp(v / self.ndim) + 20. + np.exp(1.))
 
 
 class Ackley02(Benchmark):
@@ -133,7 +134,7 @@ class Adjiman(Benchmark):
     latex_formula_global_optimum = r'f(x1, x2)\approx-2.02181, at$$ $$x1=2.0, and$$ $$ x2=0.10578'
     continuous = True
     linear = False
-    convex = True
+    convex = False
     unimodal = False
     separable = False
 
@@ -170,7 +171,7 @@ class Alpine01(Benchmark):
     latex_formula_global_optimum = r'f(x*)\approx 0, at$$ $$x*=0.0'
     continuous = True
     linear = False
-    convex = True
+    convex = False
     unimodal = False
     separable = True
 
@@ -207,7 +208,7 @@ class Alpine02(Benchmark):
     latex_formula_global_optimum = r'f(x*)\approx -6.12950, at$$ $$x_1=7.91705268, x_2=4.81584232'
     continuous = True
     linear = False
-    convex = True
+    convex = False
     unimodal = False
     separable = True
 
@@ -244,7 +245,7 @@ class AMGM(Benchmark):
     latex_formula_global_optimum = r'f(x*)\approx 0, at$$ $$x_1=x_2=...=x_n'
     continuous = True
     linear = False
-    convex = True
+    convex = False
     unimodal = False
     separable = False
 

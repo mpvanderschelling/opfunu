@@ -22,7 +22,7 @@ class Damavandi(Benchmark):
     latex_formula_global_optimum = r'f(2, 2) = 0'
     continuous = True
     linear = False
-    convex = True
+    convex = False
     unimodal = False
     separable = False
 
@@ -63,7 +63,7 @@ class Deb01(Benchmark):
     latex_formula_global_optimum = r'f(0.3, -0.3) = -1'
     continuous = True
     linear = False
-    convex = True
+    convex = False
     unimodal = False
     separable = True
 
@@ -100,7 +100,7 @@ class Deb03(Benchmark):
     latex_formula_global_optimum = r'f(0.3, -0.3) = -1'
     continuous = True
     linear = False
-    convex = True
+    convex = False
     unimodal = False
     separable = True
 
@@ -138,7 +138,7 @@ class Decanomial(Benchmark):
     latex_formula_global_optimum = r'f(2, -3) = 0'
     continuous = True
     linear = False
-    convex = True
+    convex = False
     unimodal = False
     separable = True
 
@@ -296,7 +296,7 @@ class DeflectedCorrugatedSpring(Benchmark):
     latex_formula_global_optimum = r'f(x_i) = f(alpha_i) = -1'
     continuous = True
     linear = False
-    convex = True
+    convex = False
     unimodal = False
     separable = False
 
@@ -335,7 +335,7 @@ class DeVilliersGlasser01(Benchmark):
     latex_formula_global_optimum = r'f(60.137, 1.371, 3.112, 1.761) = 0'
     continuous = True
     linear = False
-    convex = True
+    convex = False
     unimodal = False
     separable = False
 
@@ -375,7 +375,7 @@ class DeVilliersGlasser02(Benchmark):
     latex_formula_global_optimum = r'f(53.81, 1.27, 3.012, 2.13, 0.507) = 0'
     continuous = True
     linear = False
-    convex = True
+    convex = False
     unimodal = False
     separable = False
 
@@ -453,7 +453,7 @@ class Dolan(Benchmark):
     latex_formula_global_optimum = r'f(8.39045925, 4.81424707, 7.34574133, 68.88246895, 3.85470806) = 0'
     continuous = True
     linear = False
-    convex = True
+    convex = False
     unimodal = False
     separable = False
 
@@ -490,7 +490,7 @@ class DropWave(Benchmark):
     latex_formula_global_optimum = r'f(0, 0) = -1'
     continuous = True
     linear = False
-    convex = True
+    convex = False
     unimodal = False
     separable = False
 

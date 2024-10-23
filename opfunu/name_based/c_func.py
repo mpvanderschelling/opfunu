@@ -21,7 +21,7 @@ class CamelThreeHump(Benchmark):
     latex_formula_global_optimum = r'f(0, 0) = 0'
     continuous = False
     linear = False
-    convex = True
+    convex = False
     unimodal = False
     separable = False
 
@@ -58,7 +58,7 @@ class CamelSixHump(Benchmark):
     latex_formula_global_optimum = r'f(-0.0898, 0.7126) = f(0.0898, -0.7126) = -1.0316284229280819'
     continuous = True
     linear = False
-    convex = True
+    convex = False
     unimodal = False
     separable = False
 
@@ -96,7 +96,7 @@ class ChenBird(Benchmark):
     latex_formula_global_optimum = r'f(-113.11622344, 227.73244688) = -1000'
     continuous = True
     linear = False
-    convex = True
+    convex = False
     unimodal = False
     separable = False
 
@@ -133,7 +133,7 @@ class ChenV(Benchmark):
     latex_formula_global_optimum = r'f(±0.70710678, ±0.70710678) = -2000.0039999840005'
     continuous = True
     linear = False
-    convex = True
+    convex = False
     unimodal = False
     separable = False
 
@@ -175,7 +175,7 @@ class Chichinadze(Benchmark):
     latex_formula_global_optimum = r'f(6.189866586965680, 0.5) = -42.94438701899098'
     continuous = True
     linear = False
-    convex = True
+    convex = False
     unimodal = False
     separable = True
 
@@ -391,7 +391,7 @@ class Colville(Benchmark):
     latex_formula_global_optimum = r'f(1,...,1) = 0'
     continuous = True
     linear = False
-    convex = True
+    convex = False
     unimodal = False
     separable = False
 

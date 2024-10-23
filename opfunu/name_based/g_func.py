@@ -5,6 +5,7 @@
 # --------------------------------------------------%
 
 import autograd.numpy as np
+
 from opfunu.benchmark import Benchmark
 
 
@@ -21,7 +22,7 @@ class Giunta(Benchmark):
     latex_formula_global_optimum = r'f([0.4673200277395354, 0.4673200169591304]) = 0.06447042053690566'
     continuous = True
     linear = False
-    convex = True
+    convex = False
     unimodal = False
     separable = False
 
@@ -60,7 +61,7 @@ class GoldsteinPrice(Benchmark):
     latex_formula_global_optimum = r'f([0, -1]) = 3'
     continuous = True
     linear = False
-    convex = True
+    convex = False
     unimodal = False
     separable = False
 
@@ -103,7 +104,7 @@ class Griewank(Benchmark):
     latex_formula_global_optimum = r'f(0,...,0) = 0'
     continuous = True
     linear = False
-    convex = True
+    convex = False
     unimodal = False
     separable = False
 
@@ -141,7 +142,7 @@ class Gulf(Benchmark):
     latex_formula_global_optimum = r'f(50, 25, 1.5) = 0'
     continuous = True
     linear = False
-    convex = True
+    convex = False
     unimodal = False
     separable = False
 
@@ -182,7 +183,7 @@ class Gear(Benchmark):
     latex_formula_global_optimum = r'f(16, 19, 43, 49) = 2.7 \cdot 10^{-12}'
     continuous = True
     linear = False
-    convex = True
+    convex = False
     unimodal = False
     separable = False
 

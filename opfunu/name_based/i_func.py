@@ -5,6 +5,7 @@
 # --------------------------------------------------%
 
 import autograd.numpy as np
+
 from opfunu.benchmark import Benchmark
 
 
@@ -20,7 +21,7 @@ class Infinity(Benchmark):
     latex_formula_global_optimum = r'f(0,..,0) = 0'
     continuous = True
     linear = False
-    convex = True
+    convex = False
     unimodal = False
     separable = True
 

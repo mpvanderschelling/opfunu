@@ -39,7 +39,7 @@ class OddSquare(Benchmark):
     latex_formula_global_optimum = r'f(b) = -1.00846728102'
     continuous = False
     linear = False
-    convex = True
+    convex = False
     unimodal = False
     separable = False
 

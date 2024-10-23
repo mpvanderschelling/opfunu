@@ -70,7 +70,7 @@ class McCormick(Benchmark):
     latex_formula_global_optimum = r'f(-0.5471975602214493, -1.547197559268372) = -1.913222954981037'
     continuous = True
     linear = False
-    convex = True
+    convex = False
     unimodal = False
     separable = False
 
@@ -106,7 +106,7 @@ class Meyer(Benchmark):
     latex_formula_global_optimum = r'f(5.6096364710e-3, 6.1813463463e2, 3.4522363462e2) = 8.7945855171e1'
     continuous = True
     linear = False
-    convex = True
+    convex = False
     unimodal = False
     separable = False
 
@@ -334,7 +334,7 @@ class Mishra03(Benchmark):
     latex_formula_global_optimum = r'f(-9.99378322, -9.99918927) = -0.19990562'
     continuous = True
     linear = False
-    convex = True
+    convex = False
     unimodal = False
     separable = False
 
@@ -377,7 +377,7 @@ class Mishra04(Benchmark):
     latex_formula_global_optimum = r'f(-8.71499636, -9.0533148) = -0.17767'
     continuous = True
     linear = False
-    convex = True
+    convex = False
     unimodal = False
     separable = False
 
@@ -420,7 +420,7 @@ class Mishra05(Benchmark):
     latex_formula_global_optimum = r'f(-1.98682, -10) = -1.019829519930646'
     continuous = True
     linear = False
-    convex = True
+    convex = False
     unimodal = False
     separable = False
 
@@ -464,7 +464,7 @@ class Mishra06(Benchmark):
     latex_formula_global_optimum = r'f(2.88631, 1.82326) = -2.28395'
     continuous = True
     linear = False
-    convex = True
+    convex = False
     unimodal = False
     separable = False
 
@@ -510,7 +510,7 @@ class Mishra07(Benchmark):
     latex_formula_global_optimum = r'f(\sqrt{n}) = 0'
     continuous = True
     linear = False
-    convex = True
+    convex = False
     unimodal = False
     separable = False
 
@@ -561,7 +561,7 @@ class Mishra08(Benchmark):
     latex_formula_global_optimum = r'f(2, -3) = 0'
     continuous = True
     linear = False
-    convex = True
+    convex = False
     unimodal = False
     separable = False
 
@@ -615,7 +615,7 @@ class Mishra09(Benchmark):
     latex_formula_global_optimum = r'f(1, 2, 3) = 0'
     continuous = True
     linear = False
-    convex = True
+    convex = False
     unimodal = False
     separable = False
 
@@ -661,7 +661,7 @@ class Mishra10(Benchmark):
     latex_formula_global_optimum = r'f(2, 2) = 0'
     continuous = True
     linear = False
-    convex = True
+    convex = False
     unimodal = False
     separable = False
 
@@ -706,7 +706,7 @@ class Mishra11(Benchmark):
     latex_formula_global_optimum = r'f(0) = 0'
     continuous = True
     linear = False
-    convex = True
+    convex = False
     unimodal = False
     separable = False
 
@@ -748,7 +748,7 @@ class MultiModal(Benchmark):
     latex_formula_global_optimum = r'f(0) = 0'
     continuous = True
     linear = False
-    convex = True
+    convex = False
     unimodal = False
     separable = False
 

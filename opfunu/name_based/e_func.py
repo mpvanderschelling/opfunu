@@ -6,6 +6,7 @@
 
 
 import autograd.numpy as np
+
 from opfunu.benchmark import Benchmark
 
 
@@ -22,7 +23,7 @@ class Easom(Benchmark):
     latex_formula_global_optimum = r'f(pi, pi) = -1'
     continuous = True
     linear = False
-    convex = True
+    convex = False
     unimodal = False
     separable = True
 
@@ -97,7 +98,7 @@ class EggCrate(Benchmark):
     latex_formula_global_optimum = r'f(0, 0) = 0'
     continuous = True
     linear = False
-    convex = True
+    convex = False
     unimodal = False
     separable = True
 
@@ -135,7 +136,7 @@ class EggHolder(Benchmark):
     latex_formula_global_optimum = r'f(512, 404.2319) = -959.640662711'
     continuous = True
     linear = False
-    convex = True
+    convex = False
     unimodal = False
     separable = False
 
@@ -173,7 +174,7 @@ class Exponential(Benchmark):
     latex_formula_global_optimum = r'f(0,..,0) = -1'
     continuous = True
     linear = False
-    convex = True
+    convex = False
     unimodal = False
     separable = False
 
@@ -210,7 +211,7 @@ class Exp2(Benchmark):
     latex_formula_global_optimum = r'f(1, 10) = 0'
     continuous = True
     linear = False
-    convex = True
+    convex = False
     unimodal = False
     separable = True
 
@@ -249,7 +250,7 @@ class Eckerle4(Benchmark):
     latex_formula_global_optimum = r'f(1.5543827178, 4.0888321754, 4.5154121844e2) = 1.4635887487E-03'
     continuous = True
     linear = False
-    convex = True
+    convex = False
     unimodal = False
     separable = False
 

@@ -5,6 +5,7 @@
 # --------------------------------------------------%
 
 import autograd.numpy as np
+
 from opfunu.benchmark import Benchmark
 
 
@@ -31,12 +32,12 @@ class XinSheYang01(Benchmark):
     continuous = True
     linear = False
     convex = True
-    unimodal = False
+    unimodal = True
     separable = True
 
     differentiable = False
     scalable = True
-    randomized_term = False
+    randomized_term = True
     parametric = False
 
     modality = True  # Number of ambiguous peaks, unknown # peaks

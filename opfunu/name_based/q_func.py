@@ -5,6 +5,7 @@
 # --------------------------------------------------%
 
 import autograd.numpy as np
+
 from opfunu.benchmark import Benchmark
 
 
@@ -28,7 +29,7 @@ class Qing(Benchmark):
     latex_formula_global_optimum = r'f(0, 0, ...,0) = 1.0'
     continuous = True
     linear = False
-    convex = True
+    convex = False
     unimodal = False
     separable = True
 
@@ -75,7 +76,7 @@ class Quadratic(Benchmark):
     continuous = True
     linear = False
     convex = True
-    unimodal = False
+    unimodal = True
     separable = False
 
     differentiable = True
@@ -120,7 +121,7 @@ class Quartic(Benchmark):
     latex_formula_global_optimum = r'f(0, 0, ...,0) = 1.0'
     continuous = True
     linear = False
-    convex = True
+    convex = False
     unimodal = False
     separable = False
 
@@ -166,7 +167,7 @@ class Quintic(Benchmark):
     latex_formula_global_optimum = r'f(0, 0, ...,0) = 1.0'
     continuous = True
     linear = False
-    convex = True
+    convex = False
     unimodal = False
     separable = True
 

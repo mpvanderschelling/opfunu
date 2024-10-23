@@ -4,9 +4,11 @@
 #       Github: https://github.com/thieu1995        %
 # --------------------------------------------------%
 
+from abc import ABC
+
 import autograd.numpy as np
 import pkg_resources
-from abc import ABC
+
 from opfunu.benchmark import Benchmark
 
 
@@ -45,7 +47,7 @@ class CecBenchmark(Benchmark, ABC):
     latex_formula_global_optimum = r'f(0, ..., 0)=-1, \text{ for}, m=5, \beta=15'
     continuous = True
     linear = False
-    convex = True
+    convex = False
     unimodal = False
     separable = False
 

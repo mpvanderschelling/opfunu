@@ -399,7 +399,7 @@ class F132014(F12014):
     latex_formula_global_optimum = r'\text{Global optimum: } x^* = o, F_1(x^*) = bias = 1300.0'
 
     continuous = False
-    convex = True
+    convex = False
     unimodal = False
     separable = False
     differentiable = True
@@ -429,7 +429,7 @@ class F142014(F12014):
     latex_formula_global_optimum = r'\text{Global optimum: } x^* = o, F_1(x^*) = bias = 1400.0'
 
     continuous = True
-    convex = True
+    convex = False
     unimodal = False
     separable = False
     differentiable = True
@@ -831,7 +831,7 @@ class F232014(CecBenchmark):
 
     continuous = True
     linear = False
-    convex = True
+    convex = False
     unimodal = False
     separable = False
 

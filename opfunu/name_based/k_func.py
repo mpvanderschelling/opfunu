@@ -5,6 +5,7 @@
 # --------------------------------------------------%
 
 import autograd.numpy as np
+
 from opfunu.benchmark import Benchmark
 
 
@@ -33,7 +34,7 @@ class Katsuura(Benchmark):
     latex_formula_global_optimum = r'f(0., 0., ..., 0.) = 1.'
     continuous = True
     linear = False
-    convex = True
+    convex = False
     unimodal = False
     separable = False
 
@@ -80,7 +81,7 @@ class Keane(Benchmark):
     latex_formula_global_optimum = r'f(7.85396153, 7.85396135) = 0.'
     continuous = True
     linear = False
-    convex = True
+    convex = False
     unimodal = False
     separable = False
 
@@ -132,7 +133,7 @@ class Kowalik(Benchmark):
     latex_formula_global_optimum = r'f(0.192833, 0.190836, 0.123117, 0.135766) = 0.00030748610'
     continuous = True
     linear = False
-    convex = True
+    convex = False
     unimodal = False
     separable = False
 

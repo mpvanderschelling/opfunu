@@ -5,6 +5,7 @@
 # --------------------------------------------------%
 
 import autograd.numpy as np
+
 from opfunu.benchmark import Benchmark
 
 
@@ -20,7 +21,7 @@ class JennrichSampson(Benchmark):
     latex_formula_global_optimum = r'f(0.257825, 0.257825) = 124.3621824'
     continuous = True
     linear = False
-    convex = True
+    convex = False
     unimodal = False
     separable = False
 
@@ -76,7 +77,7 @@ class Judge(Benchmark):
     latex_formula_global_optimum = r'f(0.86479, 1.2357) = 16.0817307'
     continuous = True
     linear = False
-    convex = True
+    convex = False
     unimodal = False
     separable = False
 

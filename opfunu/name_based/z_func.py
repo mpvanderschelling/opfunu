@@ -5,6 +5,7 @@
 # --------------------------------------------------%
 
 import autograd.numpy as np
+
 from opfunu.benchmark import Benchmark
 
 
@@ -28,7 +29,7 @@ class Zacharov(Benchmark):
     latex_formula_global_optimum = r'f(0, 0,...,0) = 0'
     continuous = False
     linear = False
-    convex = True
+    convex = False
     unimodal = False
     separable = False
 
@@ -74,7 +75,7 @@ class ZeroSum(Benchmark):
     latex_formula_global_optimum = r'f(x_best) = 0'
     continuous = False
     linear = False
-    convex = True
+    convex = False
     unimodal = False
     separable = False
 
@@ -119,7 +120,7 @@ class Zettl(Benchmark):
     latex_formula_global_optimum = r'f(x_best) = -0.0037912'
     continuous = False
     linear = False
-    convex = True
+    convex = False
     unimodal = False
     separable = False
 
@@ -173,7 +174,7 @@ class Zimmerman(Benchmark):
     latex_formula_global_optimum = r'f([7, 2]) = 0.'
     continuous = False
     linear = False
-    convex = True
+    convex = False
     unimodal = False
     separable = False
 

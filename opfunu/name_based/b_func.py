@@ -5,6 +5,7 @@
 # --------------------------------------------------%
 
 import autograd.numpy as np
+
 from opfunu.benchmark import Benchmark
 
 
@@ -21,7 +22,7 @@ class BartelsConn(Benchmark):
     continuous = True
     linear = False
     convex = True
-    unimodal = False
+    unimodal = True
     separable = False
 
     differentiable = False
@@ -58,7 +59,7 @@ class Beale(Benchmark):
     latex_formula_global_optimum = r'f(3.0, 0.5) = 0.0'
     continuous = True
     linear = False
-    convex = True
+    convex = False
     unimodal = False
     separable = False
 
@@ -96,7 +97,7 @@ class BiggsExp02(Benchmark):
     latex_formula_global_optimum = r'f(1.0, 10.) = 0.0'
     continuous = True
     linear = False
-    convex = True
+    convex = False
     unimodal = False
     separable = False
 
@@ -136,7 +137,7 @@ class BiggsExp03(Benchmark):
     latex_formula_global_optimum = r'f(1.0, 10., 5.0) = 0.0'
     continuous = True
     linear = False
-    convex = True
+    convex = False
     unimodal = False
     separable = False
 
@@ -176,7 +177,7 @@ class BiggsExp04(Benchmark):
     latex_formula_global_optimum = r'f(1.0, 10., 1.0, 5.0) = 0.0'
     continuous = True
     linear = False
-    convex = True
+    convex = False
     unimodal = False
     separable = False
 
@@ -216,7 +217,7 @@ class BiggsExp05(Benchmark):
     latex_formula_global_optimum = r'f(1.0, 10., 1.0, 5.0, 4.0) = 0.0'
     continuous = True
     linear = False
-    convex = True
+    convex = False
     unimodal = False
     separable = False
 
@@ -256,7 +257,7 @@ class Bird(Benchmark):
     latex_formula_global_optimum = r'f(4.701055751981055, 3.152946019601391) = f(-1.582142172055011, -3.130246799635430) = -106.7645367198034'
     continuous = True
     linear = False
-    convex = True
+    convex = False
     unimodal = False
     separable = False
 
@@ -294,7 +295,7 @@ class Bohachevsky1(Benchmark):
     latex_formula_global_optimum = r'f(0, 0) = 0'
     continuous = True
     linear = False
-    convex = True
+    convex = False
     unimodal = False
     separable = True
 
@@ -331,7 +332,7 @@ class Bohachevsky2(Benchmark):
     latex_formula_global_optimum = r'f(0, 0) = 0'
     continuous = True
     linear = False
-    convex = True
+    convex = False
     unimodal = False
     separable = False
 
@@ -368,7 +369,7 @@ class Bohachevsky3(Benchmark):
     latex_formula_global_optimum = r'f(0, 0) = 0'
     continuous = True
     linear = False
-    convex = True
+    convex = False
     unimodal = False
     separable = False
 
@@ -442,7 +443,7 @@ class BoxBetts(Benchmark):
     latex_formula_global_optimum = r'f(1, 10, 1) = 0'
     continuous = True
     linear = False
-    convex = True
+    convex = False
     unimodal = False
     separable = False
 
@@ -482,7 +483,7 @@ class Branin01(Benchmark):
     latex_formula_global_optimum = r'f(x_i) = 0.39788735772973816, x_i = [-\pi, 12.275]; or [\pi, 2.275] or x = [3\pi, 2.475]'
     continuous = True
     linear = False
-    convex = True
+    convex = False
     unimodal = False
     separable = False
 
@@ -521,7 +522,7 @@ class Branin02(Benchmark):
     latex_formula_global_optimum = r'f(x_i) = 5.559037, x_i = [-3.2, 12.53]'
     continuous = True
     linear = False
-    convex = True
+    convex = False
     unimodal = False
     separable = False
 
@@ -635,7 +636,7 @@ class Bukin02(Benchmark):
     latex_formula_global_optimum = r'f(x_i) = -124.75, x_i = [-15, 0]'
     continuous = True
     linear = False
-    convex = True
+    convex = False
     unimodal = False
     separable = False
 
@@ -672,7 +673,7 @@ class Bukin04(Benchmark):
     latex_formula_global_optimum = r'f(x_i) = 0, x_i = [-10, 0]'
     continuous = True
     linear = False
-    convex = True
+    convex = False
     unimodal = False
     separable = True
 
@@ -709,7 +710,7 @@ class Bukin06(Benchmark):
     latex_formula_global_optimum = r'f(x_i) = 0, x_i = [-10, 1]'
     continuous = True
     linear = False
-    convex = True
+    convex = False
     unimodal = False
     separable = False
 

@@ -4,7 +4,7 @@
 ```python
 
 import opfunu
-import autograd.numpy as np
+import jax.numpy as np
 
 # get all the available functions accepting ANY dimension
 any_dim_cec = opfunu.get_cecs(None)
@@ -98,7 +98,7 @@ print(my_list)
 ## For dimension_based
 
 from opfunu.dimension_based.benchmark2d import Functions        # import 2-d benchmark functions
-import autograd.numpy as np
+import jax.numpy as np
 
 solution2d = np.array([-0.1, 1.5])                              # Solution for 2-d benchmark
 func2d = Functions()                                            # create an object
@@ -109,13 +109,13 @@ print(func2d._bird__(solution2d))
 ## For type_based (same as dimension_based)
 
 from opfunu.type_based.multi_modal import Functions             # import 2-d benchmark functions
-import autograd.numpy as np
+import jax.numpy as np
 
 
 ## For CEC
 
 from opfunu.cec.cec2014 import Functions                        # import cec2014 functions
-import autograd.numpy as np
+import jax.numpy as np
 
 cec_sol = np.array([-0.1, 1.5])                              # Solution for 2-d benchmark
 cec_func = Functions()                                            # create an object
@@ -126,7 +126,7 @@ print(cec_func.C30(cec_sol))
 
 ## CEC-2005 or CEC-2008
 
-import autograd.numpy as np
+import jax.numpy as np
 from opfunu.cec.cec2005.F1 import Model as f1
 from opfunu.cec.cec2008.F7 import Model as f7
 
@@ -144,7 +144,7 @@ print(result)
 
 ## CEC-2010 
 
-import autograd.numpy as np
+import jax.numpy as np
 from opfunu.cec.cec2010.function import F1, F2, ..., F12,..
 
 solution = np.random.uniform(0, 1, 1000)
@@ -154,7 +154,7 @@ print(result)
 
 ## CEC-2013 (2 ways to use depend on your purpose)
 
-import autograd.numpy as np
+import jax.numpy as np
 from opfunu.cec.cec2013.unconstraint import Model as M13
 from opfunu.cec.cec2014.unconstraint2 import Model as MD2
 
@@ -173,7 +173,7 @@ print(obj.F2())
 
 ## CEC-2014 (3 ways to use depend on your purpose)
 
-import autograd.numpy as np
+import jax.numpy as np
 from opfunu.cec.cec2014.function import F1, F2, ...
 from opfunu.cec.cec2014.unconstraint2 import Model as MD2
 from opfunu.cec.cec2014.unconstraint import Model as MD
@@ -194,7 +194,7 @@ print(obj.F2())
 
 
 ## CEC-2015 
-import autograd.numpy as np
+import jax.numpy as np
 from opfunu.cec.cec2015.function import F1, F2,...
 
 temp = np.random.uniform(0, 1, 10)
@@ -204,7 +204,7 @@ print(result)
 
 
 ## CEC basic 
-import autograd.numpy as np
+import jax.numpy as np
 from opfunu.cec_basic.cec2014 import *
 
 problem_size = 20

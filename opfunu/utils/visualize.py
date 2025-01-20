@@ -5,11 +5,12 @@
 # --------------------------------------------------%
 
 from io import BytesIO
+
+import jax.numpy as np
 import matplotlib.pyplot as plt
-import autograd.numpy as np
 import requests
-from PIL import Image
 from matplotlib import cm
+from PIL import Image
 
 cmap = [(0, '#2f9599'), (0.45, '#eeeeee'), (1, '#8800ff')]
 cmap = cm.colors.LinearSegmentedColormap.from_list('Custom', cmap, N=256)

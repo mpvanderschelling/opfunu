@@ -5,7 +5,7 @@
 # --------------------------------------------------%
 
 import opfunu
-import autograd.numpy as np
+import jax.numpy as np
 
 
 # Test CEC2022 F1

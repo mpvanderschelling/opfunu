@@ -6,7 +6,7 @@
 
 from abc import ABC
 
-import autograd.numpy as np
+import jax.numpy as np
 import pkg_resources
 
 from opfunu.benchmark import Benchmark

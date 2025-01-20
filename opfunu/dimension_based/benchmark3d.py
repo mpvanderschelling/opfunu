@@ -8,7 +8,7 @@
 # -------------------------------------------------------------------------------------------------------#
 
 
-import autograd.numpy as np
+import jax.numpy as np
 
 
 class Functions:

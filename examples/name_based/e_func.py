@@ -5,7 +5,7 @@
 # --------------------------------------------------%
 
 import opfunu
-import autograd.numpy as np
+import jax.numpy as np
 from mealpy.swarm_based import WOA
 
 

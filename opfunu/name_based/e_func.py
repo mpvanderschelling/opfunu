@@ -5,7 +5,7 @@
 # --------------------------------------------------%
 
 
-import autograd.numpy as np
+import jax.numpy as np
 
 from opfunu.benchmark import Benchmark
 

@@ -5,7 +5,7 @@
 # --------------------------------------------------%
 
 
-import autograd.numpy as np
+import jax.numpy as np
 
 from opfunu.cec_based.cec import CecBenchmark
 from opfunu.utils import operator

@@ -5,6 +5,7 @@
 # --------------------------------------------------%
 
 import jax.numpy as np
+import numpy as onp
 
 from opfunu.cec_based.cec import CecBenchmark
 from opfunu.utils import operator
@@ -104,7 +105,7 @@ class F22005(CecBenchmark):
         self.n_fe += 1
         self.check_solution(x, self.dim_max, self.dim_supported)
         ndim = len(x)
-        results = [np.sum(x[:idx] - self.f_shift[:idx]) ** 2 for idx in range(0, ndim)]
+        results = np.array([np.sum(x[:idx] - self.f_shift[:idx]) ** 2 for idx in range(0, ndim)])
         return np.sum(results) + self.f_bias
 
 
@@ -207,8 +208,8 @@ class F42005(CecBenchmark):
         self.n_fe += 1
         self.check_solution(x, self.dim_max, self.dim_supported)
         ndim = len(x)
-        results = [np.sum(x[:idx] - self.f_shift[:idx]) ** 2 for idx in range(0, ndim)]
-        return np.sum(results) * (1 + 0.4 * np.abs(np.random.normal(0, 1))) + self.f_bias
+        results = np.array([np.sum(x[:idx] - self.f_shift[:idx]) ** 2 for idx in range(0, ndim)])
+        return np.sum(results) * (1 + 0.4 * np.abs(onp.random.normal(0, 1))) + self.f_bias
 
 
 class F52005(CecBenchmark):
@@ -265,7 +266,7 @@ class F52005(CecBenchmark):
         self.n_fe += 1
         self.check_solution(x, self.dim_max, self.dim_supported)
         ndim = len(x)
-        results = [np.abs(np.dot(self.f_matrix[idx], x) - np.dot(self.f_matrix[idx], self.f_shift)) for idx in range(0, ndim)]
+        results = np.array([np.abs(np.dot(self.f_matrix[idx], x) - np.dot(self.f_matrix[idx], self.f_shift)) for idx in range(0, ndim)])
         return np.max(results) + self.f_bias
 
 
@@ -416,7 +417,7 @@ class F82005(CecBenchmark):
         self.paras = {"f_shift": self.f_shift, "f_matrix": self.f_matrix, "f_bias": self.f_bias}
         a = np.arange(0, self.ndim)
         self.f_shift[a % 2 == 0] = -32
-        self.f_shift[a % 2 == 1] = np.random.uniform(-32., 32., int(self.ndim / 2))
+        self.f_shift[a % 2 == 1] = onp.random.uniform(-32., 32., int(self.ndim / 2))
 
     def evaluate(self, x, *args):
         self.n_fe += 1
@@ -975,7 +976,7 @@ class F172005(F162005):
         maxw = np.max(weights)
         weights = np.where(weights != maxw, weights * (1 - maxw**10), weights)
         weights = weights / np.sum(weights)
-        return np.sum(np.dot(weights, (fits + self.bias))) * (1 + 0.2 * np.abs(np.random.normal(0, 1))) + self.f_bias
+        return np.sum(np.dot(weights, (fits + self.bias))) * (1 + 0.2 * np.abs(onp.random.normal(0, 1))) + self.f_bias
 
 
 class F182005(CecBenchmark):

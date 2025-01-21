@@ -341,5 +341,5 @@ class F72008(CecBenchmark):
         self.n_fe += 1
         self.check_solution(x, self.dim_max, self.dim_supported)
         ndim = len(x)
-        results = [operator.fractal_1d_func(x[idx] + operator.twist_func(x[idx + 1])) for idx in range(0, ndim - 1)]
+        results = np.array([operator.fractal_1d_func(x[idx] + operator.twist_func(x[idx + 1])) for idx in range(0, ndim - 1)])
         return np.sum(results) + operator.fractal_1d_func(x[-1] + operator.twist_func(x[0])) + self.f_bias

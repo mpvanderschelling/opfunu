@@ -5,6 +5,7 @@
 # --------------------------------------------------%
 
 import jax.numpy as np
+import numpy as onp
 
 from opfunu.benchmark import Benchmark
 
@@ -144,7 +145,7 @@ class Quartic(Benchmark):
         self.check_solution(x)
         self.n_fe += 1
         i = np.arange(1, self.ndim + 1)
-        return np.sum(i * x**4.) + np.random.rand()
+        return np.sum(i * x**4.) + onp.random.rand()
 
 
 class Quintic(Benchmark):

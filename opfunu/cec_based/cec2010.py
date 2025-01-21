@@ -5,6 +5,7 @@
 # --------------------------------------------------%
 
 import jax.numpy as np
+import numpy as onp
 
 from opfunu.cec_based.cec import CecBenchmark
 from opfunu.utils import operator
@@ -139,8 +140,8 @@ class F42010(CecBenchmark):
         if self.ndim == 1000:
             self.P = (f_shift[1:, :].ravel() - np.ones(self.ndim)).astype(int)
         else:
-            np.random.seed(0)
-            self.P = np.random.permutation(self.ndim)
+            onp.random.seed(0)
+            self.P = onp.random.permutation(self.ndim)
         self.m_group = self.check_m_group(m_group)
         self.f_global = 0
         self.x_global = self.f_shift
@@ -250,8 +251,8 @@ class F72010(CecBenchmark):
         if self.ndim == 1000:
             self.P = (f_shift[1:, :].ravel() - np.ones(self.ndim)).astype(int)
         else:
-            np.random.seed(0)
-            self.P = np.random.permutation(self.ndim)
+            onp.random.seed(0)
+            self.P = onp.random.permutation(self.ndim)
         self.m_group = self.check_m_group(m_group)
         self.f_global = 0
         self.x_global = self.f_shift
@@ -333,8 +334,8 @@ class F92010(CecBenchmark):
         if self.ndim == 1000:
             self.P = (f_shift[1:, :].ravel() - np.ones(self.ndim)).astype(int)
         else:
-            np.random.seed(0)
-            self.P = np.random.permutation(self.ndim)
+            onp.random.seed(0)
+            self.P = onp.random.permutation(self.ndim)
         self.m_group = self.check_m_group(m_group)
         self.f_global = 0
         self.x_global = self.f_shift

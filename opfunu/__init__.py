@@ -14,7 +14,7 @@
 # >>> upper_bound = f1.ub
 # >>> fitness = f1.evaluate
 # >>>
-# >>> solution = np.random.uniform(0, 1, 30)
+# >>> solution = onp.random.uniform(0, 1, 30)
 # >>> print(f1.evaluate(solution))
 # >>> print(fitness.evaluate(solution))
 # >>>
@@ -29,13 +29,21 @@
 # >>> opfunu.plot_2d(f22005, n_space=1000, ax=None)
 # >>> opfunu.plot_3d(f22005, n_space=1000, ax=None)
 
+from functools import partial
+
 __version__ = "1.0.1"
 
 import inspect
 import re
+from typing import Optional
+
+import jax
+import jax.numpy as jnp
+from f3dasm import Block, ExperimentData
+
+from . import cec_based, name_based
+from .f3dasmblock import bench_function
 from .utils import *
-from . import name_based
-from . import cec_based
 
 FUNC_DATABASE = inspect.getmembers(name_based, inspect.isclass)
 CEC_DATABASE = inspect.getmembers(cec_based, inspect.isclass)
@@ -109,6 +117,12 @@ def get_all_named_functions():
 
 def get_all_cec_functions():
     return [cls for classname, cls in CEC_DATABASE if classname not in EXCLUDES]
+
+
+def get_all_functions():
+    return [cls for classname, cls in ALL_DATABASE if classname not in EXCLUDES]
+
+
 def get_functions(ndim, continuous=None, linear=None, convex=None, unimodal=None, separable=None,
                   differentiable=None, scalable=None, randomized_term=None, parametric=None, modality=None):
     functions = [cls for classname, cls in FUNC_DATABASE if classname not in EXCLUDES]
@@ -127,8 +141,11 @@ def get_functions(ndim, continuous=None, linear=None, convex=None, unimodal=None
     return functions
 
 
+FUNCTION_MAPPING = {f.__name__: partial(bench_function, fn_class=f) for f in get_all_functions()}
+
+
 def get_cecs(ndim=None, continuous=None, linear=None, convex=None, unimodal=None, separable=None, differentiable=None,
-             scalable=None, randomized_term=None, parametric=True, shifted=True, rotated=None , modality=None):
+             scalable=None, randomized_term=None, parametric=True, shifted=True, rotated=None, modality=None):
     functions = [cls for classname, cls in CEC_DATABASE if classname not in EXCLUDES]
     functions = list(filter(lambda f: f().is_ndim_compatible(ndim), functions))
 
@@ -145,3 +162,37 @@ def get_cecs(ndim=None, continuous=None, linear=None, convex=None, unimodal=None
     functions = list(filter(lambda f: (rotated is None) or (f.rotated == rotated), functions))
     functions = list(filter(lambda f: (modality is None) or (f.modality == modality), functions))
     return functions
+
+
+class BenchmarkFunc(Block):
+    def __init__(self, fn_name: str,
+                 seed: Optional[int] = None,
+                 scale_bounds: Optional[jax.Array] = None,
+                 dimensionality: Optional[int] = None,
+                 offset: bool = False,
+                 noise: float = 0.0,
+                 ):
+        fn_class = FUNCTION_MAPPING[fn_name]
+        self.function = fn_class(seed=seed,
+                                 scale_bounds=scale_bounds,
+                                 dimensionality=dimensionality,
+                                 offset=offset,
+                                 noise=noise)
+        self.dfdx = jax.grad(self.function)
+
+    def call(self, data: ExperimentData) -> ExperimentData:
+        open_es = [es for _, es in data if es.is_status('open')]
+        if not open_es:
+            return data
+
+        x = jnp.atleast_2d([es.input_data['x'] for es in open_es])
+        y = jax.vmap(self.function)(x)
+
+        for es, y_val in zip(open_es, y):
+            es.store(name='y', object=y_val)
+            es.mark('finished')
+
+        return data
+
+    def __call__(self, x: jnp.ndarray) -> jnp.ndarray:
+        return self.function(x)

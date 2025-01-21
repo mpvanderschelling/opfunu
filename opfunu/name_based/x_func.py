@@ -5,6 +5,7 @@
 # --------------------------------------------------%
 
 import jax.numpy as np
+import numpy as onp
 
 from opfunu.benchmark import Benchmark
 
@@ -54,4 +55,4 @@ class XinSheYang01(Benchmark):
         self.check_solution(x)
         self.n_fe += 1
         i = np.arange(1.0, self.ndim + 1.0)
-        return np.sum(np.random.random(self.ndim) * (np.abs(x) ** i))
+        return np.sum(onp.random.random(self.ndim) * (np.abs(x) ** i))

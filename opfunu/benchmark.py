@@ -5,6 +5,7 @@
 # --------------------------------------------------%
 
 import jax.numpy as np
+import numpy as onp
 
 
 class Benchmark:
@@ -248,4 +249,4 @@ class Benchmark:
         solution: 1D-vector
             The random solution
         """
-        return np.random.uniform(self.lb, self.ub)
+        return onp.random.uniform(self.lb, self.ub)

@@ -5,6 +5,7 @@
 # --------------------------------------------------%
 
 import jax.numpy as np
+import numpy as onp
 
 from opfunu.benchmark import Benchmark
 
@@ -225,7 +226,7 @@ class Alpine02(Benchmark):
         self.dim_default = 2
         self.check_ndim_and_bounds(ndim, bounds, np.array([[0., 10.] for _ in range(self.dim_default)]))
         self.f_global = -6.12950
-        self.x_global = np.array([7.91705268, 4.81584232] + list(np.random.uniform(0, 10, self.ndim - 2)))
+        self.x_global = np.array([7.91705268, 4.81584232] + list(onp.random.uniform(0, 10, self.ndim - 2)))
 
     def evaluate(self, x, *args):
         self.check_solution(x)

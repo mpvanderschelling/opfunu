@@ -147,7 +147,7 @@ print(result)
 import jax.numpy as np
 from opfunu.cec.cec2010.function import F1, F2, ..., F12,..
 
-solution = np.random.uniform(0, 1, 1000)
+solution = onp.random.uniform(0, 1, 1000)
 result = F12(temp)
 print(result)
 
@@ -159,7 +159,7 @@ from opfunu.cec.cec2013.unconstraint import Model as M13
 from opfunu.cec.cec2014.unconstraint2 import Model as MD2
 
 problem_size = 10
-solution = np.random.uniform(0, 1, problem_size)
+solution = onp.random.uniform(0, 1, problem_size)
 
 
 obj = MD2(problem_size)             # Object style solve different problems with different functions
@@ -179,7 +179,7 @@ from opfunu.cec.cec2014.unconstraint2 import Model as MD2
 from opfunu.cec.cec2014.unconstraint import Model as MD
 
 problem_size = 10
-solution = np.random.uniform(0, 1, problem_size)
+solution = onp.random.uniform(0, 1, problem_size)
 
 
 print(F1(solution))             # Function style
@@ -197,7 +197,7 @@ print(obj.F2())
 import jax.numpy as np
 from opfunu.cec.cec2015.function import F1, F2,...
 
-temp = np.random.uniform(0, 1, 10)
+temp = onp.random.uniform(0, 1, 10)
 
 result = F1(temp)
 print(result)
@@ -208,7 +208,7 @@ import jax.numpy as np
 from opfunu.cec_basic.cec2014 import *
 
 problem_size = 20
-sol = np.random.uniform(0, 1, 20)
+sol = onp.random.uniform(0, 1, 20)
 
 print(F30(sol))
 

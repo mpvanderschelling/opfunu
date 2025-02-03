@@ -301,7 +301,7 @@ def lunacek_bi_rastrigin_func(x, miu0=2.5, d=1, shift=0.0):
     delta_x_miu0 = x - miu0
     term1 = np.sum(delta_x_miu0 ** 2)
     term2 = np.sum((x - miu1) ** 2) * s + d * ndim
-    result = min(term1, term2) + 10 * (ndim - np.sum(np.cos(2 * np.pi * delta_x_miu0)))
+    result = np.minimum(term1, term2) + 10 * (ndim - np.sum(np.cos(2 * np.pi * delta_x_miu0)))
     return result
 
 

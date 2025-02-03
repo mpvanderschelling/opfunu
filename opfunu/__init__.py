@@ -30,16 +30,18 @@
 # >>> opfunu.plot_3d(f22005, n_space=1000, ax=None)
 
 from functools import partial
+from typing import Iterator, NamedTuple
 
 __version__ = "1.0.1"
 
 import inspect
 import re
-from typing import Optional
+from typing import Any, Callable, Dict, Optional, Tuple
 
 import jax
 import jax.numpy as jnp
 from f3dasm import Block, ExperimentData
+from jaxtyping import PyTree
 
 from . import cec_based, name_based
 from .f3dasmblock import bench_function
@@ -141,7 +143,8 @@ def get_functions(ndim, continuous=None, linear=None, convex=None, unimodal=None
     return functions
 
 
-FUNCTION_MAPPING = {f.__name__: partial(bench_function, fn_class=f) for f in get_all_functions()}
+FUNCTION_MAPPING = {f.__name__.lower(): partial(bench_function, fn_class=f) for f in get_all_functions()}
+FUNCTION_CLASS_MAPPING = {f.__name__.lower(): f for f in get_all_functions()}
 
 
 def get_cecs(ndim=None, continuous=None, linear=None, convex=None, unimodal=None, separable=None, differentiable=None,
@@ -164,35 +167,81 @@ def get_cecs(ndim=None, continuous=None, linear=None, convex=None, unimodal=None
     return functions
 
 
-class BenchmarkFunc(Block):
-    def __init__(self, fn_name: str,
-                 seed: Optional[int] = None,
-                 scale_bounds: Optional[jax.Array] = None,
-                 dimensionality: Optional[int] = None,
-                 offset: bool = False,
-                 noise: float = 0.0,
-                 ):
-        fn_class = FUNCTION_MAPPING[fn_name]
-        self.function = fn_class(seed=seed,
-                                 scale_bounds=scale_bounds,
-                                 dimensionality=dimensionality,
-                                 offset=offset,
-                                 noise=noise)
-        self.dfdx = jax.grad(self.function)
+class NoneIterator:
+    def __iter__(self):
+        return self
 
-    def call(self, data: ExperimentData) -> ExperimentData:
-        open_es = [es for _, es in data if es.is_status('open')]
-        if not open_es:
-            return data
+    def __next__(self):
+        return {}
 
-        x = jnp.atleast_2d([es.input_data['x'] for es in open_es])
-        y = jax.vmap(self.function)(x)
 
-        for es, y_val in zip(open_es, y):
-            es.store(name='y', object=y_val)
-            es.mark('finished')
+class Task(NamedTuple):
+    model: PyTree
+    loss_fn: Callable
+    learning_data: Iterator = NoneIterator()
 
-        return data
 
-    def __call__(self, x: jnp.ndarray) -> jnp.ndarray:
-        return self.function(x)
+def create_benchmark_loss_function(
+    fn_name: str,
+        seed: Optional[int] = None,
+        scale_bounds: Optional[jax.Array] = None,
+        dimensionality: Optional[int] = None,
+        offset: bool = False,
+        noise: float = 0.0,
+) -> Tuple[jnp.ndarray, Callable, Dict[str, Any]]:
+
+    model = jnp.zeros(dimensionality),
+    bench_func = FUNCTION_CLASS_MAPPING[fn_name.lower()]
+    loss_fn = FUNCTION_MAPPING[fn_name.lower()](
+        seed=seed,
+        scale_bounds=scale_bounds,
+        dimensionality=dimensionality,
+        offset=offset,
+        noise=noise)
+
+    tag = {
+        'task_name': fn_name,
+        'dim': dimensionality,
+        'noise': noise if noise is not None else 0.0,
+        'convex': bench_func.convex,
+        'separable': bench_func.separable,
+        'seed': seed,
+        # 'multimodal': bench_func.multimodal,
+        'differentiable': bench_func.differentiable,
+    }
+
+    return model, loss_fn, tag
+
+
+# class BenchmarkFunc(Block):
+#     def __init__(self, fn_name: str,
+#                  seed: Optional[int] = None,
+#                  scale_bounds: Optional[jax.Array] = None,
+#                  dimensionality: Optional[int] = None,
+#                  offset: bool = False,
+#                  noise: float = 0.0,
+#                  ):
+#         fn_class = FUNCTION_MAPPING[fn_name.lower()]
+#         self.function = jax.jit(fn_class(seed=seed,
+#                                          scale_bounds=scale_bounds,
+#                                          dimensionality=dimensionality,
+#                                          offset=offset,
+#                                          noise=noise))
+#         self.dfdx = jax.jit(jax.grad(self.function))
+
+#     def call(self, data: ExperimentData) -> ExperimentData:
+#         open_es = [es for _, es in data if es.is_status('open')]
+#         if not open_es:
+#             return data
+
+#         x = jnp.atleast_2d([es.input_data['x'] for es in open_es])
+#         y = jax.vmap(self.function)(x)
+
+#         for es, y_val in zip(open_es, y):
+#             es.store(name='y', object=y_val)
+#             es.mark('finished')
+
+#         return data
+
+#     def __call__(self, x: jnp.ndarray) -> jnp.ndarray:
+#         return self.function(x)

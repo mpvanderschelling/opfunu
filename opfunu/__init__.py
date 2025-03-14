@@ -30,7 +30,6 @@
 # >>> opfunu.plot_3d(f22005, n_space=1000, ax=None)
 
 from functools import partial
-from typing import Iterator, NamedTuple
 
 __version__ = "1.0.1"
 
@@ -40,8 +39,6 @@ from typing import Any, Callable, Dict, Optional, Tuple
 
 import jax
 import jax.numpy as jnp
-from f3dasm import Block, ExperimentData
-from jaxtyping import PyTree
 
 from . import cec_based, name_based
 from .f3dasmblock import bench_function
@@ -167,20 +164,6 @@ def get_cecs(ndim=None, continuous=None, linear=None, convex=None, unimodal=None
     return functions
 
 
-class NoneIterator:
-    def __iter__(self):
-        return self
-
-    def __next__(self):
-        return {}
-
-
-class Task(NamedTuple):
-    model: PyTree
-    loss_fn: Callable
-    learning_data: Iterator = NoneIterator()
-
-
 def create_benchmark_loss_function(
     fn_name: str,
         seed: Optional[int] = None,
@@ -188,20 +171,23 @@ def create_benchmark_loss_function(
         dimensionality: Optional[int] = None,
         offset: bool = False,
         noise: float = 0.0,
-) -> Tuple[jnp.ndarray, Callable, Dict[str, Any]]:
+        scale_output: bool = False,
+) -> Tuple[jnp.ndarray, Callable, Dict[str, jax.Array], Dict[str, Any]]:
 
-    model = jnp.zeros(dimensionality),
+    model = jnp.zeros(dimensionality)
     bench_func = FUNCTION_CLASS_MAPPING[fn_name.lower()]
     loss_fn = FUNCTION_MAPPING[fn_name.lower()](
         seed=seed,
         scale_bounds=scale_bounds,
         dimensionality=dimensionality,
         offset=offset,
-        noise=noise)
+        noise=noise,
+        scale_output=scale_output,
+    )
 
     tag = {
         'task_name': fn_name,
-        'dim': dimensionality,
+        'dimensionality': dimensionality,
         'noise': noise if noise is not None else 0.0,
         'convex': bench_func.convex,
         'separable': bench_func.separable,

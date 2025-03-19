@@ -172,6 +172,7 @@ def create_benchmark_loss_function(
         offset: bool = False,
         noise: float = 0.0,
         scale_output: bool = False,
+        grad_noise: float = 0.0,
 ) -> Tuple[jnp.ndarray, Callable, Dict[str, jax.Array], Dict[str, Any]]:
 
     model = jnp.zeros(dimensionality)
@@ -183,6 +184,7 @@ def create_benchmark_loss_function(
         offset=offset,
         noise=noise,
         scale_output=scale_output,
+        grad_noise=grad_noise,
     )
 
     tag = {
@@ -194,6 +196,7 @@ def create_benchmark_loss_function(
         'seed': seed,
         # 'multimodal': bench_func.multimodal,
         'differentiable': bench_func.differentiable,
+        'grad_noise': grad_noise if grad_noise is not None else 0.0,
     }
 
     return model, loss_fn, tag

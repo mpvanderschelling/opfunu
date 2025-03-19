@@ -17,21 +17,12 @@ def offset_input(x_offset: jax.Array):
 def add_noise(sigma: float):
 
     def decorator(func):
-        def wrapper(x, key: int, *args, **kwargs):
-
-            rng_key = jax.random.key(key)
-            _, subkey = jax.random.split(jax.random.key(key))
+        def wrapper(x, key: jax.Array, *args, **kwargs):
 
             # Add gaussian noise
-            noise = jax.random.normal(rng_key, shape=()) * sigma
+            noise = jax.random.normal(jrd.key(key.squeeze()), shape=()) * sigma
 
-            new_key = jax.random.randint(key=rng_key,
-                                         minval=0,
-                                         maxval=2**16,
-                                         shape=(),
-                                         )
-
-            kwargs.update({'key': new_key.item(), 'noise': noise})
+            kwargs.update({'noise': noise})
 
             return func(x, *args, **kwargs)
         return wrapper
@@ -77,14 +68,38 @@ def identity():
         return wrapper
     return decorator
 
+# =============================================================================
+
+
+def create_grad_noise(fn: Callable, sigma: float):
+    # Forward pass
+    def fn_fwd(x, key):
+        primal_out = fn(x, key)
+        return primal_out, (x, key)
+
+    # Backward pass
+    def fn_bwd(res, g):
+        x, key = res
+        noise = jax.random.normal(jrd.key(key.squeeze()), shape=x.shape) * sigma
+        grad_out = jax.grad(fn)(x, key)
+
+        tangent_out = noise + grad_out
+
+        return (g * tangent_out, None)
+
+    return fn_fwd, fn_bwd
+
+# =============================================================================
+
 
 def bench_function(fn_class: Callable,
-                   seed: Optional[int] = None,
-                   scale_bounds: Optional[jax.Array] = None,
-                   dimensionality: Optional[int] = None,
-                   offset: bool = False,
-                   noise: float = 0.0,
-                   scale_output: bool = False,
+                   seed: Optional[int],
+                   scale_bounds: Optional[jax.Array],
+                   dimensionality: Optional[int],
+                   offset: bool,
+                   noise: float,
+                   scale_output: bool,
+                   grad_noise: float,
                    ) -> Callable:
     fn = fn_class(dimensionality)
 
@@ -107,10 +122,10 @@ def bench_function(fn_class: Callable,
         fn_scale_bounds = scale_input(scale_bounds, fn.bounds)
 
     # Wrap fn.evaluate to return f(x) and an empty kwargs dict
-    def fn_with_kwargs(x, *args, noise: float = 0.0, mean: float = 0.0,
-                       sigma: float = 1.0, **kwargs) -> Tuple[jax.Array, Dict[str, Any]]:
+    def fn_with_kwargs(x, *args, noise: float, mean: float,
+                       sigma: float, **kwargs) -> jax.Array:
 
-        return ((fn.evaluate(x, *args) + noise) - mean) / sigma, kwargs
+        return ((fn.evaluate(x, *args) - mean) / sigma) + noise
 
     # Combine the input decorators
     fn_bench = fn_offset(fn_scale_bounds(fn_with_kwargs))
@@ -118,17 +133,24 @@ def bench_function(fn_class: Callable,
     # SCALE_OUTPUT
     if scale_output:
         # sample 100 points per dimension between the bounds
-        key_scale_output = jrd.key(seed)
-        x = jax.random.uniform(key_scale_output, (100, dimensionality))
-        y, _ = jax.vmap(partial(fn_bench, key=key_scale_output))(x)
+        no_noise = add_noise(0.0)
+        no_scale_output = standard_scale_output(mean=0.0, sigma=1.0)
+        _k = jrd.key(seed)
+        key_scale_output = jrd.randint(key=_k, shape=(1,),
+                                       minval=0, maxval=2**16)
+        x = jax.random.uniform(key=_k, shape=(100, dimensionality))
+        y = jax.vmap(partial(no_noise(no_scale_output(fn_bench)), key=key_scale_output))(x)
         fn_scale_output = standard_scale_output(mean=y.mean(), sigma=y.std())
     else:
-        fn_scale_output = identity()
+        fn_scale_output = standard_scale_output(mean=0.0, sigma=1.0)
 
     # NOISE
-    if noise == 0.0:
-        fn_noise = identity()
-    else:
-        fn_noise = add_noise(noise)
+    fn_noise = add_noise(noise)
 
-    return fn_noise(fn_scale_output(fn_bench))
+    if grad_noise == 0.0:
+        return fn_noise(fn_scale_output(fn_bench))
+    else:
+        fn_grad_noise = jax.custom_vjp(fn_noise(fn_scale_output(fn_bench)))
+        fn_grad_noise.defvjp(*create_grad_noise(
+            fn=fn_noise(fn_scale_output(fn_bench)), sigma=grad_noise))
+        return fn_grad_noise

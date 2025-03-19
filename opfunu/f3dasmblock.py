@@ -15,18 +15,25 @@ def offset_input(x_offset: jax.Array):
 
 
 def add_noise(sigma: float):
+    if sigma == 0.0:
+        def decorator(func):
+            def wrapper(x, *args, **kwargs):
+                kwargs.update({'noise': sigma})
+                return func(x, *args, **kwargs)
+            return wrapper
+        return decorator
+    else:
+        def decorator(func):
+            def wrapper(x, key: jax.Array, *args, **kwargs):
 
-    def decorator(func):
-        def wrapper(x, key: jax.Array, *args, **kwargs):
+                # Add gaussian noise
+                noise = jax.random.normal(jrd.key(key.squeeze()), shape=()) * sigma
 
-            # Add gaussian noise
-            noise = jax.random.normal(jrd.key(key.squeeze()), shape=()) * sigma
+                kwargs.update({'noise': noise})
 
-            kwargs.update({'noise': noise})
-
-            return func(x, *args, **kwargs)
-        return wrapper
-    return decorator
+                return func(x, *args, **kwargs)
+            return wrapper
+        return decorator
 
 
 def standard_scale_output(mean: float, sigma: float):

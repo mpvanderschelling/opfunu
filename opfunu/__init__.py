@@ -110,6 +110,22 @@ def get_functions_based_ndim(ndim=None):
     return functions
 
 
+def get_named_functions_based_ndim(ndim=None):
+    """
+    Parameters
+    ----------
+    ndim : Number of dimensions that function has as default value
+
+    Returns
+    -------
+        List of the functions
+    """
+    functions = [cls for classname, cls in FUNC_DATABASE if classname not in EXCLUDES]
+    if type(ndim) is int and ndim > 1:
+        return list(filter(lambda f: f().dim_changeable or f().dim_default == ndim, functions))
+    return functions
+
+
 def get_all_named_functions():
     return [cls for classname, cls in FUNC_DATABASE if classname not in EXCLUDES]
 

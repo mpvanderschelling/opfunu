@@ -141,9 +141,9 @@ class Trid(Benchmark):
         super().__init__()
         self.dim_changeable = True
         self.dim_default = 2
-        self.check_ndim_and_bounds(ndim, bounds, np.array([[-(self.dim_default**2), self.dim_default**2] for _ in range(ndim)]))
+        self.check_ndim_and_bounds(ndim, bounds, np.array([[-(self.dim_default**2), self.dim_default**2] for _ in range(self.dim_default)]))
         self.f_global = 0.0
-        self.x_global = np.array([i * (ndim + 1 - i) for i in range(1, ndim + 1)])
+        self.x_global = np.array([i * (self._ndim + 1 - i) for i in range(1, self._ndim + 1)])
 
     def evaluate(self, x, *args):
         self.check_solution(x)

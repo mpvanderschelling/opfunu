@@ -4,6 +4,7 @@
 #       Github: https://github.com/thieu1995        %
 # --------------------------------------------------%
 
+import jax
 import jax.numpy as np
 
 from opfunu.benchmark import Benchmark
@@ -110,7 +111,7 @@ class LennardJones(Benchmark):
         # if ndim not in range(6, 61):
         #     raise ValueError("LennardJones dimensions must be in (6, 60)")
         super().__init__()
-        self.dim_changeable = True
+        self.dim_changeable = False
         self.dim_default = 6
         self.dim_supported = range(6, 61)
         self.dim_max = 60
@@ -126,8 +127,15 @@ class LennardJones(Benchmark):
     def evaluate(self, x, *args):
         self.check_solution(x)
         self.n_fe += 1
-        k = int(self.ndim / 3)
+        k = self.ndim // 3  # Using integer division for JAX compatibility
         s = 0.0
+
+        def branch_true(ed, ud, s):
+            return s + (1.0 / ud - 2.0) / ud
+
+        def branch_false(ed, ud, s):
+            return s  # No change if condition is False
+
         for i in range(k - 1):
             for j in range(i + 1, k):
                 a = 3 * i
@@ -137,8 +145,14 @@ class LennardJones(Benchmark):
                 zd = x[a + 2] - x[b + 2]
                 ed = xd * xd + yd * yd + zd * zd
                 ud = ed * ed * ed
-                if ed > 0.0:
-                    s += (1.0 / ud - 2.0) / ud
+
+                s = jax.lax.cond(
+                    ed > 0.0,  # Condition
+                    lambda _: branch_true(ed, ud, s),  # If True
+                    lambda _: branch_false(ed, ud, s),  # If False
+                    operand=None
+                )
+
         return s
 
 

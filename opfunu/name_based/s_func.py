@@ -244,38 +244,6 @@ class Schwefel2_22(Benchmark):
         return res
 
 
-class Schwefel2_23(Benchmark):
-    name = "Schwefel 2_23 Function"
-    latex_formula = r'f_{\text{Sphere}}(x) = 1 - \cos \left (2 \pi \sqrt{\sum_{i=1}^{n} x_i^2} \right) + 0.1 \sqrt{\sum_{i=1}^n x_i^2}'
-    latex_formula_dimension = r'd = n'
-    latex_formula_bounds = r'x_i \in [-10, 10, ..., 10]'
-    latex_formula_global_optimum = r'f(0, 0, ...,0) = 1.0'
-    continuous = True
-    linear = False
-    convex = False
-    unimodal = False
-    separable = True
-
-    differentiable = True
-    scalable = True
-    randomized_term = False
-    parametric = False
-
-    modality = True  # Number of ambiguous peaks, unknown # peaks
-
-    def __init__(self, ndim=None, bounds=None):
-        super().__init__()
-        self.dim_changeable = True
-        self.dim_default = 2
-        self.check_ndim_and_bounds(ndim, bounds, np.array([[-100, 100] for _ in range(self.dim_default)]))
-        self.f_global = 0.
-        self.x_global = np.zeros(self.ndim)
-
-    def evaluate(self, x, *args):
-        res = np.sum(x**10)
-        return res
-
-
 class Shekel(Benchmark):
     name = "Shekel Function"
     latex_formula = r'f_{\text{Sphere}}(x) = 1 - \cos \left (2 \pi \sqrt{\sum_{i=1}^{n} x_i^2} \right) + 0.1 \sqrt{\sum_{i=1}^n x_i^2}'
@@ -322,8 +290,8 @@ class Shekel(Benchmark):
 
     def evaluate(self, x, *args):
         x1, x2, x3, x4 = x
-        res = -np.sum([[np.sum((x - self.C[i]) ** 2 + self.beta[i]) ** -1]
-                      for i in range(self.m)])
+        res = -np.sum(np.array([[np.sum((x - self.C[i]) ** 2 + self.beta[i]) ** -1]
+                      for i in range(self.m)]))
         return res
 
 
@@ -357,8 +325,8 @@ class Shubert(Benchmark):
     def evaluate(self, x, *args):
         d = x.shape[0]
         for i in range(0, d):
-            res = np.prod(np.sum([i * np.cos((j + 1) * x[i] + j)
-                          for j in range(1, 5 + 1)]))
+            res = np.prod(np.sum(np.array([i * np.cos((j + 1) * x[i] + j)
+                          for j in range(1, 5 + 1)])))
         return res
 
 
@@ -390,8 +358,8 @@ class ShubertN3(Benchmark):
         self.x_global = np.ones(self.ndim) * -7.4
 
     def evaluate(self, x, *args):
-        res = np.sum(np.sum([j * np.sin((j + 1) * x + j)
-                     for j in range(1, 5 + 1)]))
+        res = np.sum(np.sum(np.array([j * np.sin((j + 1) * x + j)
+                     for j in range(1, 5 + 1)])))
         return res
 
 
@@ -423,8 +391,8 @@ class ShubertN4(Benchmark):
         self.x_global = np.ones(self.ndim) * 4.85
 
     def evaluate(self, x, *args):
-        res = np.sum(np.sum([j * np.cos((j + 1) * x + j)
-                     for j in range(1, 5 + 1)]))
+        res = np.sum(np.sum(np.array([j * np.cos((j + 1) * x + j)
+                     for j in range(1, 5 + 1)])))
         return res
 
 

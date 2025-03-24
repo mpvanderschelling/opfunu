@@ -96,15 +96,15 @@ class Keane(Benchmark):
         super().__init__()
         self.dim_changeable = False
         self.dim_default = 2
-        self.check_ndim_and_bounds(ndim, bounds, np.array([[0., 10.] for _ in range(self.dim_default)]))
+        self.check_ndim_and_bounds(ndim, bounds, np.array([[-10., 10.] for _ in range(self.dim_default)]))
         self.f_global = 0.
-        self.x_global = np.array([7.85396153, 7.85396135])
+        self.x_global = np.array([1.393249070031784, 0.])
 
     def evaluate(self, x, *args):
         self.check_solution(x)
         self.n_fe += 1
         val = np.sin(x[0] - x[1]) ** 2 * np.sin(x[0] + x[1]) ** 2
-        return val / np.sqrt(x[0] ** 2 + x[1] ** 2)
+        return - val / (np.sqrt(x[0] ** 2 + x[1] ** 2) + 1e-8)
 
 
 class Kowalik(Benchmark):

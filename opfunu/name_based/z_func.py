@@ -4,6 +4,7 @@
 #       Github: https://github.com/thieu1995        %
 # --------------------------------------------------%
 
+import jax
 import jax.numpy as np
 
 from opfunu.benchmark import Benchmark
@@ -96,9 +97,14 @@ class ZeroSum(Benchmark):
     def evaluate(self, x, *args):
         self.check_solution(x)
         self.n_fe += 1
-        if np.abs(np.sum(x)) < 3e-16:
-            return 0.0
-        return 1.0 + (10000.0 * np.abs(np.sum(x))) ** 0.5
+        abs_sum_x = np.abs(np.sum(x))  # Ensure JAX compatibility
+
+        return jax.lax.cond(
+            abs_sum_x < 3e-16,
+            lambda _: 0.0,  # If True, return 0.0
+            lambda _: 1.0 + (10000.0 * abs_sum_x) ** 0.5,  # If False, return computed value
+            operand=None
+        )
 
 
 class Zettl(Benchmark):
@@ -195,11 +201,26 @@ class Zimmerman(Benchmark):
     def evaluate(self, x, *args):
         self.check_solution(x)
         self.n_fe += 1
-        def Zh1(x): return 9.0 - x[0] - x[1]
-        def Zh2(x): return (x[0] - 3.0) ** 2.0 + (x[1] - 2.0) ** 2.0 - 16.0
-        def Zh3(x): return x[0] * x[1] - 14.0
-        def Zp(x): return 100.0 * (1.0 + x)
-        return max(Zh1(x), Zp(Zh2(x)) * np.sign(Zh2(x)), Zp(Zh3(x)) * np.sign(Zh3(x)), Zp(-x[0]) * np.sign(x[0]), Zp(-x[1]) * np.sign(x[1]))
+
+        def Zh1(x):
+            return 9.0 - x[0] - x[1]
+
+        def Zh2(x):
+            return (x[0] - 3.0) ** 2.0 + (x[1] - 2.0) ** 2.0 - 16.0
+
+        def Zh3(x):
+            return x[0] * x[1] - 14.0
+
+        def Zp(x):
+            return 100.0 * (1.0 + x)
+
+        return np.max(np.array([
+            Zh1(x),
+            Zp(Zh2(x)) * np.sign(Zh2(x)),
+            Zp(Zh3(x)) * np.sign(Zh3(x)),
+            Zp(-x[0]) * np.sign(x[0]),
+            Zp(-x[1]) * np.sign(x[1])
+        ]))
 
 
 class Zirilli(Benchmark):

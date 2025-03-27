@@ -27,7 +27,7 @@ def add_noise(sigma: float):
             def wrapper(x, key: jax.Array, *args, **kwargs):
 
                 # Add gaussian noise
-                noise = jax.random.normal(jrd.key(key.squeeze()), shape=()) * sigma
+                noise = jax.random.normal(key=key, shape=()) * sigma
 
                 kwargs.update({'noise': noise})
 
@@ -87,7 +87,7 @@ def create_grad_noise(fn: Callable, sigma: float):
     # Backward pass
     def fn_bwd(res, g):
         x, key = res
-        noise = jax.random.normal(jrd.key(key.squeeze()), shape=x.shape) * sigma
+        noise = jax.random.normal(key=key, shape=x.shape) * sigma
         grad_out = jax.grad(fn)(x, key)
 
         tangent_out = noise + grad_out
@@ -143,10 +143,8 @@ def bench_function(fn_class: Callable,
         no_noise = add_noise(0.0)
         no_scale_output = standard_scale_output(mean=0.0, sigma=1.0)
         _k = jrd.key(seed)
-        key_scale_output = jrd.randint(key=_k, shape=(1,),
-                                       minval=0, maxval=2**16)
         x = jax.random.uniform(key=_k, shape=(100, dimensionality))
-        y = jax.vmap(partial(no_noise(no_scale_output(fn_bench)), key=key_scale_output))(x)
+        y = jax.vmap(partial(no_noise(no_scale_output(fn_bench)), key=_k))(x)
         fn_scale_output = standard_scale_output(mean=y.mean(), sigma=y.std())
     else:
         fn_scale_output = standard_scale_output(mean=0.0, sigma=1.0)

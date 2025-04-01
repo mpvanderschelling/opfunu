@@ -4,9 +4,10 @@
 #       Github: https://github.com/thieu1995        %
 # --------------------------------------------------%
 
+import jax
 import jax.numpy as np
 import numpy as onp
-from jax import lax
+from jax import lax, random
 
 
 def fill_diagonal(matrix, diagonal):
@@ -155,25 +156,53 @@ def twist_func(x):
 
 
 def doubledip(x, c, s):
-    # This function in CEC-2008 F7
-    if -0.5 < x < 0.5:
-        return (-6144 * (x - c) ** 6 + 3088 * (x - c) ** 4 - 392 * (x - c) ** 2 + 1) * s
-    else:
-        return 0
+    """
+    JAX-compatible version of the doubledip function from CEC-2008 F7.
+    """
+    poly_term = (-6144 * (x - c) ** 6 + 3088 * (x - c) ** 4 - 392 * (x - c) ** 2 + 1) * s
+    return np.where((-0.5 < x) & (x < 0.5), poly_term, 0.0)
 
 
 def fractal_1d_func(x):
-    # This function in CEC-2008 F7
-    onp.random.seed(0)
-    result1 = 0.0
-    for k in range(1, 4):
-        result2 = 0.0
-        upper = 2 ** (k - 1) + 1
-        for t in range(1, upper):
-            selected = onp.random.choice([0, 1, 2])
-            result2 += np.sum(np.array([doubledip(x, onp.random.uniform(0, 1), 1.0 / (2 ** (k - 1) * (2 - onp.random.uniform(0, 1)))) for _ in range(0, selected)]))
-        result1 += result2
-    return result1
+    """
+    JAX-compatible version of the CEC-2008 F7 fractal function.
+    Uses a fixed random seed (0).
+    """
+    def outer_loop(carry, _):
+        k = carry
+        upper = 2 ** (k - 1)  # Convert to concrete integer
+        key_outer = random.key(k)
+
+        def inner_loop(carry, _):
+            key_inner = carry
+
+            # Generate random values
+            key_a, _ = random.split(key_inner)
+            a_vals = random.uniform(key_a, shape=(), minval=0, maxval=1)
+            b_vals = 1.0 / upper * (2 - random.uniform(key_a, shape=()))
+
+            # Compute sum using vmap
+            sum_val = np.sum(jax.vmap(doubledip, in_axes=(None, 0, 0))(x, a_vals, b_vals))
+            return key_a, sum_val
+
+        # result2 = lax.fori_loop(1, upper, inner_loop, result2)
+        t, result2 = lax.scan(
+            f=inner_loop,
+            init=key_outer,
+            xs=None,
+            length=upper
+        )
+
+        k += 1
+        return k, np.sum(result2)
+
+    final_k, result1 = lax.scan(
+        f=outer_loop,
+        init=0,
+        xs=None,
+        length=3
+    )
+    return np.sum(result1)
 
 
 # def schwefel_12_func(x):
@@ -306,12 +335,12 @@ def lunacek_bi_rastrigin_func(x, miu0=2.5, d=1, shift=0.0):
 
 
 def calculate_weight(x, delta=1.):
-    ndim = len(x)
+    ndim = x.shape[0]  # Use .shape instead of len()
     temp = np.sum(x ** 2)
-    if temp != 0:
-        weight = np.sqrt(1.0 / temp) * np.exp(-temp / (2 * ndim * delta ** 2))
-    else:
-        weight = 1e99  # this is the INF definition in original CEC Calculate logic
+
+    weight = np.where(temp != 0,
+                      np.sqrt(1.0 / temp) * np.exp(-temp / (2 * ndim * delta ** 2)),
+                      1e99)
 
     return weight
 
@@ -478,7 +507,7 @@ def chebyshev_func(x):
     Converted from the original CEC2019 C code.
     """
     x = np.array(x).ravel()
-    ndim = len(x)
+    ndim = x.shape[0]
     sample = 32 * ndim
 
     # Compute dx_arr using a recurrence relation
@@ -486,31 +515,28 @@ def chebyshev_func(x):
         return dx_arr.at[i].set(2.4 * dx_arr[i - 1] - dx_arr[i - 2])
 
     dx_arr = np.zeros(ndim)
-    dx_arr = dx_arr.at[:2].set([1.0, 1.2])
+    dx_arr = dx_arr.at[:2].set(np.array([1.0, 1.2]))
     dx_arr = lax.fori_loop(2, ndim, recurrence, dx_arr)
     dx = dx_arr[-1]
 
     dy = 2.0 / sample
     y_vals = np.linspace(-1, 1, sample + 1)  # Linearly spaced values for y
 
-    # First loop: Calculate sum_val based on y and px
-    def inner_loop(y, carry):
-        sum_val = carry
-        px = x[0]
-        for j in range(1, ndim):
-            px = y * px + x[j]
-        if px < -1 or px > 1:
-            sum_val += (1.0 - abs(px)) ** 2
-        return sum_val
+    # Inner function for computing sum_val
+    def inner_loop(y, sum_val):
+        def body(j, px):
+            return y * px + x[j]
+        px = lax.fori_loop(1, ndim, body, x[0])
 
-    sum_val = 0
-    for y in y_vals:
-        sum_val = inner_loop(y, sum_val)
+        term = np.where((px < -1) | (px > 1), (1.0 - np.abs(px)) ** 2, 0.0)
+        return sum_val + term
+
+    sum_val = lax.fori_loop(0, sample + 1, lambda i, val: inner_loop(y_vals[i], val), 0.0)
 
     # Second part: Additional checks and summation
     px = np.sum(1.2 * x[1:]) + x[0]
     mask = px < dx
-    sum_val += np.sum(np.where(mask, px**2, 0))
+    sum_val += np.where(mask, px**2, 0).sum()
 
     return sum_val
 
@@ -538,36 +564,33 @@ def inverse_hilbert_func(x):
 
 def lennard_jones_func(x):
     """
-    This version is a direct python conversion from the C-Code of CEC2019 implementation.
-    Find the atomic configuration with minimum energy (Lennard-Jones potential)
-    Valid for any dimension, D = 3 * k, k = 2, 3, 4, ..., 25.
-    k is the number of atoms in 3-D space.
+    Lennard-Jones potential energy function adapted for JAX.
+    Computes the minimum energy configuration for atomic clusters.
     """
     x = np.array(x).ravel()
-    ndim = len(x)
-    # Minima values from Cambridge cluster database: http://www-wales.ch.cam.ac.uk/~jon/structures/LJ/tables.150.html
+    ndim = x.shape[0]
+
     minima = np.array([-1., -3., -6., -9.103852, -12.712062, -16.505384, -19.821489, -24.113360,
-                       -28.422532, -32.765970, -37.967600, -44.326801, -47.845157, -52.322627, -56.815742,
-                       -61.317995, -66.530949, -72.659782, -77.1777043, -81.684571, -86.809782, -02.844472,
-                       -97.348815, -102.372663])
+                      -28.422532, -32.765970, -37.967600, -44.326801, -47.845157, -52.322627, -56.815742,
+                      -61.317995, -66.530949, -72.659782, -77.1777043, -81.684571, -86.809782, -92.844472,
+                      -97.348815, -102.372663])
 
     k = ndim // 3
-    sum_val = 0
-
     x_matrix = x.reshape((k, 3))
-    for i in range(k - 1):
-        for j in range(i + 1, k):
-            # Use slicing to get the differences between points i and j
-            diff = x_matrix[i] - x_matrix[j]
-            # Calculate the squared Euclidean distance
-            ed = np.sum(diff ** 2)
-            # Calculate ud and update sum_val accordingly
-            ud = ed ** 3
-            if ud > 1.0e-10:
-                sum_val += (1.0 / ud - 2.0) / ud
-            else:
-                sum_val += 1.0e20  # cec2019 version penalizes when ud is <=1e-10
-    return sum_val - minima[k - 2]  # Subtract known minima for k
+
+    def pairwise_energy(carry, ij):
+        i, j = ij
+        diff = x_matrix[i] - x_matrix[j]
+        ed = np.sum(diff ** 2)
+        ud = ed ** 3
+        energy = np.where(ud > 1.0e-10, (1.0 / ud - 2.0) / ud, 1.0e20)
+        return carry + energy, None
+
+    # Generate all (i, j) pairs where i < j
+    indices = np.array([(i, j) for i in range(k - 1) for j in range(i + 1, k)])
+    sum_val, _ = lax.scan(pairwise_energy, 0.0, indices)
+
+    return sum_val - minima[k - 2]  # Adjust with known minima
 
 
 expanded_griewank_rosenbrock_func = grie_rosen_cec_func

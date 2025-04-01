@@ -295,51 +295,51 @@ class F62008(CecBenchmark):
         return operator.ackley_func(z) + self.f_bias
 
 
-class F72008(CecBenchmark):
-    """
-    .. [1] Tang, K., Yáo, X., Suganthan, P. N., MacNish, C., Chen, Y. P., Chen, C. M., & Yang, Z. (2007). Benchmark functions
-    for the CEC’2008 special session and competition on large scale global optimization.
-    Nature inspired computation and applications laboratory, USTC, China, 24, 1-18.
-    """
-    name = "F7: FastFractal “DoubleDip” Function"
-    latex_formula = r'F_1(x) = \sum_{i=1}^D z_i^2 + bias, z=x-o,\\ x=[x_1, ..., x_D]; o=[o_1, ..., o_D]: \text{the shifted global optimum}'
-    latex_formula_dimension = r'2 <= D <= 100'
-    latex_formula_bounds = r'x_i \in [-100.0, 100.0], \forall i \in  [1, D]'
-    latex_formula_global_optimum = r'\text{Global optimum: } x^* = unknown, F_1(x^*) = unknown'
-    continuous = True
-    linear = False
-    convex = False
-    unimodal = False
-    separable = False
+# class F72008(CecBenchmark):
+#     """
+#     .. [1] Tang, K., Yáo, X., Suganthan, P. N., MacNish, C., Chen, Y. P., Chen, C. M., & Yang, Z. (2007). Benchmark functions
+#     for the CEC’2008 special session and competition on large scale global optimization.
+#     Nature inspired computation and applications laboratory, USTC, China, 24, 1-18.
+#     """
+#     name = "F7: FastFractal “DoubleDip” Function"
+#     latex_formula = r'F_1(x) = \sum_{i=1}^D z_i^2 + bias, z=x-o,\\ x=[x_1, ..., x_D]; o=[o_1, ..., o_D]: \text{the shifted global optimum}'
+#     latex_formula_dimension = r'2 <= D <= 100'
+#     latex_formula_bounds = r'x_i \in [-100.0, 100.0], \forall i \in  [1, D]'
+#     latex_formula_global_optimum = r'\text{Global optimum: } x^* = unknown, F_1(x^*) = unknown'
+#     continuous = True
+#     linear = False
+#     convex = False
+#     unimodal = False
+#     separable = False
 
-    differentiable = True
-    scalable = True
-    randomized_term = True
-    parametric = True
-    shifted = True
-    rotated = False
+#     differentiable = True
+#     scalable = True
+#     randomized_term = True
+#     parametric = True
+#     shifted = True
+#     rotated = False
 
-    modality = True  # Number of ambiguous peaks, unknown # peaks
-    # n_basins = 1
-    # n_valleys = 1
+#     modality = True  # Number of ambiguous peaks, unknown # peaks
+#     # n_basins = 1
+#     # n_valleys = 1
 
-    def __init__(self, ndim=None, bounds=None, f_shift="rastrigin_shift_func_data", f_bias=0.):
-        super().__init__()
-        self.dim_changeable = True
-        self.dim_default = 500
-        self.dim_max = 1000
-        self.check_ndim_and_bounds(ndim, self.dim_max, bounds, np.array([[-1., 1.] for _ in range(self.dim_default)]))
-        self.make_support_data_path("data_2008")
-        self.f_shift = self.check_shift_data(f_shift)[:self.ndim]
-        self.f_shift = self.f_shift / np.max(self.f_shift)
-        self.f_bias = f_bias
-        self.f_global = -1e32
-        self.x_global = self.f_shift
-        self.paras = {"f_shift": self.f_shift, "f_bias": self.f_bias}
+#     def __init__(self, ndim=None, bounds=None, f_shift="rastrigin_shift_func_data", f_bias=0.):
+#         super().__init__()
+#         self.dim_changeable = True
+#         self.dim_default = 500
+#         self.dim_max = 1000
+#         self.check_ndim_and_bounds(ndim, self.dim_max, bounds, np.array([[-1., 1.] for _ in range(self.dim_default)]))
+#         self.make_support_data_path("data_2008")
+#         self.f_shift = self.check_shift_data(f_shift)[:self.ndim]
+#         self.f_shift = self.f_shift / np.max(self.f_shift)
+#         self.f_bias = f_bias
+#         self.f_global = -1e32
+#         self.x_global = self.f_shift
+#         self.paras = {"f_shift": self.f_shift, "f_bias": self.f_bias}
 
-    def evaluate(self, x, *args):
-        self.n_fe += 1
-        self.check_solution(x, self.dim_max, self.dim_supported)
-        ndim = len(x)
-        results = np.array([operator.fractal_1d_func(x[idx] + operator.twist_func(x[idx + 1])) for idx in range(0, ndim - 1)])
-        return np.sum(results) + operator.fractal_1d_func(x[-1] + operator.twist_func(x[0])) + self.f_bias
+#     def evaluate(self, x, *args):
+#         self.n_fe += 1
+#         self.check_solution(x, self.dim_max, self.dim_supported)
+#         ndim = len(x)
+#         results = np.array([operator.fractal_1d_func(x[idx] + operator.twist_func(x[idx + 1])) for idx in range(0, ndim - 1)])
+#         return np.sum(results) + operator.fractal_1d_func(x[-1] + operator.twist_func(x[0])) + self.f_bias

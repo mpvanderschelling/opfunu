@@ -121,9 +121,18 @@ def get_named_functions_based_ndim(ndim=None):
         List of the functions
     """
     functions = [cls for classname, cls in FUNC_DATABASE if classname not in EXCLUDES]
-    if type(ndim) is int and ndim > 1:
-        return list(filter(lambda f: f().dim_changeable or f().dim_default == ndim, functions))
-    return functions
+
+    def filter_function(f):
+        f_instance = f()
+        if isinstance(ndim, int) and ndim > 1:
+            if f_instance.dim_changeable:
+                if hasattr(f_instance, "dim_supported"):
+                    return ndim in f_instance.dim_supported
+                return True
+            return f_instance.dim_default == ndim
+        return True
+
+    return list(filter(filter_function, functions))
 
 
 def get_cec_functions_based_ndim(ndim=None):

@@ -162,6 +162,8 @@ class Benchmark:
             return True
         else:
             if self.dim_changeable:
+                if hasattr(self, 'dim_supported'):
+                    return ndim in self.dim_supported
                 return ndim > 0
             else:
                 return ndim == self.ndim

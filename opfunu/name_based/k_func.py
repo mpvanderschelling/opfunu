@@ -4,6 +4,7 @@
 #       Github: https://github.com/thieu1995        %
 # --------------------------------------------------%
 
+import jax
 import jax.numpy as np
 
 from opfunu.benchmark import Benchmark
@@ -54,13 +55,16 @@ class Katsuura(Benchmark):
         self.x_global = np.zeros(self.ndim)
 
     def evaluate(self, x, *args):
-        self.check_solution(x)
-        self.n_fe += 1
         d = 32
-        k = np.atleast_2d(np.arange(1, d + 1)).T
-        idx = np.arange(0., self.ndim * 1.)
-        inner = np.round(2 ** k * x) * (2. ** (-k))
-        return np.prod(np.sum(inner, axis=0) * (idx + 1) + 1)
+        ndim = x.shape[0]
+        k = np.arange(1, d + 1).reshape(-1, 1)  # Shape (d, 1)
+        idx = np.arange(ndim)
+
+        inner = jax.lax.round(2 ** k * x) * (2. ** (-k))
+        sum_inner = np.sum(inner, axis=0) * (idx + 1) + 1
+
+        # Replace np.prod with jax.lax.reduce
+        return jax.lax.reduce(sum_inner, init_values=1.0, computation=jax.lax.mul, dimensions=(0,))
 
 
 class Keane(Benchmark):

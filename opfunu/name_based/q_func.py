@@ -43,7 +43,7 @@ class Qing(Benchmark):
 
     def __init__(self, ndim=None, bounds=None):
         super().__init__()
-        self.dim_changeable = True
+        self.dim_changeable = False
         self.dim_default = 2
         self.check_ndim_and_bounds(ndim, bounds, np.array([[-500., 500.] for _ in range(self.dim_default)]))
         self.f_global = 0.
@@ -145,7 +145,7 @@ class Quartic(Benchmark):
         self.check_solution(x)
         self.n_fe += 1
         i = np.arange(1, self.ndim + 1)
-        return np.sum(i * x**4.) + onp.random.rand()
+        return np.sum(i * x**4.) + onp.random.rand(x.shape[0])
 
 
 class Quintic(Benchmark):

@@ -127,17 +127,10 @@ class LennardJones(Benchmark):
     def evaluate(self, x, *args):
         self.check_solution(x)
         self.n_fe += 1
-        k = self.ndim // 3  # Using integer division for JAX compatibility
-        s = 0.0
+        k = self.ndim // 3  # Integer division
 
-        def branch_true(ed, ud, s):
-            return s + (1.0 / ud - 2.0) / ud
-
-        def branch_false(ed, ud, s):
-            return s  # No change if condition is False
-
-        for i in range(k - 1):
-            for j in range(i + 1, k):
+        def body_fn(i, s):
+            def inner_body_fn(j, s):
                 a = 3 * i
                 b = 3 * j
                 xd = x[a] - x[b]
@@ -147,12 +140,17 @@ class LennardJones(Benchmark):
                 ud = ed * ed * ed
 
                 s = jax.lax.cond(
-                    ed > 0.0,  # Condition
-                    lambda _: branch_true(ed, ud, s),  # If True
-                    lambda _: branch_false(ed, ud, s),  # If False
+                    ed > 0.0,
+                    lambda _: s + (1.0 / ud - 2.0) / ud,
+                    lambda _: s,
                     operand=None
                 )
+                return s
 
+            s = jax.lax.fori_loop(i + 1, k, inner_body_fn, s)
+            return s
+
+        s = jax.lax.fori_loop(0, k - 1, body_fn, 0.0)
         return s
 
 

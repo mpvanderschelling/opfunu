@@ -205,36 +205,10 @@ def fractal_1d_func(x):
     return np.sum(result1)
 
 
-# def schwefel_12_func(x):
-#     x = np.array(x).ravel()
-#     ndim = len(x)
-#     return np.sum([np.sum(x[:idx]) ** 2 for idx in range(0, ndim)])
-
 def schwefel_12_func(x):
-    """
-    Schwefel 12 Function implemented with JAX.
-    """
-    # x = np.array(x).ravel()
-    return np.sum(np.cumsum(x) ** 2)
+    cumsum_x = jax.lax.associative_scan(np.add, x)
+    return np.sum(cumsum_x ** 2)
 
-
-# def tosz_func(x):
-#     # Original!
-#     def transform(xi):
-#         if xi > 0:
-#             c1, c2, x_sign = 10., 7.9, 1.0
-#             x_star = np.log(np.abs(xi))
-#         elif xi == 0:
-#             c1, c2, x_sign, x_star = 5.5, 3.1, 0., 0.
-#         else:
-#             c1, c2, x_sign = 5.5, 3.1, -1.
-#             x_star = np.log(np.abs(xi))
-#         return x_sign * np.exp(x_star + 0.049 * (np.sin(c1 * x_star) + np.sin(c2 * x_star)))
-
-#     x = np.array(x).ravel()
-#     x[0] = transform(x[0])
-#     x[-1] = transform(x[-1])
-#     return x
 
 def tosz_func(x):
     def transform(xi):
@@ -295,15 +269,6 @@ def gz_func(x):
     return y
 
 
-# def katsuura_func(x):
-#     x = np.array(x).ravel()
-#     ndim = len(x)
-#     result = 1.0
-#     for idx in range(0, ndim):
-#         temp = np.sum([np.abs(2 ** j * x[idx] - np.round(2 ** j * x[idx])) / 2 ** j for j in range(1, 33)])
-#         result *= (1 + (idx + 1) * temp) ** (10.0 / ndim ** 1.2)
-#     return (result - 1) * 10 / ndim ** 2
-
 def katsuura_func(x):
     x = np.array(x).ravel()  # Ensure x is a JAX array
     ndim = len(x)
@@ -344,25 +309,6 @@ def calculate_weight(x, delta=1.):
 
     return weight
 
-
-# def modified_schwefel_func(x):
-#     """
-#         This is a direct conversion of the CEC2021 C-Code for the Modified Schwefel F11 Function
-#     """
-#     z = np.array(x).ravel() + 4.209687462275036e+002
-#     nx = len(z)
-
-#     mask1 = z > 500
-#     mask2 = z < -500
-#     mask3 = ~mask1 & ~mask2
-#     fx = np.zeros(nx)
-#     fx[mask1] -= (500.0 + np.fmod(np.abs(z[mask1]), 500)) * np.sin(np.sqrt(500.0 - np.fmod(np.abs(z[mask1]), 500))) - (
-#         (z[mask1] - 500.0) / 100.) ** 2 / nx
-#     fx[mask2] -= (-500.0 + np.fmod(np.abs(z[mask2]), 500)) * np.sin(np.sqrt(500.0 - np.fmod(np.abs(z[mask2]), 500))) - (
-#         (z[mask2] + 500.0) / 100.) ** 2 / nx
-#     fx[mask3] -= z[mask3] * np.sin(np.sqrt(np.abs(z[mask3])))
-
-#     return np.sum(fx) + 4.189828872724338e+002 * nx
 
 def modified_schwefel_func(x):
     """
@@ -467,39 +413,6 @@ def schaffer_f7_func(x):
         result += np.sqrt(t) * (np.sin(50. * t ** 0.2) + 1)
     return (result / (ndim - 1)) ** 2
 
-
-# def chebyshev_func(x):
-#     """
-#     The following was converted from the cec2019 C code
-#     Storn's Tchebychev - a 2nd ICEO function - generalized version
-#     """
-#     x = np.array(x).ravel()
-#     ndim = len(x)
-#     sample = 32 * ndim
-
-#     dx_arr = np.zeros(ndim)
-#     dx_arr[:2] = [1.0, 1.2]
-#     for i in range(2, ndim):
-#         dx_arr[i] = 2.4 * dx_arr[i - 1] - dx_arr[i - 2]
-#     dx = dx_arr[-1]
-
-#     dy = 2.0 / sample
-
-#     px, y, sum_val = 0, -1, 0
-#     for i in range(sample + 1):
-#         px = x[0]
-#         for j in range(1, ndim):
-#             px = y * px + x[j]
-#         if px < -1 or px > 1:
-#             sum_val += (1.0 - abs(px)) ** 2
-#         y += dy
-
-#     for _ in range(2):
-#         px = np.sum(1.2 * x[1:]) + x[0]
-#         mask = px < dx
-#         sum_val += np.sum(px[mask] ** 2)
-
-#     return sum_val
 
 def chebyshev_func(x):
     """

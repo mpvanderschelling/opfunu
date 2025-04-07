@@ -4,6 +4,7 @@
 #       Github: https://github.com/thieu1995        %
 # --------------------------------------------------%
 
+import jax
 import jax.numpy as np
 import numpy as onp
 
@@ -345,12 +346,17 @@ class F92010(CecBenchmark):
     def evaluate(self, x, *args):
         self.n_fe += 1
         self.check_solution(x, self.dim_max, self.dim_supported)
+
         z = x - self.f_shift
-        result = 0.0
-        for k in range(0, self.count_up):
-            idx1 = self.P[k * self.m_group: (k + 1) * self.m_group]
-            z1 = np.dot(z[idx1], self.f_matrix[:len(idx1), :len(idx1)])
-            result += operator.elliptic_func(z1)
+
+        # Extract indices for each group
+        idx_groups = np.array([self.P[k * self.m_group: (k + 1) * self.m_group] for k in range(self.count_up)])
+
+        # Vectorized computation across groups
+        vectorized_f = jax.vmap(lambda idx: operator.elliptic_func(z[idx]))
+        result = np.sum(vectorized_f(idx_groups))
+
+        # Compute the remaining part
         z2 = z[self.P[int(self.ndim / 2):]]
         return result + operator.elliptic_func(z2)
 
@@ -374,12 +380,17 @@ class F102010(F92010):
     def evaluate(self, x, *args):
         self.n_fe += 1
         self.check_solution(x, self.dim_max, self.dim_supported)
+
         z = x - self.f_shift
-        result = 0.0
-        for k in range(0, self.count_up):
-            idx1 = self.P[k * self.m_group: (k + 1) * self.m_group]
-            z1 = np.dot(z[idx1], self.f_matrix[:len(idx1), :len(idx1)])
-            result += operator.rastrigin_func(z1)
+
+        # Extract indices for each group
+        idx_groups = np.array([self.P[k * self.m_group: (k + 1) * self.m_group] for k in range(self.count_up)])
+
+        # Vectorized computation across groups
+        vectorized_f = jax.vmap(lambda idx: operator.rastrigin_func(z[idx]))
+        result = np.sum(vectorized_f(idx_groups))
+
+        # Compute the remaining part
         z2 = z[self.P[int(self.ndim / 2):]]
         return result + operator.rastrigin_func(z2)
 
@@ -403,12 +414,21 @@ class F112010(F92010):
     def evaluate(self, x, *args):
         self.n_fe += 1
         self.check_solution(x, self.dim_max, self.dim_supported)
+
         z = x - self.f_shift
-        result = 0.0
-        for k in range(0, self.count_up):
-            idx1 = self.P[k * self.m_group: (k + 1) * self.m_group]
-            z1 = np.dot(z[idx1], self.f_matrix[:len(idx1), :len(idx1)])
-            result += operator.ackley_func(z1)
+
+        # Compute index groups
+        idx_groups = np.array([self.P[k * self.m_group: (k + 1) * self.m_group] for k in range(self.count_up)])
+
+        # Vectorized matrix operation and function application
+        def compute_ackley(idx):
+            z1 = np.dot(z[idx], self.f_matrix[:len(idx), :len(idx)])
+            return operator.ackley_func(z1)
+
+        vectorized_ackley = jax.vmap(compute_ackley)
+        result = np.sum(vectorized_ackley(idx_groups))
+
+        # Compute the remaining part
         z2 = z[self.P[int(self.ndim / 2):]]
         return result + operator.ackley_func(z2)
 
@@ -430,11 +450,17 @@ class F122010(F72010):
     def evaluate(self, x, *args):
         self.n_fe += 1
         self.check_solution(x, self.dim_max, self.dim_supported)
+
         z = x - self.f_shift
-        result = 0.0
-        for k in range(0, self.count_up):
-            idx1 = self.P[k * self.m_group: (k + 1) * self.m_group]
-            result += operator.schwefel_12_func(z[idx1])
+
+        # Extract indices for each group
+        idx_groups = np.array([self.P[k * self.m_group: (k + 1) * self.m_group] for k in range(self.count_up)])
+
+        # Vectorized computation across groups
+        vectorized_schwefel = jax.vmap(lambda idx: operator.schwefel_12_func(z[idx]))
+        result = np.sum(vectorized_schwefel(idx_groups))
+
+        # Compute the remaining part
         z2 = z[self.P[int(self.ndim / 2):]]
         return result + operator.sphere_func(z2)
 
@@ -460,11 +486,17 @@ class F132010(F72010):
     def evaluate(self, x, *args):
         self.n_fe += 1
         self.check_solution(x, self.dim_max, self.dim_supported)
+
         z = x - self.f_shift
-        result = 0.0
-        for k in range(0, self.count_up):
-            idx1 = self.P[k * self.m_group: (k + 1) * self.m_group]
-            result += operator.rosenbrock_func(z[idx1])
+
+        # Extract indices for each group
+        idx_groups = np.array([self.P[k * self.m_group: (k + 1) * self.m_group] for k in range(self.count_up)])
+
+        # Vectorized computation across groups
+        vectorized_f = jax.vmap(lambda idx: operator.rosenbrock_func(z[idx]))
+        result = np.sum(vectorized_f(idx_groups))
+
+        # Compute the remaining part
         z2 = z[self.P[int(self.ndim / 2):]]
         return result + operator.sphere_func(z2)
 
@@ -486,12 +518,16 @@ class F142010(F92010):
     def evaluate(self, x, *args):
         self.n_fe += 1
         self.check_solution(x, self.dim_max, self.dim_supported)
+
         z = x - self.f_shift
-        result = 0.0
-        for k in range(0, self.count_up):
-            idx1 = self.P[k * self.m_group: (k + 1) * self.m_group]
-            z1 = np.dot(z[idx1], self.f_matrix[:len(idx1), :len(idx1)])
-            result += operator.elliptic_func(z1)
+
+        # Extract indices for each group
+        idx_groups = np.array([self.P[k * self.m_group: (k + 1) * self.m_group] for k in range(self.count_up)])
+
+        # Vectorized computation across groups
+        vectorized_f = jax.vmap(lambda idx: operator.elliptic_func(z[idx]))
+        result = np.sum(vectorized_f(idx_groups))
+
         return result
 
 
@@ -515,12 +551,16 @@ class F152010(F92010):
     def evaluate(self, x, *args):
         self.n_fe += 1
         self.check_solution(x, self.dim_max, self.dim_supported)
+
         z = x - self.f_shift
-        result = 0.0
-        for k in range(0, self.count_up):
-            idx1 = self.P[k * self.m_group: (k + 1) * self.m_group]
-            z1 = np.dot(z[idx1], self.f_matrix[:len(idx1), :len(idx1)])
-            result += operator.rastrigin_func(z1)
+
+        # Extract indices for each group
+        idx_groups = np.array([self.P[k * self.m_group: (k + 1) * self.m_group] for k in range(self.count_up)])
+
+        # Vectorized computation across groups
+        vectorized_f = jax.vmap(lambda idx: operator.rastrigin_func(z[idx]))
+        result = np.sum(vectorized_f(idx_groups))
+
         return result
 
 
@@ -544,12 +584,16 @@ class F162010(F92010):
     def evaluate(self, x, *args):
         self.n_fe += 1
         self.check_solution(x, self.dim_max, self.dim_supported)
+
         z = x - self.f_shift
-        result = 0.0
-        for k in range(0, self.count_up):
-            idx1 = self.P[k * self.m_group: (k + 1) * self.m_group]
-            z1 = np.dot(z[idx1], self.f_matrix[:len(idx1), :len(idx1)])
-            result += operator.ackley_func(z1)
+
+        # Extract indices for each group
+        idx_groups = np.array([self.P[k * self.m_group: (k + 1) * self.m_group] for k in range(self.count_up)])
+
+        # Vectorized computation across groups
+        vectorized_f = jax.vmap(lambda idx: operator.ackley_func(z[idx]))
+        result = np.sum(vectorized_f(idx_groups))
+
         return result
 
 
@@ -572,11 +616,16 @@ class F172010(F72010):
     def evaluate(self, x, *args):
         self.n_fe += 1
         self.check_solution(x, self.dim_max, self.dim_supported)
+
         z = x - self.f_shift
-        result = 0.0
-        for k in range(0, self.count_up):
-            idx1 = self.P[k * self.m_group: (k + 1) * self.m_group]
-            result += operator.ackley_func(z[idx1])
+
+        # Extract indices for each group
+        idx_groups = np.array([self.P[k * self.m_group: (k + 1) * self.m_group] for k in range(self.count_up)])
+
+        # Vectorized computation across groups
+        vectorized_f = jax.vmap(lambda idx: operator.schwefel_12_func(z[idx]))
+        result = np.sum(vectorized_f(idx_groups))
+
         return result
 
 
@@ -600,11 +649,16 @@ class F182010(F72010):
     def evaluate(self, x, *args):
         self.n_fe += 1
         self.check_solution(x, self.dim_max, self.dim_supported)
+
         z = x - self.f_shift
-        result = 0.0
-        for k in range(0, self.count_up):
-            idx1 = self.P[k * self.m_group: (k + 1) * self.m_group]
-            result += operator.rosenbrock_func(z[idx1])
+
+        # Extract indices for each group
+        idx_groups = np.array([self.P[k * self.m_group: (k + 1) * self.m_group] for k in range(self.count_up)])
+
+        # Vectorized computation across groups
+        vectorized_f = jax.vmap(lambda idx: operator.rosenbrock_func(z[idx]))
+        result = np.sum(vectorized_f(idx_groups))
+
         return result
 
 

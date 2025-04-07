@@ -4,6 +4,7 @@
 #       Github: https://github.com/thieu1995        %
 # --------------------------------------------------%
 
+import jax
 import jax.numpy as np
 import numpy as onp
 
@@ -636,12 +637,11 @@ class F122005(CecBenchmark):
     def evaluate(self, x, *args):
         self.n_fe += 1
         self.check_solution(x, self.dim_max, self.dim_supported)
-        ndim = len(x)
-        result = 0.0
-        for idx in range(0, ndim):
-            t1 = np.sum(self.f_matrix_a[idx] * np.sin(self.f_shift) + self.f_matrix_b[idx] * np.cos(self.f_shift))
-            t2 = np.sum(self.f_matrix_a[idx] * np.sin(x) + self.f_matrix_b[idx] * np.cos(x))
-            result += (t1 - t2) ** 2
+
+        t1 = np.sum(self.f_matrix_a * np.sin(self.f_shift) + self.f_matrix_b * np.cos(self.f_shift), axis=1)
+        t2 = np.sum(self.f_matrix_a * np.sin(x) + self.f_matrix_b * np.cos(x), axis=1)
+        result = np.sum((t1 - t2) ** 2)
+
         return result + self.f_bias
 
 
@@ -785,7 +785,7 @@ class F152005(CecBenchmark):
         self.dim_max = 100
         self.check_ndim_and_bounds(ndim, self.dim_max, bounds, np.array([[-5., 5.] for _ in range(self.dim_default)]))
         self.make_support_data_path("data_2005")
-        self.f_shift = self.load_matrix_data(f_shift)[:, :self.ndim]        # This shift as matrix for M functions
+        self.f_shift = np.array(self.load_matrix_data(f_shift)[:, :self.ndim])        # This shift as matrix for M functions
         self.lamdas = np.array([1, 1, 10, 10, 5.0 / 60, 5.0 / 60, 5.0 / 32, 5.0 / 32, 5.0 / 100, 5.0 / 100])
         self.bias = np.array([0, 100, 200, 300, 400, 500, 600, 700, 800, 900])      # ==> f_shift[0] is the global optimum
         self.n_funcs = 10
@@ -800,37 +800,42 @@ class F152005(CecBenchmark):
                       "n_funcs": self.n_funcs, "C": self.C, "M": self.M, "y": self.y}
 
     def fi__(self, x, idx):
-        if idx == 0 or idx == 1:
-            return operator.rastrigin_func(x)
-        elif idx == 2 or idx == 3:
-            return operator.weierstrass_norm_func(x)
-        elif idx == 4 or idx == 5:
-            return operator.griewank_func(x)
-        elif idx == 6 or idx == 7:
-            return operator.ackley_func(x)
-        else:
-            return operator.sphere_func(x)
+        # Define conditions for different index ranges using jax.lax.cond
+        cond1 = jax.lax.eq(idx, 0) | jax.lax.eq(idx, 1)  # idx == 0 or idx == 1
+        cond2 = jax.lax.eq(idx, 2) | jax.lax.eq(idx, 3)  # idx == 2 or idx == 3
+        cond3 = jax.lax.eq(idx, 4) | jax.lax.eq(idx, 5)  # idx == 4 or idx == 5
+        cond4 = jax.lax.eq(idx, 6) | jax.lax.eq(idx, 7)  # idx == 6 or idx == 7
+        # cond5 = jax.lax.ge(idx, 8)  # else case (idx >= 8)
+
+        # Use jax.lax.cond to select the correct function based on the index
+        return jax.lax.cond(cond1, lambda _: operator.rastrigin_func(x),
+                            jax.lax.cond(cond2, lambda _: operator.weierstrass_norm_func(x),
+                                         jax.lax.cond(cond3, lambda _: operator.griewank_func(x),
+                                                      jax.lax.cond(cond4, lambda _: operator.ackley_func(x),
+                                                                   lambda _: operator.sphere_func(x)))))
 
     def evaluate(self, x, *args):
         self.n_fe += 1
         self.check_solution(x, self.dim_max, self.dim_supported)
         ndim = len(x)
-        weights = np.ones(self.n_funcs)
-        fits = np.ones(self.n_funcs)
-        for idx in range(0, self.n_funcs):
+
+        # Vectorized computation of weights and fits
+        def compute_weight_and_fit(idx):
             w_i = np.exp(-np.sum((x - self.f_shift[idx]) ** 2) / (2 * ndim * self.xichmas[idx] ** 2))
             z = np.dot((x - self.f_shift[idx]) / self.lamdas[idx], self.M)
             fit_i = self.fi__(z, idx)
             f_max_i = self.fi__(np.dot((self.y / self.lamdas[idx]), self.M), idx)
             fit_i = self.C * fit_i / f_max_i
-            # weights[idx] = w_i
-            # fits[idx] = fit_i
-            weights = np.concatenate((weights[:idx], np.array([w_i]), weights[idx + 1:]))
-            fits = np.concatenate((fits[:idx], np.array([fit_i]), fits[idx + 1:]))
+            return w_i, fit_i
 
+        vectorized_compute = jax.vmap(compute_weight_and_fit)
+        weights, fits = vectorized_compute(np.arange(self.n_funcs))
+
+        # Normalize weights
         maxw = np.max(weights)
-        weights = np.where(weights != maxw, weights * (1 - maxw**10), weights)
+        weights = np.where(weights != maxw, weights * (1 - maxw ** 10), weights)
         weights = weights / np.sum(weights)
+
         return np.sum(np.dot(weights, (fits + self.bias))) + self.f_bias
 
 
@@ -886,57 +891,41 @@ class F162005(CecBenchmark):
                       "n_funcs": self.n_funcs, "C": self.C, "M": self.M, "y": self.y}
 
     def fi__(self, x, idx):
-        if idx == 0 or idx == 1:
-            return operator.rastrigin_func(x)
-        elif idx == 2 or idx == 3:
-            return operator.weierstrass_norm_func(x)
-        elif idx == 4 or idx == 5:
-            return operator.griewank_func(x)
-        elif idx == 6 or idx == 7:
-            return operator.ackley_func(x)
-        else:
-            return operator.sphere_func(x)
-
-    # def evaluate(self, x, *args):
-    # # Original!
-    #     self.n_fe += 1
-    #     self.check_solution(x, self.dim_max, self.dim_supported)
-    #     ndim = len(x)
-    #     weights = np.ones(self.n_funcs)
-    #     fits = np.ones(self.n_funcs)
-    #     for idx in range(0, self.n_funcs):
-    #         w_i = np.exp(-np.sum((x - self.f_shift[idx]) ** 2) / (2 * ndim * self.xichmas[idx] ** 2))
-    #         z = np.dot((x - self.f_shift[idx]) / self.lamdas[idx], self.M[idx * ndim:(idx + 1) * ndim, :])
-    #         fit_i = self.fi__(z, idx)
-    #         f_max_i = self.fi__(np.dot((self.y / self.lamdas[idx]), self.M[idx * ndim:(idx + 1) * ndim, :]), idx)
-    #         fit_i = self.C * fit_i / f_max_i
-    #         weights[idx] = w_i
-    #         fits[idx] = fit_i
-
-    #     maxw = np.max(weights)
-    #     weights = np.where(weights != maxw, weights * (1 - maxw**10), weights)
-    #     weights = weights / np.sum(weights)
-    #     return np.sum(np.dot(weights, (fits + self.bias))) + self.f_bias
+        funcs = [
+            operator.rastrigin_func, operator.rastrigin_func,
+            operator.weierstrass_norm_func, operator.weierstrass_norm_func,
+            operator.griewank_func, operator.griewank_func,
+            operator.ackley_func, operator.ackley_func
+        ]
+        return funcs[idx](x) if idx < len(funcs) else operator.sphere_func(x)
 
     def evaluate(self, x, *args):
         self.n_fe += 1
         self.check_solution(x, self.dim_max, self.dim_supported)
         ndim = len(x)
-        weights = np.ones(self.n_funcs)
-        fits = np.ones(self.n_funcs)
-        for idx in range(0, self.n_funcs):
-            w_i = np.exp(-np.sum((x - self.f_shift[idx]) ** 2) / (2 * ndim * self.xichmas[idx] ** 2))
-            z = np.dot((x - self.f_shift[idx]) / self.lamdas[idx], self.M[idx * ndim:(idx + 1) * ndim, :])
-            fit_i = self.fi__(z, idx)
-            f_max_i = self.fi__(np.dot((self.y / self.lamdas[idx]), self.M[idx * ndim:(idx + 1) * ndim, :]), idx)
-            fit_i = self.C * fit_i / f_max_i
-            weights = np.concatenate((weights[:idx], np.array([w_i]), weights[idx + 1:]))
-            fits = np.concatenate((fits[:idx], np.array([fit_i]), fits[idx + 1:]))
 
-        maxw = np.max(weights)
-        weights = np.where(weights != maxw, weights * (1 - maxw**10), weights)
-        weights = weights / np.sum(weights)
-        return np.sum(np.dot(weights, (fits + self.bias))) + self.f_bias
+        # Compute weights vectorized
+        w_i = np.exp(-np.sum((x - self.f_shift) ** 2, axis=1) / (2 * ndim * self.xichmas ** 2))
+
+        # Compute transformed `z`
+        z = np.einsum('ij,jk->ik', (x - self.f_shift) / self.lamdas, self.M)
+
+        # Compute function values
+        fit_i = jax.vmap(self.fi__, in_axes=(0, 0))(z, np.arange(self.n_funcs))
+
+        # Compute max fitness values
+        y_transformed = np.einsum('ij,jk->ik', (self.y / self.lamdas), self.M)
+        f_max_i = jax.vmap(self.fi__, in_axes=(0, 0))(y_transformed, np.arange(self.n_funcs))
+
+        # Normalize fitness values
+        fit_i = self.C * fit_i / f_max_i
+
+        # Adjust weights
+        maxw = np.max(w_i)
+        w_i = np.where(w_i != maxw, w_i * (1 - maxw**10), w_i)
+        weights = w_i / np.sum(w_i)
+
+        return np.sum(weights @ (fit_i + self.bias)) + self.f_bias
 
 
 class F172005(F162005):
@@ -960,23 +949,38 @@ class F172005(F162005):
         self.n_fe += 1
         self.check_solution(x, self.dim_max, self.dim_supported)
         ndim = len(x)
-        weights = np.ones(self.n_funcs)
-        fits = np.ones(self.n_funcs)
-        for idx in range(0, self.n_funcs):
-            w_i = np.exp(-np.sum((x - self.f_shift[idx]) ** 2) / (2 * ndim * self.xichmas[idx] ** 2))
-            z = np.dot((x - self.f_shift[idx]) / self.lamdas[idx], self.M[idx * ndim:(idx + 1) * ndim, :])
-            fit_i = self.fi__(z, idx)
-            f_max_i = self.fi__(np.dot((self.y / self.lamdas[idx]), self.M[idx * ndim:(idx + 1) * ndim, :]), idx)
-            fit_i = self.C * fit_i / f_max_i
-            # weights[idx] = w_i
-            # fits[idx] = fit_i
-            weights = np.concatenate((weights[:idx], np.array([w_i]), weights[idx + 1:]))
-            fits = np.concatenate((fits[:idx], np.array([fit_i]), fits[idx + 1:]))
 
-        maxw = np.max(weights)
-        weights = np.where(weights != maxw, weights * (1 - maxw**10), weights)
-        weights = weights / np.sum(weights)
-        return np.sum(np.dot(weights, (fits + self.bias))) * (1 + 0.2 * np.abs(onp.random.normal(0, 1))) + self.f_bias
+        # Compute weights in a vectorized way
+        w_i = np.exp(-np.sum((x - self.f_shift) ** 2, axis=1) / (2 * ndim * self.xichmas ** 2))
+
+        # Compute transformed `z` (handling `M` per function)
+        M_slices = self.M.reshape(self.n_funcs, ndim, -1)  # Reshape for batching
+        z = jax.vmap(lambda shift, lamda, M: np.dot((x - shift) / lamda, M))(
+            self.f_shift, self.lamdas, M_slices
+        )
+
+        # Compute fitness values
+        fit_i = jax.vmap(self.fi__, in_axes=(0, 0))(z, np.arange(self.n_funcs))
+
+        # Compute max fitness values
+        y_transformed = jax.vmap(lambda lamda, M: np.dot((self.y / lamda), M))(
+            self.lamdas, M_slices
+        )
+        f_max_i = jax.vmap(self.fi__, in_axes=(0, 0))(y_transformed, np.arange(self.n_funcs))
+
+        # Normalize fitness values
+        fit_i = self.C * fit_i / f_max_i
+
+        # Adjust weights
+        maxw = np.max(w_i)
+        w_i = np.where(w_i != maxw, w_i * (1 - maxw**10), w_i)
+        weights = w_i / np.sum(w_i)
+
+        # Add controlled randomness (JAX-safe)
+        self.key, subkey = jr.split(self.key)
+        noise = 1 + 0.2 * np.abs(jr.normal(subkey))
+
+        return np.sum(weights @ (fit_i + self.bias)) * noise + self.f_bias
 
 
 class F182005(CecBenchmark):
@@ -1031,38 +1035,46 @@ class F182005(CecBenchmark):
                       "n_funcs": self.n_funcs, "C": self.C, "M": self.M, "y": self.y}
 
     def fi__(self, x, idx):
-        if idx == 0 or idx == 1:
-            return operator.ackley_func(x)
-        elif idx == 2 or idx == 3:
-            return operator.rastrigin_func(x)
-        elif idx == 4 or idx == 5:
-            return operator.sphere_func(x)
-        elif idx == 6 or idx == 7:
-            return operator.weierstrass_norm_func(x)
-        else:
-            return operator.griewank_func(x)
+        funcs = [
+            operator.ackley_func, operator.ackley_func,
+            operator.rastrigin_func, operator.rastrigin_func,
+            operator.sphere_func, operator.sphere_func,
+            operator.weierstrass_norm_func, operator.weierstrass_norm_func
+        ]
+        return funcs[idx](x) if idx < len(funcs) else operator.griewank_func(x)
 
     def evaluate(self, x, *args):
         self.n_fe += 1
         self.check_solution(x, self.dim_max, self.dim_supported)
         ndim = len(x)
-        weights = np.ones(self.n_funcs)
-        fits = np.ones(self.n_funcs)
-        for idx in range(0, self.n_funcs):
-            w_i = np.exp(-np.sum((x - self.f_shift[idx]) ** 2) / (2 * ndim * self.xichmas[idx] ** 2))
-            z = np.dot((x - self.f_shift[idx]) / self.lamdas[idx], self.M[idx * ndim:(idx + 1) * ndim, :])
-            fit_i = self.fi__(z, idx)
-            f_max_i = self.fi__(np.dot((self.y / self.lamdas[idx]), self.M[idx * ndim:(idx + 1) * ndim, :]), idx)
-            fit_i = self.C * fit_i / f_max_i
-            # weights[idx] = w_i
-            # fits[idx] = fit_i
-            weights = np.concatenate((weights[:idx], np.array([w_i]), weights[idx + 1:]))
-            fits = np.concatenate((fits[:idx], np.array([fit_i]), fits[idx + 1:]))
 
-        maxw = np.max(weights)
-        weights = np.where(weights != maxw, weights * (1 - maxw**10), weights)
-        weights = weights / np.sum(weights)
-        return np.sum(np.dot(weights, (fits + self.bias))) + self.f_bias
+        # Compute weights in a vectorized way
+        w_i = np.exp(-np.sum((x - self.f_shift) ** 2, axis=1) / (2 * ndim * self.xichmas ** 2))
+
+        # Compute transformed `z` (handling `M` per function)
+        M_slices = self.M.reshape(self.n_funcs, ndim, -1)  # Reshape for batching
+        z = jax.vmap(lambda shift, lamda, M: np.dot((x - shift) / lamda, M))(
+            self.f_shift, self.lamdas, M_slices
+        )
+
+        # Compute fitness values
+        fit_i = jax.vmap(self.fi__, in_axes=(0, 0))(z, np.arange(self.n_funcs))
+
+        # Compute max fitness values
+        y_transformed = jax.vmap(lambda lamda, M: np.dot((self.y / lamda), M))(
+            self.lamdas, M_slices
+        )
+        f_max_i = jax.vmap(self.fi__, in_axes=(0, 0))(y_transformed, np.arange(self.n_funcs))
+
+        # Normalize fitness values
+        fit_i = self.C * fit_i / f_max_i
+
+        # Adjust weights
+        maxw = np.max(w_i)
+        w_i = np.where(w_i != maxw, w_i * (1 - maxw**10), w_i)
+        weights = w_i / np.sum(w_i)
+
+        return np.sum(weights @ (fit_i + self.bias)) + self.f_bias
 
 
 class F192005(F182005):
@@ -1159,38 +1171,46 @@ class F212005(CecBenchmark):
                       "n_funcs": self.n_funcs, "C": self.C, "M": self.M, "y": self.y}
 
     def fi__(self, x, idx):
-        if idx == 0 or idx == 1:
-            return operator.rotated_expanded_schaffer_func(x)
-        elif idx == 2 or idx == 3:
-            return operator.rastrigin_func(x)
-        elif idx == 4 or idx == 5:
-            return operator.grie_rosen_cec_func(x)
-        elif idx == 6 or idx == 7:
-            return operator.weierstrass_norm_func(x)
-        else:
-            return operator.griewank_func(x)
+        funcs = [
+            operator.rotated_expanded_schaffer_func, operator.rotated_expanded_schaffer_func,
+            operator.rastrigin_func, operator.rastrigin_func,
+            operator.grie_rosen_cec_func, operator.grie_rosen_cec_func,
+            operator.weierstrass_norm_func, operator.weierstrass_norm_func
+        ]
+        return funcs[idx](x) if idx < len(funcs) else operator.griewank_func(x)
 
     def evaluate(self, x, *args):
         self.n_fe += 1
         self.check_solution(x, self.dim_max, self.dim_supported)
         ndim = len(x)
-        weights = np.ones(self.n_funcs)
-        fits = np.ones(self.n_funcs)
-        for idx in range(0, self.n_funcs):
-            w_i = np.exp(-np.sum((x - self.f_shift[idx]) ** 2) / (2 * ndim * self.xichmas[idx] ** 2))
-            z = np.dot((x - self.f_shift[idx]) / self.lamdas[idx], self.M[idx * ndim:(idx + 1) * ndim, :])
-            fit_i = self.fi__(z, idx)
-            f_max_i = self.fi__(np.dot((self.y / self.lamdas[idx]), self.M[idx * ndim:(idx + 1) * ndim, :]), idx)
-            fit_i = self.C * fit_i / f_max_i
-            # weights[idx] = w_i
-            # fits[idx] = fit_i
-            weights = np.concatenate((weights[:idx], np.array([w_i]), weights[idx + 1:]))
-            fits = np.concatenate((fits[:idx], np.array([fit_i]), fits[idx + 1:]))
 
-        maxw = np.max(weights)
-        weights = np.where(weights != maxw, weights * (1 - maxw**10), weights)
-        weights = weights / np.sum(weights)
-        return np.sum(np.dot(weights, (fits + self.bias))) + self.f_bias
+        # Compute weights in a vectorized way
+        w_i = np.exp(-np.sum((x - self.f_shift) ** 2, axis=1) / (2 * ndim * self.xichmas ** 2))
+
+        # Compute transformed `z` (handling `M` per function)
+        M_slices = self.M.reshape(self.n_funcs, ndim, -1)  # Reshape for batching
+        z = jax.vmap(lambda shift, lamda, M: np.dot((x - shift) / lamda, M))(
+            self.f_shift, self.lamdas, M_slices
+        )
+
+        # Compute fitness values
+        fit_i = jax.vmap(self.fi__, in_axes=(0, 0))(z, np.arange(self.n_funcs))
+
+        # Compute max fitness values
+        y_transformed = jax.vmap(lambda lamda, M: np.dot((self.y / lamda), M))(
+            self.lamdas, M_slices
+        )
+        f_max_i = jax.vmap(self.fi__, in_axes=(0, 0))(y_transformed, np.arange(self.n_funcs))
+
+        # Normalize fitness values
+        fit_i = self.C * fit_i / f_max_i
+
+        # Adjust weights
+        maxw = np.max(w_i)
+        w_i = np.where(w_i != maxw, w_i * (1 - maxw**10), w_i)
+        weights = w_i / np.sum(w_i)
+
+        return np.sum(weights @ (fit_i + self.bias)) + self.f_bias
 
 
 class F222005(F212005):
@@ -1233,24 +1253,37 @@ class F232005(F212005):
         self.n_fe += 1
         self.check_solution(x, self.dim_max, self.dim_supported)
         ndim = len(x)
-        x = operator.rounder(x, np.abs(x - self.f_shift[0]))
-        weights = np.ones(self.n_funcs)
-        fits = np.ones(self.n_funcs)
-        for idx in range(0, self.n_funcs):
-            w_i = np.exp(-np.sum((x - self.f_shift[idx]) ** 2) / (2 * ndim * self.xichmas[idx] ** 2))
-            z = np.dot((x - self.f_shift[idx]) / self.lamdas[idx], self.M[idx * ndim:(idx + 1) * ndim, :])
-            fit_i = self.fi__(z, idx)
-            f_max_i = self.fi__(np.dot((self.y / self.lamdas[idx]), self.M[idx * ndim:(idx + 1) * ndim, :]), idx)
-            fit_i = self.C * fit_i / f_max_i
-            # weights[idx] = w_i
-            # fits[idx] = fit_i
-            weights = np.concatenate((weights[:idx], np.array([w_i]), weights[idx + 1:]))
-            fits = np.concatenate((fits[:idx], np.array([fit_i]), fits[idx + 1:]))
 
-        maxw = np.max(weights)
-        weights = np.where(weights != maxw, weights * (1 - maxw**10), weights)
-        weights = weights / np.sum(weights)
-        return np.sum(np.dot(weights, (fits + self.bias))) + self.f_bias
+        # Apply rounder function on x (assumed to be defined elsewhere)
+        x = operator.rounder(x, np.abs(x - self.f_shift[0]))
+
+        # Compute weights in a vectorized way
+        w_i = np.exp(-np.sum((x - self.f_shift) ** 2, axis=1) / (2 * ndim * self.xichmas ** 2))
+
+        # Compute transformed `z` (handling `M` per function)
+        M_slices = self.M.reshape(self.n_funcs, ndim, -1)  # Reshape for batching
+        z = jax.vmap(lambda shift, lamda, M: np.dot((x - shift) / lamda, M))(
+            self.f_shift, self.lamdas, M_slices
+        )
+
+        # Compute fitness values
+        fit_i = jax.vmap(self.fi__, in_axes=(0, 0))(z, np.arange(self.n_funcs))
+
+        # Compute max fitness values
+        y_transformed = jax.vmap(lambda lamda, M: np.dot((self.y / lamda), M))(
+            self.lamdas, M_slices
+        )
+        f_max_i = jax.vmap(self.fi__, in_axes=(0, 0))(y_transformed, np.arange(self.n_funcs))
+
+        # Normalize fitness values
+        fit_i = self.C * fit_i / f_max_i
+
+        # Adjust weights
+        maxw = np.max(w_i)
+        w_i = np.where(w_i != maxw, w_i * (1 - maxw**10), w_i)
+        weights = w_i / np.sum(w_i)
+
+        return np.sum(weights @ (fit_i + self.bias)) + self.f_bias
 
 
 class F242005(CecBenchmark):
@@ -1305,47 +1338,53 @@ class F242005(CecBenchmark):
                       "n_funcs": self.n_funcs, "C": self.C, "M": self.M, "y": self.y}
 
     def fi__(self, x, idx):
-        if idx == 0:
-            return operator.weierstrass_norm_func(x)
-        elif idx == 1:
-            return operator.rotated_expanded_schaffer_func(x)
-        elif idx == 2:
-            return operator.grie_rosen_cec_func(x)
-        elif idx == 3:
-            return operator.ackley_func(x)
-        elif idx == 4:
-            return operator.rastrigin_func(x)
-        elif idx == 5:
-            return operator.griewank_func(x)
-        elif idx == 6:
-            return operator.non_continuous_expanded_scaffer_func(x)
-        elif idx == 7:
-            return operator.non_continuous_rastrigin_func(x)
-        elif idx == 8:
-            return operator.elliptic_func(x)
-        else:
-            return operator.sphere_func(x)
+        # Mapping functions based on index
+        func_map = [
+            operator.weierstrass_norm_func, operator.rotated_expanded_schaffer_func,
+            operator.grie_rosen_cec_func, operator.ackley_func,
+            operator.rastrigin_func, operator.griewank_func,
+            operator.non_continuous_expanded_scaffer_func, operator.non_continuous_rastrigin_func,
+            operator.elliptic_func, operator.sphere_func
+        ]
+        return func_map[idx](x)
 
     def evaluate(self, x, *args):
         self.n_fe += 1
         self.check_solution(x, self.dim_max, self.dim_supported)
         ndim = len(x)
-        weights = np.ones(self.n_funcs)
-        fits = np.ones(self.n_funcs)
-        for idx in range(0, self.n_funcs):
-            w_i = np.exp(-np.sum((x - self.f_shift[idx]) ** 2) / (2 * ndim * self.xichmas[idx] ** 2))
-            z = np.dot((x - self.f_shift[idx]) / self.lamdas[idx], self.M[idx * ndim:(idx + 1) * ndim, :])
-            fit_i = self.fi__(z, idx)
-            f_max_i = self.fi__(np.dot((self.y / self.lamdas[idx]), self.M[idx * ndim:(idx + 1) * ndim, :]), idx)
-            fit_i = self.C * fit_i / f_max_i
-            # weights[idx] = w_i
-            # fits[idx] = fit_i
-            weights = np.concatenate((weights[:idx], np.array([w_i]), weights[idx + 1:]))
-            fits = np.concatenate((fits[:idx], np.array([fit_i]), fits[idx + 1:]))
+
+        # Apply rounder function on x (assumed to be defined elsewhere)
+        x = operator.rounder(x, np.abs(x - self.f_shift[0]))
+
+        # Vectorized computation for weights and fitnesses
+        w_i = np.exp(-np.sum((x - self.f_shift) ** 2, axis=1) / (2 * ndim * self.xichmas ** 2))
+
+        # Compute transformed `z` (handling `M` per function)
+        M_slices = self.M.reshape(self.n_funcs, ndim, -1)  # Reshape for batching
+        z = jax.vmap(lambda shift, lamda, M: np.dot((x - shift) / lamda, M))(
+            self.f_shift, self.lamdas, M_slices
+        )
+
+        # Compute fitness values
+        fit_i = jax.vmap(self.fi__, in_axes=(0, 0))(z, np.arange(self.n_funcs))
+
+        # Compute max fitness values
+        y_transformed = jax.vmap(lambda lamda, M: np.dot((self.y / lamda), M))(
+            self.lamdas, M_slices
+        )
+        f_max_i = jax.vmap(self.fi__, in_axes=(0, 0))(y_transformed, np.arange(self.n_funcs))
+
+        # Normalize fitness values
+        fit_i = self.C * fit_i / f_max_i
+
+        # Update weights and fitness values without using np.concatenate
+        weights = w_i
+        fits = fit_i
 
         maxw = np.max(weights)
         weights = np.where(weights != maxw, weights * (1 - maxw**10), weights)
         weights = weights / np.sum(weights)
+
         return np.sum(np.dot(weights, (fits + self.bias))) + self.f_bias
 
 

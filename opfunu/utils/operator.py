@@ -53,14 +53,16 @@ def rastrigin_func(x):
     return np.sum(x ** 2 - 10 * np.cos(2 * np.pi * x) + 10)
 
 
-def weierstrass_func(x, a=0.5, b=3., k_max=20):
-    x = np.array(x).ravel()
-    ndim = len(x)
-    k = np.arange(0, k_max + 1)
-    result = 0
-    for idx in range(0, ndim):
-        result += np.sum(a ** k * np.cos(2 * np.pi * b ** k * (x[idx] + 0.5)))
-    return result - ndim * np.sum(a ** k * np.cos(np.pi * b ** k))
+def weierstrass_func(x, a=0.5, b=3.0, k_max=20):
+    x = np.ravel(np.array(x))  # Ensure x is a flattened JAX array
+    k = np.arange(0, k_max + 1)  # Vector of exponents
+    ak = a ** k  # Precompute a^k
+    bk = b ** k  # Precompute b^k
+
+    result = np.sum(ak[:, None] * np.cos(2 * np.pi * bk[:, None] * (x + 0.5)), axis=0)
+    correction = np.sum(ak * np.cos(np.pi * bk))
+
+    return np.sum(result) - len(x) * correction
 
 
 def weierstrass_norm_func(x, a=0.5, b=3., k_max=20):
@@ -405,13 +407,10 @@ def expanded_schaffer_f6_func(x):
 
 
 def schaffer_f7_func(x):
-    x = np.array(x).ravel()
-    ndim = len(x)
-    result = 0.0
-    for idx in range(0, ndim - 1):
-        t = x[idx] ** 2 + x[idx + 1] ** 2
-        result += np.sqrt(t) * (np.sin(50. * t ** 0.2) + 1)
-    return (result / (ndim - 1)) ** 2
+    x = np.ravel(np.array(x))  # Ensure x is a 1D JAX array
+    t = x[:-1] ** 2 + x[1:] ** 2  # Compute pairwise squared sum
+    result = np.sum(np.sqrt(t) * (np.sin(50. * t ** 0.2) + 1))  # Vectorized sum
+    return (result / (x.shape[0] - 1)) ** 2
 
 
 def chebyshev_func(x):
@@ -454,24 +453,21 @@ def chebyshev_func(x):
     return sum_val
 
 
-def inverse_hilbert_func(x):
+def inverse_hilbert_func(x, ndim: int):
     """
-    This is a direct conversion of the cec2019 C code for python optimized to use numpy
+    JAX-compatible version of the inverse Hilbert function with static dimension b.
     """
-    x = np.array(x).ravel()
-    ndim = len(x)
-    b = int(np.sqrt(ndim))
-
     # Create the Hilbert matrix
-    i, j = np.indices((b, b))
+    i = np.arange(ndim).reshape((ndim, 1))
+    j = np.arange(ndim).reshape((1, ndim))
     hilbert = 1.0 / (i + j + 1)
 
-    # Reshape x and compute H*x
-    x = x.reshape((b, b))
-    y = np.dot(hilbert, x).dot(hilbert.T)
+    # Reshape x and apply Hilbert transform
+    x = np.reshape(x, (ndim, ndim))
+    y = hilbert @ x @ hilbert.T
 
-    # Compute the absolute deviations
-    result = np.sum(np.abs(y - np.eye(b)))
+    # Compute the absolute deviation from identity
+    result = np.sum(np.abs(y - np.eye(ndim)))
     return result
 
 

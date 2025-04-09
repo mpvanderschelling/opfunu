@@ -161,11 +161,30 @@ class EggHolder(Benchmark):
         self.f_global = -959.640662711
         self.x_global = np.zeros(self.ndim)
 
+    # def evaluate(self, x, *args):
+    #     self.check_solution(x)
+    #     self.n_fe += 1
+    #     vec = (-(x[1:] + 47) * np.sin(np.sqrt(abs(x[1:] + x[:-1] / 2. + 47))) - x[:-1] * np.sin(np.sqrt(np.abs(x[:-1] - (x[1:] + 47)))))
+    #     return np.sum(vec)
+
     def evaluate(self, x, *args):
         self.check_solution(x)
         self.n_fe += 1
-        vec = (-(x[1:] + 47) * np.sin(np.sqrt(abs(x[1:] + x[:-1] / 2. + 47))) - x[:-1] * np.sin(np.sqrt(np.abs(x[:-1] - (x[1:] + 47)))))
-        return np.sum(vec)
+
+        x0 = x[:-1]
+        x1 = x[1:]
+        x1_plus_47 = x1 + 47.0
+
+        a = x1_plus_47 + 0.5 * x0
+        b = x0 - x1_plus_47
+
+        sqrt_a = np.sqrt(np.abs(a))
+        sqrt_b = np.sqrt(np.abs(b))
+
+        term1 = -x1_plus_47 * np.sin(sqrt_a)
+        term2 = -x0 * np.sin(sqrt_b)
+
+        return np.sum(term1 + term2)
 
 
 class Exponential(Benchmark):

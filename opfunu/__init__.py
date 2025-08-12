@@ -14,7 +14,7 @@
 # >>> upper_bound = f1.ub
 # >>> fitness = f1.evaluate
 # >>>
-# >>> solution = np.random.uniform(0, 1, 30)
+# >>> solution = onp.random.uniform(0, 1, 30)
 # >>> print(f1.evaluate(solution))
 # >>> print(fitness.evaluate(solution))
 # >>>
@@ -29,13 +29,20 @@
 # >>> opfunu.plot_2d(f22005, n_space=1000, ax=None)
 # >>> opfunu.plot_3d(f22005, n_space=1000, ax=None)
 
+from functools import partial
+
 __version__ = "1.0.1"
 
 import inspect
 import re
+from typing import Any, Callable, Dict, Optional, Tuple
+
+import jax
+import jax.numpy as jnp
+
+from . import cec_based, name_based
+from .f3dasmblock import bench_function
 from .utils import *
-from . import name_based
-from . import cec_based
 
 FUNC_DATABASE = inspect.getmembers(name_based, inspect.isclass)
 CEC_DATABASE = inspect.getmembers(cec_based, inspect.isclass)
@@ -103,12 +110,59 @@ def get_functions_based_ndim(ndim=None):
     return functions
 
 
+def get_named_functions_based_ndim(ndim=None):
+    """
+    Parameters
+    ----------
+    ndim : Number of dimensions that function has as default value
+
+    Returns
+    -------
+        List of the functions
+    """
+    functions = [cls for classname, cls in FUNC_DATABASE if classname not in EXCLUDES]
+
+    def filter_function(f):
+        f_instance = f()
+        if isinstance(ndim, int) and ndim > 1:
+            if f_instance.dim_changeable:
+                if hasattr(f_instance, "dim_supported"):
+                    return ndim in f_instance.dim_supported
+                return True
+            return f_instance.dim_default == ndim
+        return True
+
+    return list(filter(filter_function, functions))
+
+
+def get_cec_functions_based_ndim(ndim=None):
+    """
+    Parameters
+    ----------
+    ndim : Number of dimensions that function has as default value
+
+    Returns
+    -------
+        List of the functions
+    """
+    functions = [cls for classname, cls in CEC_DATABASE if classname not in EXCLUDES]
+    if type(ndim) is int and ndim > 1:
+        return list(filter(lambda f: f().dim_changeable and f().dim_max <= ndim, functions))
+    return functions
+
+
 def get_all_named_functions():
     return [cls for classname, cls in FUNC_DATABASE if classname not in EXCLUDES]
 
 
 def get_all_cec_functions():
     return [cls for classname, cls in CEC_DATABASE if classname not in EXCLUDES]
+
+
+def get_all_functions():
+    return [cls for classname, cls in ALL_DATABASE if classname not in EXCLUDES]
+
+
 def get_functions(ndim, continuous=None, linear=None, convex=None, unimodal=None, separable=None,
                   differentiable=None, scalable=None, randomized_term=None, parametric=None, modality=None):
     functions = [cls for classname, cls in FUNC_DATABASE if classname not in EXCLUDES]
@@ -127,8 +181,12 @@ def get_functions(ndim, continuous=None, linear=None, convex=None, unimodal=None
     return functions
 
 
+FUNCTION_MAPPING = {f.__name__.lower(): partial(bench_function, fn_class=f) for f in get_all_functions()}
+FUNCTION_CLASS_MAPPING = {f.__name__.lower(): f for f in get_all_functions()}
+
+
 def get_cecs(ndim=None, continuous=None, linear=None, convex=None, unimodal=None, separable=None, differentiable=None,
-             scalable=None, randomized_term=None, parametric=True, shifted=True, rotated=None , modality=None):
+             scalable=None, randomized_term=None, parametric=True, shifted=True, rotated=None, modality=None):
     functions = [cls for classname, cls in CEC_DATABASE if classname not in EXCLUDES]
     functions = list(filter(lambda f: f().is_ndim_compatible(ndim), functions))
 
@@ -145,3 +203,75 @@ def get_cecs(ndim=None, continuous=None, linear=None, convex=None, unimodal=None
     functions = list(filter(lambda f: (rotated is None) or (f.rotated == rotated), functions))
     functions = list(filter(lambda f: (modality is None) or (f.modality == modality), functions))
     return functions
+
+
+def create_benchmark_loss_function(
+    fn_name: str,
+        seed: Optional[int] = None,
+        scale_bounds: Optional[jax.Array] = None,
+        dimensionality: Optional[int] = None,
+        offset: bool = False,
+        noise: float = 0.0,
+        scale_output: bool = False,
+        grad_noise: float = 0.0,
+) -> Tuple[jnp.ndarray, Callable, Dict[str, jax.Array], Dict[str, Any]]:
+
+    model = jnp.zeros(dimensionality)
+    bench_func = FUNCTION_CLASS_MAPPING[fn_name.lower()]
+    loss_fn = FUNCTION_MAPPING[fn_name.lower()](
+        seed=seed,
+        scale_bounds=scale_bounds,
+        dimensionality=dimensionality,
+        offset=offset,
+        noise=noise,
+        scale_output=scale_output,
+        grad_noise=grad_noise,
+    )
+
+    tag = {
+        'task_name': fn_name,
+        'dimensionality': dimensionality,
+        'noise': noise if noise is not None else 0.0,
+        'convex': bench_func.convex,
+        'separable': bench_func.separable,
+        'seed': seed,
+        # 'multimodal': bench_func.multimodal,
+        'differentiable': bench_func.differentiable,
+        'grad_noise': grad_noise if grad_noise is not None else 0.0,
+    }
+
+    return model, loss_fn, tag
+
+
+# class BenchmarkFunc(Block):
+#     def __init__(self, fn_name: str,
+#                  seed: Optional[int] = None,
+#                  scale_bounds: Optional[jax.Array] = None,
+#                  dimensionality: Optional[int] = None,
+#                  offset: bool = False,
+#                  noise: float = 0.0,
+#                  ):
+#         fn_class = FUNCTION_MAPPING[fn_name.lower()]
+#         self.function = jax.jit(fn_class(seed=seed,
+#                                          scale_bounds=scale_bounds,
+#                                          dimensionality=dimensionality,
+#                                          offset=offset,
+#                                          noise=noise))
+#         self.dfdx = jax.jit(jax.grad(self.function))
+
+#     def call(self, data: ExperimentData) -> ExperimentData:
+#         open_es = [es for _, es in data if es.is_status('open')]
+#         if not open_es:
+#             return data
+
+#         x = jnp.atleast_2d([es.input_data['x'] for es in open_es])
+#         y = jax.vmap(self.function)(x)
+
+#         for es, y_val in zip(open_es, y):
+#             es.store(name='y', object=y_val)
+#             es.mark('finished')
+
+#         return data
+
+#     def __call__(self, x: jnp.ndarray) -> jnp.ndarray:
+#         return self.function(x)

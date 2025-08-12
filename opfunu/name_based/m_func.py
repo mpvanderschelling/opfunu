@@ -4,7 +4,8 @@
 #       Github: https://github.com/thieu1995        %
 # --------------------------------------------------%
 
-import autograd.numpy as np
+import jax.numpy as np
+import jax.scipy.special as jsp
 
 from opfunu.benchmark import Benchmark
 
@@ -534,11 +535,8 @@ class Mishra07(Benchmark):
     def evaluate(self, x, *args):
         self.check_solution(x)
         self.n_fe += 1
-        fact = 1
-        for i in range(1, self.ndim + 1):
-            fact *= i
 
-        # return (np.prod(x) - np.factorial(self.ndim)) ** 2.0
+        fact = jsp.factorial(self.ndim)  # JIT-compatible factorial computation
         return (np.prod(x) - fact) ** 2.0
 
 

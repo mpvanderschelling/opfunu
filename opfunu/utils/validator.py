@@ -5,7 +5,8 @@
 # --------------------------------------------------%
 
 import operator
-import autograd.numpy as np
+
+import jax.numpy as np
 
 
 def is_in_bound(value, bound):

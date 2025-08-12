@@ -4,7 +4,8 @@
 #       Github: https://github.com/thieu1995        %
 # --------------------------------------------------%
 
-import autograd.numpy as np
+import jax.numpy as np
+import numpy as onp
 
 
 class Benchmark:
@@ -161,6 +162,8 @@ class Benchmark:
             return True
         else:
             if self.dim_changeable:
+                if hasattr(self, 'dim_supported'):
+                    return ndim in self.dim_supported
                 return ndim > 0
             else:
                 return ndim == self.ndim
@@ -248,4 +251,4 @@ class Benchmark:
         solution: 1D-vector
             The random solution
         """
-        return np.random.uniform(self.lb, self.ub)
+        return onp.random.uniform(self.lb, self.ub)

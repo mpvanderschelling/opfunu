@@ -7,7 +7,8 @@
 #       Github:     https://github.com/thieu1995                                                  #
 # -------------------------------------------------------------------------------------------------------#
 
-import autograd.numpy as np
+import jax.numpy as np
+import numpy as onp
 
 
 class Functions:
@@ -171,7 +172,7 @@ class Functions:
         result = 0
         for i in range(0, d):
             result += (i + 1) * solution[i]**4
-        return result + np.random.uniform(0, 1)
+        return result + onp.random.uniform(0, 1)
 
     def _rastrigin__(self, solution=None):
         """
@@ -376,7 +377,7 @@ class Functions:
         d = len(solution)
         result = 0
         for i in range(0, d):
-            result += np.random.uniform(0, 1) * np.abs(solution[i])**(i + 1)
+            result += onp.random.uniform(0, 1) * np.abs(solution[i])**(i + 1)
         return result
 
     def _xin_she_yang_n2__(self, solution=None):

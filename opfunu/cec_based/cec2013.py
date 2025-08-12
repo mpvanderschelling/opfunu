@@ -4,7 +4,7 @@
 #       Github: https://github.com/thieu1995        %
 # --------------------------------------------------%
 
-import autograd.numpy as np
+import jax.numpy as np
 
 from opfunu.cec_based.cec import CecBenchmark
 from opfunu.utils import operator
@@ -266,15 +266,17 @@ class F72013(F32013):
     def evaluate(self, x, *args):
         self.n_fe += 1
         self.check_solution(x, self.dim_max, self.dim_supported)
-        M1 = self.f_matrix[:self.ndim, :]
-        M2 = self.f_matrix[self.ndim:2 * self.ndim, :]
+
+        M1, M2 = self.f_matrix[:self.ndim, :], self.f_matrix[self.ndim:2 * self.ndim, :]
         alpha = operator.generate_diagonal_matrix(self.ndim, alpha=10)
+
         temp = operator.tasy_func(np.dot(M1, x - self.f_shift), beta=0.5)
         y = np.dot(np.matmul(alpha, M2), temp)
-        result = 0.
-        for idx in range(0, self.ndim - 1):
-            z = np.sqrt(y[idx]**2 + y[idx + 1]**2)
-            result += np.sqrt(z) * (1 + np.sin(50 * z**0.2)**2)
+
+        # Vectorized calculation
+        z = np.sqrt(y[:-1] ** 2 + y[1:] ** 2)
+        result = np.sum(np.sqrt(z) * (1 + np.sin(50 * z**0.2) ** 2))
+
         return result**2 + self.f_bias
 
 

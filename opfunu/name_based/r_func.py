@@ -4,7 +4,7 @@
 #       Github: https://github.com/thieu1995        %
 # --------------------------------------------------%
 
-import autograd.numpy as np
+import jax.numpy as np
 
 from opfunu.benchmark import Benchmark
 
@@ -57,3 +57,110 @@ class Rana(Benchmark):
         t2 = np.sqrt(np.abs(x[1:] - x[: -1] + 1))
         v = (x[1:] + 1) * np.cos(t2) * np.sin(t1) + x[:-1] * np.cos(t1) * np.sin(t2)
         return np.sum(v)
+
+
+class Rastrigin(Benchmark):
+    name = "Rastrigin Function"
+    latex_formula = r'f_{\text{Rastrigin}}(x) = '
+    latex_formula_dimension = r'd = n'
+    latex_formula_bounds = r'x_i \in [-10, 10, ..., 10]'
+    latex_formula_global_optimum = r'f(0, 0, ...,0) = 1.0'
+    continuous = True
+    linear = False
+    convex = False
+    unimodal = False
+    separable = False
+
+    differentiable = True
+    scalable = True
+    randomized_term = False
+    parametric = False
+
+    modality = True  # Number of ambiguous peaks, unknown # peaks
+
+    def __init__(self, ndim=None, bounds=None):
+        super().__init__()
+        self.dim_changeable = True
+        self.dim_default = 2
+        self.check_ndim_and_bounds(ndim, bounds, np.array([[-5.12, 5.12] for _ in range(self.dim_default)]))
+        self.f_global = 0.
+        self.x_global = np.zeros(self.ndim)
+
+    def evaluate(self, x, *args):
+        self.check_solution(x)
+        self.n_fe += 1
+        d = x.shape[0]
+        res = 10 * d + np.sum(x**2 - 10 * np.cos(2 * np.pi * x))
+        return res
+
+
+class Rosenbrock(Benchmark):
+    name = "Rosenbrock Function"
+    latex_formula = r'f_{\text{Rosenbrock}}(x) = '
+    latex_formula_dimension = r'd = n'
+    latex_formula_bounds = r'x_i \in [-10, 10, ..., 10]'
+    latex_formula_global_optimum = r'f(0, 0, ...,0) = 1.0'
+    continuous = True
+    linear = False
+    convex = False
+    unimodal = False
+    separable = False
+
+    differentiable = True
+    scalable = True
+    randomized_term = False
+    parametric = False
+
+    modality = True  # Number of ambiguous peaks, unknown # peaks
+
+    def __init__(self, ndim=None, bounds=None):
+        super().__init__()
+        self.dim_changeable = True
+        self.dim_default = 2
+        self.check_ndim_and_bounds(ndim, bounds, np.array([[-5., 10.] for _ in range(self.dim_default)]))
+        self.f_global = 0.
+        self.x_global = np.ones(self.ndim)
+
+    def evaluate(self, x, *args):
+        self.check_solution(x)
+        a = 1
+        b = 100
+        self.n_fe += 1
+        res = np.sum(
+            np.abs(b * (x[1:] - x[:-1] ** 2) ** 2 + (
+                a - x[:-1]) ** 2))
+        return res
+
+
+class RotatedHyperEllipsoid(Benchmark):
+    name = "Rotated Hyperellipsoid Function"
+    latex_formula = r'f_{\text{Rotated Hyperellipsoid}}(x) = '
+    latex_formula_dimension = r'd = n'
+    latex_formula_bounds = r'x_i \in [-10, 10, ..., 10]'
+    latex_formula_global_optimum = r'f(0, 0, ...,0) = 1.0'
+    continuous = True
+    linear = False
+    convex = False
+    unimodal = False
+    separable = False
+
+    differentiable = True
+    scalable = True
+    randomized_term = False
+    parametric = False
+
+    modality = True  # Number of ambiguous peaks, unknown # peaks
+
+    def __init__(self, ndim=None, bounds=None):
+        super().__init__()
+        self.dim_changeable = True
+        self.dim_default = 2
+        self.check_ndim_and_bounds(ndim, bounds, np.array([[-100., 100.] for _ in range(self.dim_default)]))
+        self.f_global = 0.
+        self.x_global = np.zeros(self.ndim)
+
+    def evaluate(self, x, *args):
+        self.check_solution(x)
+        res = 1 - np.cos(2 * np.pi * np.sqrt(np.sum(x**2)))
+        res = res + 0.1 * np.sqrt(np.sum(x**2))
+        return res

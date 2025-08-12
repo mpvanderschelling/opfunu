@@ -4,7 +4,7 @@
 #       Github: https://github.com/thieu1995        %
 # --------------------------------------------------%
 
-import autograd.numpy as np
+import jax.numpy as np
 
 from opfunu.benchmark import Benchmark
 
@@ -65,6 +65,6 @@ class OddSquare(Benchmark):
         self.check_solution(x)
         self.n_fe += 1
         b = self.b[0: self.ndim]
-        d = self.ndim * max((x - b) ** 2.0)
+        d = self.ndim * np.max((x - b) ** 2.0)
         h = np.sum((x - b) ** 2.0)
         return (-np.exp(-d / (2.0 * np.pi)) * np.cos(np.pi * d) * (1.0 + 0.02 * h / (d + 0.01)))

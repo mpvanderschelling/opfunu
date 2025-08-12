@@ -4,15 +4,17 @@
 #       Github: https://github.com/thieu1995        %
 # --------------------------------------------------%
 
-import autograd.numpy as np
+import jax.numpy as np
+import numpy as onp
 import pytest
+
 from opfunu.benchmark import Benchmark
 
 
 def test_Benchmark_class():
     ndim = 10
     default_bounds = np.array([[-15, ] * ndim, [15, ] * ndim]).T
-    x = np.random.uniform(-15, 15, ndim)
+    x = onp.random.uniform(-15, 15, ndim)
     problem = Benchmark()
     problem.check_ndim_and_bounds(ndim, None, default_bounds)
 

@@ -4,8 +4,10 @@
 #       Github: https://github.com/thieu1995        %
 # --------------------------------------------------%
 
+import jax.numpy as np
+import numpy as onp
+
 import opfunu
-import autograd.numpy as np
 
 # Test CEC2008 F1
 print("====================F1")
@@ -82,7 +84,7 @@ print(problem.is_succeed(problem.x_global))
 # Test CEC2008 F7
 print("====================F7")
 problem = opfunu.cec_based.F72008(ndim=100)
-x = np.random.uniform(0, 1, 100)
+x = onp.random.uniform(0, 1, 100)
 print(problem.evaluate(x))
 print(problem.x_global)
 

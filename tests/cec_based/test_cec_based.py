@@ -3,7 +3,9 @@
 #       Github: https://github.com/firestrand       %
 # --------------------------------------------------%
 
-import autograd.numpy as np
+import jax.numpy as np
+import numpy as onp
+
 from opfunu import get_all_cec_functions
 
 
@@ -20,7 +22,7 @@ def test_whenEvaulateDefaultNdim_thenHasResult():
     failing = []
     for f in all_functions:
         f_default = f()
-        x = np.random.rand(f_default.dim_default)
+        x = onp.random.rand(f_default.dim_default)
         try:
             f_default.evaluate(x)
         except x:

@@ -4,7 +4,7 @@
 #       Github: https://github.com/thieu1995        %
 # --------------------------------------------------%
 
-import autograd.numpy as np
+import jax.numpy as np
 
 from opfunu.benchmark import Benchmark
 
@@ -55,3 +55,98 @@ class TestTubeHolder(Benchmark):
         u = np.sin(x[0]) * np.cos(x[1])
         v = (x[0] ** 2 + x[1] ** 2) / 200
         return -4 * np.abs(u * np.exp(np.abs(np.cos(v))))
+
+
+class ThreeHump(Benchmark):
+    """
+    .. [1]  Jamil, M. & Yang, X.-S. A Literature Survey of Benchmark Functions For Global Optimization Problems
+    Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
+
+    .. math::
+
+        f_{\text{TestTubeHolder}}(x) = - 4 \left | {e^{\left|{\cos \left(\frac{1}{200} x_{1}^{2} +
+        \frac{1}{200} x_{2}^{2}\right)} \right|}\sin\left(x_{1}\right) \cos\left(x_{2}\right)}\right|
+
+    with :math:`x_i \in [-10, 10]` for :math:`i = 1, 2`.
+
+    *Global optimum*: :math:`f(x) = -10.872299901558` for :math:`x= [-\pi/2, 0]`
+    """
+    name = "Three Hump Function"
+    latex_formula = r'f_{\text{TestTubeHolder}}(x)='
+    latex_formula_dimension = r'd = n'
+    latex_formula_bounds = r'x_i \in [-10, 10, ..., 10]'
+    latex_formula_global_optimum = r'f(0, 0, ...,0) = 1.0'
+    continuous = True
+    linear = False
+    convex = False
+    unimodal = True
+    separable = False
+
+    differentiable = True
+    scalable = False
+    randomized_term = False
+    parametric = False
+
+    modality = True  # Number of ambiguous peaks, unknown # peaks
+
+    def __init__(self, ndim=None, bounds=None):
+        super().__init__()
+        self.dim_changeable = False
+        self.dim_default = 2
+        self.check_ndim_and_bounds(ndim, bounds, np.array([[-5., 5.] for _ in range(self.dim_default)]))
+        self.f_global = 0.0
+        self.x_global = np.zeros(self.dim_default)
+
+    def evaluate(self, x, *args):
+        self.check_solution(x)
+        self.n_fe += 1
+        _x, _y = x
+        res = 2 * _x**2 - 1.05 * _x**4 + _x**6 * (1 / 6) + _x * _y + _y**2
+        return res
+
+
+class Trid(Benchmark):
+    """
+    .. [1]  Jamil, M. & Yang, X.-S. A Literature Survey of Benchmark Functions For Global Optimization Problems
+    Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
+
+    .. math::
+
+        f_{\text{TestTubeHolder}}(x) = - 4 \left | {e^{\left|{\cos \left(\frac{1}{200} x_{1}^{2} +
+        \frac{1}{200} x_{2}^{2}\right)} \right|}\sin\left(x_{1}\right) \cos\left(x_{2}\right)}\right|
+
+    with :math:`x_i \in [-10, 10]` for :math:`i = 1, 2`.
+
+    *Global optimum*: :math:`f(x) = -10.872299901558` for :math:`x= [-\pi/2, 0]`
+    """
+    name = "Trid Function"
+    latex_formula = r'f_{\text{TestTubeHolder}}(x)='
+    latex_formula_dimension = r'd = n'
+    latex_formula_bounds = r'x_i \in [-10, 10, ..., 10]'
+    latex_formula_global_optimum = r'f(0, 0, ...,0) = 1.0'
+    continuous = True
+    linear = False
+    convex = False
+    unimodal = True
+    separable = False
+
+    differentiable = True
+    scalable = False
+    randomized_term = False
+    parametric = False
+
+    modality = True  # Number of ambiguous peaks, unknown # peaks
+
+    def __init__(self, ndim=None, bounds=None):
+        super().__init__()
+        self.dim_changeable = True
+        self.dim_default = 2
+        self.check_ndim_and_bounds(ndim, bounds, np.array([[-(self.dim_default**2), self.dim_default**2] for _ in range(self.dim_default)]))
+        self.f_global = 0.0
+        self.x_global = np.array([i * (self._ndim + 1 - i) for i in range(1, self._ndim + 1)])
+
+    def evaluate(self, x, *args):
+        self.check_solution(x)
+        self.n_fe += 1
+        res = np.sum((x - 1) ** 2) - np.sum(x[1:] * x[:-1])
+        return res

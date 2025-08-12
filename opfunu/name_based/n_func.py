@@ -4,69 +4,10 @@
 #       Github: https://github.com/thieu1995        %
 # --------------------------------------------------%
 
-import autograd.numpy as np
+import jax
+import jax.numpy as np
 
 from opfunu.benchmark import Benchmark
-
-
-class NeedleEye(Benchmark):
-    """
-    .. [1] Gavana, A. Global Optimization Benchmarks and AMPGO retrieved 2015
-
-    .. math::
-        f_{\text{NeedleEye}}(x) =
-            \begin{cases}
-            1 & \textrm{if }\hspace{5pt} \lvert x_i \rvert  <  eye \hspace{5pt}
-            \forall i \\
-            \sum_{i=1}^n (100 + \lvert x_i \rvert) & \textrm{if } \hspace{5pt}
-            \lvert x_i \rvert > eye \\
-            0 & \textrm{otherwise}\\
-            \end{cases}
-
-    Here :math:`x_i \in [-10, 10]` for :math:`i = 1, 2,...,n`.
-    *Global optimum*: :math:`f(x) = 1.0`for :math:`x = [0, 0,...,0]`
-    """
-    name = "NeedleEye Function"
-    latex_formula = r'f_{\text{Matyas}}(x) = \begin{cases} 1 & \textrm{if }\hspace{5pt} \lvert x_i \rvert  <  eye \hspace{5pt} \forall i \\ ' \
-                    r'\sum_{i=1}^n (100 + \lvert x_i \rvert) & \textrm{if } \hspace{5pt}\lvert x_i \rvert > eye \\ 0 & \textrm{otherwise}\\\end{cases}'
-    latex_formula_dimension = r'd = n'
-    latex_formula_bounds = r'x_i \in [-10, 10, ..., 10]'
-    latex_formula_global_optimum = r'f(0, 0, ...,0) = 1.0'
-    continuous = False
-    linear = False
-    convex = True
-    unimodal = True
-    separable = False
-
-    differentiable = False
-    scalable = True
-    randomized_term = False
-    parametric = False
-
-    modality = False  # Number of ambiguous peaks, unknown # peaks
-
-    def __init__(self, ndim=None, bounds=None):
-        super().__init__()
-        self.dim_changeable = True
-        self.dim_default = 2
-        self.check_ndim_and_bounds(ndim, bounds, np.array([[-10., 10.] for _ in range(self.dim_default)]))
-        self.f_global = 1.0
-        self.x_global = np.zeros(self.ndim)
-
-    def evaluate(self, x, *args):
-        self.check_solution(x)
-        self.n_fe += 1
-        f = fp = 0.0
-        eye = 0.0001
-        for val in x:
-            if abs(val) >= eye:
-                fp = 1.0
-                f += 100.0 + abs(val)
-            else:
-                f += 1.0
-        if fp < 1e-6:
-            f = f / self.ndim
-        return f
 
 
 class NewFunction01(Benchmark):

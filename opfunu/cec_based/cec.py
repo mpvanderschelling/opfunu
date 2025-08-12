@@ -6,8 +6,10 @@
 
 from abc import ABC
 
-import autograd.numpy as np
+import jax.numpy as np
+import numpy as onp
 import pkg_resources
+from jax import Array
 
 from opfunu.benchmark import Benchmark
 
@@ -83,46 +85,47 @@ class CecBenchmark(Benchmark, ABC):
         self.support_path = pkg_resources.resource_filename("opfunu", f"cec_based/{data_name}")
 
     def check_shift_data(self, f_shift):
-        if type(f_shift) is str:
+        if isinstance(f_shift, str):
             return self.load_shift_data(f_shift)
         else:
-            if type(f_shift) in [list, tuple, np.ndarray]:
+            if isinstance(f_shift, (list, tuple, np.ndarray, Array, onp.ndarray)):
                 return np.squeeze(f_shift)
             else:
-                raise ValueError(f"The shift data should be a list/tuple or np.array!")
+                raise ValueError((f"The shift data should be a list/tuple or np.array!,"
+                                  f"type is {type(f_shift)}"))
 
     def check_shift_matrix(self, f_shift, selected_idx=None):
-        if type(f_shift) is str:
+        if isinstance(f_shift, str):
             if selected_idx is None:
                 return self.load_matrix_data(f_shift)
             else:
                 return self.load_matrix_data(f_shift)[selected_idx, :self.ndim]
         else:
-            if type(f_shift) in [list, tuple, np.ndarray]:
+            if isinstance(f_shift, (list, tuple, np.ndarray, Array, onp.ndarray)):
                 return np.squeeze(f_shift)
             else:
                 raise ValueError(f"The shift data should be a list/tuple or np.array!")
 
     def check_matrix_data(self, f_matrix, needed_dim=True):
-        if type(f_matrix) is str:
+        if isinstance(f_matrix, str):
             if needed_dim:
                 return self.load_matrix_data(f"{f_matrix}{self.ndim}")
             else:
                 return self.load_matrix_data(f_matrix)
         else:
-            if type(f_matrix) is np.ndarray:
+            if isinstance(f_matrix, (list, tuple, np.ndarray, Array, onp.ndarray)):
                 return np.squeeze(f_matrix)
             else:
                 raise ValueError(f"The matrix data should be an orthogonal matrix (2D np.array)!")
 
     def check_shuffle_data(self, f_shuffle, needed_dim=True):
-        if type(f_shuffle) is str:
+        if isinstance(f_shuffle, str):
             if needed_dim:
                 return self.load_shift_data(f"{f_shuffle}{self.ndim}")
             else:
                 return self.load_shift_data(f_shuffle)
         else:
-            if type(f_shuffle) in [list, tuple, np.ndarray]:
+            if isinstance(f_shuffle, (list, tuple, np.ndarray, Array, onp.ndarray)):
                 return np.squeeze(f_shuffle)
             else:
                 raise ValueError(f"The shuffle data should be a list/tuple or np.array!")
@@ -137,12 +140,12 @@ class CecBenchmark(Benchmark, ABC):
             raise ValueError(f"m_group is positive integer!")
 
     def load_shift_data(self, filename=None):
-        data = np.genfromtxt(f"{self.support_path}/{filename}.txt", dtype=float)
+        data = onp.genfromtxt(f"{self.support_path}/{filename}.txt", dtype=float)
         return data.reshape((-1))
 
     def load_matrix_data(self, filename=None):
         try:
-            data = np.genfromtxt(f"{self.support_path}/{filename}.txt", dtype=float)
+            data = onp.genfromtxt(f"{self.support_path}/{filename}.txt", dtype=float)
             return data
         except FileNotFoundError:
             print(f'The file named: {filename}.txt is not found.')
@@ -150,13 +153,13 @@ class CecBenchmark(Benchmark, ABC):
             exit(1)
 
     def load_shift_and_matrix_data(self, filename=None):
-        data = np.genfromtxt(f"{self.support_path}/{filename}.txt", dtype=float)
+        data = onp.genfromtxt(f"{self.support_path}/{filename}.txt", dtype=float)
         shift_data = data[:1, :].ravel()
         matrix_data = data[1:, :]
         return shift_data, matrix_data
 
     def load_two_matrix_and_shift_data(self, filename=None):
-        data = np.genfromtxt(f"{self.support_path}/{filename}.txt", dtype=float)
+        data = onp.genfromtxt(f"{self.support_path}/{filename}.txt", dtype=float)
         a_matrix = data[:100, :]
         b_matrix = data[100:200, :]
         shift_data = data[200:, :].ravel()

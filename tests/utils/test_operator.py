@@ -3,7 +3,7 @@
 #       Github: https://github.com/firestrand       %
 # --------------------------------------------------%
 
-import autograd.numpy as np
+import jax.numpy as np
 from opfunu.utils import operator
 
 

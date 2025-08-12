@@ -4,9 +4,52 @@
 #       Github: https://github.com/thieu1995        %
 # --------------------------------------------------%
 
-import autograd.numpy as np
+import jax.numpy as np
+import numpy as onp
 
 from opfunu.benchmark import Benchmark
+
+
+class Ackley(Benchmark):
+    r"""
+    .. [1] Adorio, E. MVF - "Multivariate Test Functions Library in C for Unconstrained Global Optimization", 2005
+    TODO: the -0.2 factor in the exponent of the first term is given as -0.02 in Jamil et al.
+    """
+    name = "Ackley"
+    latex_formula = r'f_{\text{Ackley}}(x) = -20 e^{-0.2 \sqrt{\frac{1}{n} \sum_{i=1}^n x_i^2}} - e^{\frac{1}{n} \sum_{i=1}^n \cos(2 \pi x_i)} + 20 + e'
+    latex_formula_dimension = r'd \in \mathbb{N}_{+}^{*}'
+    latex_formula_bounds = r'x_i \in [-35, 35], \forall i \in \llbracket 1, d\rrbracket'
+    latex_formula_global_optimum = r'f(0, ..., 0) = 0'
+    continuous = True
+    linear = False
+    convex = False
+    unimodal = False
+    separable = False
+
+    differentiable = True
+    scalable = True
+    randomized_term = False
+    parametric = False
+
+    modality = False  # Number of ambiguous peaks, unknown # peaks
+
+    def __init__(self, ndim=None, bounds=None):
+        super().__init__()
+        self.dim_changeable = True
+        self.dim_default = 2
+        self.check_ndim_and_bounds(ndim, bounds, np.array([[-32.768, 32.768] for _ in range(self.dim_default)]))
+        self.f_global = 0.0
+        self.x_global = np.zeros(self.ndim)
+
+    def evaluate(self, x, *args):
+        a = 20
+        b = 0.2
+        c = 2 * np.pi
+        self.check_solution(x)
+        self.n_fe += 1
+        res = -a * np.exp(-b * np.sqrt(np.mean(x**2)))
+        res = res - np.exp(np.mean(np.cos(c * x))) + a + np.exp(1)
+        return res
 
 
 class Ackley01(Benchmark):
@@ -225,7 +268,7 @@ class Alpine02(Benchmark):
         self.dim_default = 2
         self.check_ndim_and_bounds(ndim, bounds, np.array([[0., 10.] for _ in range(self.dim_default)]))
         self.f_global = -6.12950
-        self.x_global = np.array([7.91705268, 4.81584232] + list(np.random.uniform(0, 10, self.ndim - 2)))
+        self.x_global = np.array([7.91705268, 4.81584232] + list(onp.random.uniform(0, 10, self.ndim - 2)))
 
     def evaluate(self, x, *args):
         self.check_solution(x)

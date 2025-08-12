@@ -4,7 +4,8 @@
 #       Github: https://github.com/thieu1995        %
 # --------------------------------------------------%
 
-import autograd.numpy as np
+import jax
+import jax.numpy as np
 
 from opfunu.benchmark import Benchmark
 
@@ -110,7 +111,7 @@ class LennardJones(Benchmark):
         # if ndim not in range(6, 61):
         #     raise ValueError("LennardJones dimensions must be in (6, 60)")
         super().__init__()
-        self.dim_changeable = True
+        self.dim_changeable = False
         self.dim_default = 6
         self.dim_supported = range(6, 61)
         self.dim_max = 60
@@ -126,10 +127,10 @@ class LennardJones(Benchmark):
     def evaluate(self, x, *args):
         self.check_solution(x)
         self.n_fe += 1
-        k = int(self.ndim / 3)
-        s = 0.0
-        for i in range(k - 1):
-            for j in range(i + 1, k):
+        k = self.ndim // 3  # Integer division
+
+        def body_fn(i, s):
+            def inner_body_fn(j, s):
                 a = 3 * i
                 b = 3 * j
                 xd = x[a] - x[b]
@@ -137,8 +138,19 @@ class LennardJones(Benchmark):
                 zd = x[a + 2] - x[b + 2]
                 ed = xd * xd + yd * yd + zd * zd
                 ud = ed * ed * ed
-                if ed > 0.0:
-                    s += (1.0 / ud - 2.0) / ud
+
+                s = jax.lax.cond(
+                    ed > 0.0,
+                    lambda _: s + (1.0 / ud - 2.0) / ud,
+                    lambda _: s,
+                    operand=None
+                )
+                return s
+
+            s = jax.lax.fori_loop(i + 1, k, inner_body_fn, s)
+            return s
+
+        s = jax.lax.fori_loop(0, k - 1, body_fn, 0.0)
         return s
 
 
@@ -185,6 +197,58 @@ class Leon(Benchmark):
         self.check_solution(x)
         self.n_fe += 1
         return 100. * (x[1] - x[0] ** 2.0) ** 2.0 + (1 - x[0]) ** 2.0
+
+
+class Levy(Benchmark):
+    """
+    .. [1] Mishra, S. Global Optimization by Differential Evolution and Particle Swarm Methods: Evaluation
+    on Some Benchmark Functions. Munich Personal RePEc Archive, 2006, 1005
+
+    .. math::
+        f_{\text{Levy03}}(\mathbf{x}) = \sin^2(\pi y_1)+\sum_{i=1}^{n-1}(y_i-1)^2[1+10\sin^2(\pi y_{i+1})]+(y_n-1)^2
+
+    .. math::
+        y_i=1+\frac{x_i-1}{4}
+    Here, :math:`n` represents the number of dimensions and :math:`x_i \in [-10, 10]` for :math:`i=1,...,n`.
+    *Global optimum*: :math:`f(x_i) = 0` for :math:`x_i = 1` for :math:`i=1,...,n`
+    """
+    name = "Levy Function"
+    latex_formula = r'f_{\text{Levy03}}(\mathbf{x}) = \sin^2(\pi y_1)+\sum_{i=1}^{n-1}(y_i-1)^2[1+10\sin^2(\pi y_{i+1})]+(y_n-1)^2'
+    latex_formula_dimension = r'd \in N^+'
+    latex_formula_bounds = r'x_i \in [-10, 10]'
+    latex_formula_global_optimum = r'f(1,... 1) = 0'
+    continuous = True
+    linear = False
+    convex = False
+    unimodal = False
+    separable = False
+
+    differentiable = True
+    scalable = True
+    randomized_term = False
+    parametric = False
+
+    modality = True  # Number of ambiguous peaks, unknown # peaks
+
+    def __init__(self, ndim=None, bounds=None):
+        super().__init__()
+        self.dim_changeable = True
+        self.dim_default = 2
+        self.check_ndim_and_bounds(ndim, bounds, np.array([[-10., 10.] for _ in range(self.dim_default)]))
+        self.f_global = 0.0
+        self.x_global = np.ones(self.ndim)
+
+    def evaluate(self, x, *args):
+        self.check_solution(x)
+        self.n_fe += 1
+        z = 1 + (x - 1) / 4
+        res = (
+            np.sin(np.pi * z[0]) ** 2 + sum(
+                (z[:-1] - 1) ** 2 * (1 + 10 * np.sin(
+                    np.pi * z[:-1] + 1) ** 2)) + (
+                        z[-1] - 1) ** 2 * (1 + np.sin(2 * np.pi * z[-1]) ** 2)
+        )
+        return res
 
 
 class Levy03(Benchmark):

@@ -4,63 +4,66 @@
 #       Github: https://github.com/thieu1995        %
 # --------------------------------------------------%
 
-import autograd.numpy as np
+import jax
+import jax.numpy as np
 
 from opfunu.benchmark import Benchmark
 
+# class Katsuura(Benchmark):
+#     """
+#     .. [1] Adorio, E. MVF - "Multivariate Test Functions Library in C for
+#     Unconstrained Global Optimization", 2005
+#     [2] Gavana, A. Global Optimization Benchmarks and AMPGO retrieved 2015
 
-class Katsuura(Benchmark):
-    """
-    .. [1] Adorio, E. MVF - "Multivariate Test Functions Library in C for
-    Unconstrained Global Optimization", 2005
-    [2] Gavana, A. Global Optimization Benchmarks and AMPGO retrieved 2015
+#     .. math::
+#         f_{\text{Katsuura}}(x) = \prod_{i=0}^{n-1} \left [ 1 +
+#         (i+1) \sum_{k=1}^{d} \lfloor (2^k x_i) \rfloor 2^{-k} \right ]
 
-    .. math::
-        f_{\text{Katsuura}}(x) = \prod_{i=0}^{n-1} \left [ 1 +
-        (i+1) \sum_{k=1}^{d} \lfloor (2^k x_i) \rfloor 2^{-k} \right ]
+#     Where, in this exercise, :math:`d = 32`.
+#     Here, :math:`n` represents the number of dimensions and
 
-    Where, in this exercise, :math:`d = 32`.
-    Here, :math:`n` represents the number of dimensions and
+#     :math:`x_i \in [0, 100]` for :math:`i = 1, ..., n`.
 
-    :math:`x_i \in [0, 100]` for :math:`i = 1, ..., n`.
+#     *Global optimum*: :math:`f(x) = 1` for :math:`x_i = 0` for
+#     :math:`i = 1, ..., n`.
+#     """
+#     name = "Katsuura Function"
+#     latex_formula = r'f_{\text{Katsuura}}(x) = \prod_{i=0}^{n-1} \left [ 1 + (i+1) \sum_{k=1}^{d} \lfloor (2^k x_i) \rfloor 2^{-k} \right ]'
+#     latex_formula_dimension = r'd = 32'
+#     latex_formula_bounds = r'x_i \in [0, 100]'
+#     latex_formula_global_optimum = r'f(0., 0., ..., 0.) = 1.'
+#     continuous = True
+#     linear = False
+#     convex = False
+#     unimodal = False
+#     separable = False
 
-    *Global optimum*: :math:`f(x) = 1` for :math:`x_i = 0` for
-    :math:`i = 1, ..., n`.
-    """
-    name = "Katsuura Function"
-    latex_formula = r'f_{\text{Katsuura}}(x) = \prod_{i=0}^{n-1} \left [ 1 + (i+1) \sum_{k=1}^{d} \lfloor (2^k x_i) \rfloor 2^{-k} \right ]'
-    latex_formula_dimension = r'd = 32'
-    latex_formula_bounds = r'x_i \in [0, 100]'
-    latex_formula_global_optimum = r'f(0., 0., ..., 0.) = 1.'
-    continuous = True
-    linear = False
-    convex = False
-    unimodal = False
-    separable = False
+#     differentiable = True
+#     scalable = True
+#     randomized_term = False
+#     parametric = False
 
-    differentiable = True
-    scalable = True
-    randomized_term = False
-    parametric = False
+#     modality = False  # Number of ambiguous peaks, unknown # peaks
 
-    modality = False  # Number of ambiguous peaks, unknown # peaks
+#     def __init__(self, ndim=None, bounds=None):
+#         super().__init__()
+#         self.dim_changeable = True
+#         self.dim_default = 2
+#         self.check_ndim_and_bounds(ndim, bounds, np.array([[0., 100.] for _ in range(self.dim_default)]))
+#         self.f_global = 1.
+#         self.x_global = np.zeros(self.ndim)
 
-    def __init__(self, ndim=None, bounds=None):
-        super().__init__()
-        self.dim_changeable = True
-        self.dim_default = 2
-        self.check_ndim_and_bounds(ndim, bounds, np.array([[0., 100.] for _ in range(self.dim_default)]))
-        self.f_global = 1.
-        self.x_global = np.zeros(self.ndim)
+#     def evaluate(self, x, *args):
+#         d = 32
+#         ndim = x.shape[0]
+#         k = np.arange(1, d + 1).reshape(-1, 1)  # Shape (d, 1)
+#         idx = np.arange(ndim)
 
-    def evaluate(self, x, *args):
-        self.check_solution(x)
-        self.n_fe += 1
-        d = 32
-        k = np.atleast_2d(np.arange(1, d + 1)).T
-        idx = np.arange(0., self.ndim * 1.)
-        inner = np.round(2 ** k * x) * (2. ** (-k))
-        return np.prod(np.sum(inner, axis=0) * (idx + 1) + 1)
+#         inner = jax.lax.round(2 ** k * x) * (2. ** (-k))
+#         sum_inner = np.sum(inner, axis=0) * (idx + 1) + 1
+
+#         # Replace np.prod with jax.lax.reduce
+#         return jax.lax.reduce(sum_inner, init_values=1.0, computation=jax.lax.mul, dimensions=(0,))
 
 
 class Keane(Benchmark):
@@ -96,15 +99,15 @@ class Keane(Benchmark):
         super().__init__()
         self.dim_changeable = False
         self.dim_default = 2
-        self.check_ndim_and_bounds(ndim, bounds, np.array([[0., 10.] for _ in range(self.dim_default)]))
+        self.check_ndim_and_bounds(ndim, bounds, np.array([[-10., 10.] for _ in range(self.dim_default)]))
         self.f_global = 0.
-        self.x_global = np.array([7.85396153, 7.85396135])
+        self.x_global = np.array([1.393249070031784, 0.])
 
     def evaluate(self, x, *args):
         self.check_solution(x)
         self.n_fe += 1
         val = np.sin(x[0] - x[1]) ** 2 * np.sin(x[0] + x[1]) ** 2
-        return val / np.sqrt(x[0] ** 2 + x[1] ** 2)
+        return - val / (np.sqrt(x[0] ** 2 + x[1] ** 2) + 1e-8)
 
 
 class Kowalik(Benchmark):
